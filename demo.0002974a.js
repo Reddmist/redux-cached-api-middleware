@@ -32491,23 +32491,39 @@ exports.selectors = exports.reducer = exports.actions = exports.cache = exports.
 
 var _reduxApiMiddleware = require("redux-api-middleware");
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var _extends = Object.assign || function (e) {
+var asyncToGenerator = function asyncToGenerator(e) {
+  return function () {
+    var t = e.apply(this, arguments);return new Promise(function (e, r) {
+      return function n(a, c) {
+        try {
+          var i = t[a](c),
+              u = i.value;
+        } catch (e) {
+          return void r(e);
+        }if (!i.done) return Promise.resolve(u).then(function (e) {
+          n("next", e);
+        }, function (e) {
+          n("throw", e);
+        });e(u);
+      }("next");
+    });
+  };
+},
+    _extends = Object.assign || function (e) {
   for (var t = 1; t < arguments.length; t++) {
-    var r = arguments[t];for (var c in r) {
-      Object.prototype.hasOwnProperty.call(r, c) && (e[c] = r[c]);
+    var r = arguments[t];for (var n in r) {
+      Object.prototype.hasOwnProperty.call(r, n) && (e[n] = r[n]);
     }
   }return e;
 },
     objectWithoutProperties = function objectWithoutProperties(e, t) {
-  var r = {};for (var c in e) {
-    t.indexOf(c) >= 0 || Object.prototype.hasOwnProperty.call(e, c) && (r[c] = e[c]);
+  var r = {};for (var n in e) {
+    t.indexOf(n) >= 0 || Object.prototype.hasOwnProperty.call(e, n) && (r[n] = e[n]);
   }return r;
-};var DEFAULT_CONFIG = { DEFAULT_EVENT: {}, DEFAULT_CACHE_STRATEGY: void 0 },
-    config = _extends({}, DEFAULT_CONFIG);var config$1 = { set DEFAULT_EVENT(e) {
+},
+    DEFAULT_CONFIG = { DEFAULT_EVENT: {}, DEFAULT_CACHE_STRATEGY: void 0 },
+    config = _extends({}, DEFAULT_CONFIG),
+    config$1 = { set DEFAULT_EVENT(e) {
     config.DEFAULT_EVENT = e;
   }, get DEFAULT_EVENT() {
     return config.DEFAULT_EVENT;
@@ -32515,46 +32531,50 @@ var _extends = Object.assign || function (e) {
     config.DEFAULT_CACHE_STRATEGY = e;
   }, get DEFAULT_CACHE_STRATEGY() {
     return config.DEFAULT_CACHE_STRATEGY;
-  } };var NAME = "@RCAM",
-    CACHE_TYPES = { SIMPLE: "SIMPLE", SIMPLE_SUCCESS: "SIMPLE_SUCCESS", TTL: "TTL", TTL_SUCCESS: "TTL_SUCCESS" };var constants = Object.freeze({ NAME: NAME, CACHE_TYPES: CACHE_TYPES });var type = CACHE_TYPES.SIMPLE,
+  } },
+    NAME = "@RCAM",
+    CACHE_TYPES = { SIMPLE: "SIMPLE", SIMPLE_SUCCESS: "SIMPLE_SUCCESS", TTL: "TTL", TTL_SUCCESS: "TTL_SUCCESS" },
+    constants = Object.freeze({ NAME: NAME, CACHE_TYPES: CACHE_TYPES }),
+    type = CACHE_TYPES.SIMPLE,
     buildStrategy = function buildStrategy() {
   return { type: type };
 },
-    shouldFetch = function shouldFetch(_ref) {
-  var e = _ref.state;
-  return !e || !e.fetching && !e.fetched;
-};var simple = Object.freeze({ type: type, buildStrategy: buildStrategy, shouldFetch: shouldFetch });var type$1 = CACHE_TYPES.SIMPLE_SUCCESS,
+    shouldFetch = function shouldFetch(e) {
+  var t = e.state;return !t || !t.fetching && !t.fetched;
+},
+    simple = Object.freeze({ type: type, buildStrategy: buildStrategy, shouldFetch: shouldFetch }),
+    type$1 = CACHE_TYPES.SIMPLE_SUCCESS,
     buildStrategy$1 = function buildStrategy$1() {
   return { type: type$1 };
 },
-    shouldFetch$1 = function shouldFetch$1(_ref2) {
-  var e = _ref2.state;
-  if (e) {
-    if (e.fetching) return !1;if (e.fetched && !e.error) return !1;
+    shouldFetch$1 = function shouldFetch$1(e) {
+  var t = e.state;if (t) {
+    if (t.fetching) return !1;if (t.fetched && !t.error) return !1;
   }return !0;
-};var simpleSuccess = Object.freeze({ type: type$1, buildStrategy: buildStrategy$1, shouldFetch: shouldFetch$1 });var type$2 = CACHE_TYPES.TTL,
-    buildStrategy$2 = function buildStrategy$2(_ref3) {
-  var e = _ref3.ttl;
-  return { type: type$2, ttl: e };
 },
-    shouldFetch$2 = function shouldFetch$2(_ref4) {
-  var e = _ref4.state,
-      t = _ref4.strategy;
-  if (e && t) {
-    if (e.fetching) return !1;if (e.fetched) return e.timestamp + t.ttl <= Date.now();
-  }return !0;
-};var ttl = Object.freeze({ type: type$2, buildStrategy: buildStrategy$2, shouldFetch: shouldFetch$2 });var type$3 = CACHE_TYPES.TTL_SUCCESS,
-    buildStrategy$3 = function buildStrategy$3(_ref5) {
-  var e = _ref5.ttl;
-  return { type: type$3, ttl: e };
+    simpleSuccess = Object.freeze({ type: type$1, buildStrategy: buildStrategy$1, shouldFetch: shouldFetch$1 }),
+    type$2 = CACHE_TYPES.TTL,
+    buildStrategy$2 = function buildStrategy$2(e) {
+  var t = e.ttl;return { type: type$2, ttl: t };
 },
-    shouldFetch$3 = function shouldFetch$3(_ref6) {
-  var e = _ref6.state,
-      t = _ref6.strategy;
-  if (e && t) {
-    if (e.fetching) return !1;if (e.fetched && !e.error) return e.timestamp + t.ttl <= Date.now();
+    shouldFetch$2 = function shouldFetch$2(e) {
+  var t = e.state,
+      r = e.strategy;if (t && r) {
+    if (t.fetching) return !1;if (t.fetched) return t.timestamp + r.ttl <= Date.now();
   }return !0;
-};var ttlSuccess = Object.freeze({ type: type$3, buildStrategy: buildStrategy$3, shouldFetch: shouldFetch$3 }),
+},
+    ttl = Object.freeze({ type: type$2, buildStrategy: buildStrategy$2, shouldFetch: shouldFetch$2 }),
+    type$3 = CACHE_TYPES.TTL_SUCCESS,
+    buildStrategy$3 = function buildStrategy$3(e) {
+  var t = e.ttl;return { type: type$3, ttl: t };
+},
+    shouldFetch$3 = function shouldFetch$3(e) {
+  var t = e.state,
+      r = e.strategy;if (t && r) {
+    if (t.fetching) return !1;if (t.fetched && !t.error) return t.timestamp + r.ttl <= Date.now();
+  }return !0;
+},
+    ttlSuccess = Object.freeze({ type: type$3, buildStrategy: buildStrategy$3, shouldFetch: shouldFetch$3 }),
     cacheStrategies = { get: function get(e) {
     switch (e) {case type:
         return simple;case type$1:
@@ -32562,43 +32582,40 @@ var _extends = Object.assign || function (e) {
         return ttl;case type$3:
         return ttlSuccess;default:
         throw new Error("Invalid cache type - " + e);}
-  } };var INVALIDATE_CACHE = "@RCAM.INVALIDATE_CACHE",
-    CLEAR_CACHE = "@RCAM.CLEAR_CACHE",
-    FETCH_START = "@RCAM.FETCH_START",
-    FETCH_SUCCESS = "@RCAM.FETCH_SUCCESS",
-    FETCH_ERROR = "@RCAM.FETCH_ERROR",
+  } },
+    INVALIDATE_CACHE = NAME + ".INVALIDATE_CACHE",
+    CLEAR_CACHE = NAME + ".CLEAR_CACHE",
+    FETCH_START = NAME + ".FETCH_START",
+    FETCH_SUCCESS = NAME + ".FETCH_SUCCESS",
+    FETCH_ERROR = NAME + ".FETCH_ERROR",
     DEFAULT_KEY_STATE = { fetching: !1, fetched: !1, error: !1, timestamp: null, successPayload: null, errorPayload: null },
-    DEFAULT_STATE = {};var reducer = function reducer() {
-  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
-  var _ref7 = arguments[1];
-  var t = _ref7.type,
-      r = _ref7.payload,
-      c = _ref7.meta;
-  switch (t) {case CLEAR_CACHE:
-      if (r && e[r]) {
-        var _t = _extends({}, e);return delete _t[r], _t;
+    DEFAULT_STATE = {},
+    reducer = function reducer() {
+  var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : DEFAULT_STATE,
+      t = arguments[1],
+      r = t.type,
+      n = t.payload,
+      a = t.meta;switch (r) {case CLEAR_CACHE:
+      if (n && e[n]) {
+        var c = _extends({}, e);return delete c[n], c;
       }return DEFAULT_STATE;case INVALIDATE_CACHE:
-      {
-        var _t2 = Object.keys(e).filter(function (t) {
-          return e[t].fetching;
-        });if (_t2.length) {
-          var _r = _extends({}, e);return _t2.forEach(function (e) {
-            return delete _r[e];
-          }), _r;
-        }return e;
-      }case FETCH_START:
-      {
-        var _t3 = c.cache.key;return _extends({}, e, _defineProperty({}, _t3, _extends({}, e[_t3] || DEFAULT_KEY_STATE, { fetching: !0 })));
-      }case FETCH_SUCCESS:
-      {
-        var _t4 = c.cache.key;return _t4 in e ? _extends({}, e, _defineProperty({}, _t4, _extends({}, e[_t4], { fetching: !1, fetched: !0, error: !1, timestamp: new Date().getTime(), successPayload: r }))) : e;
-      }case FETCH_ERROR:
-      {
-        var _t5 = c.cache.key;return _t5 in e ? _extends({}, e, _defineProperty({}, _t5, _extends({}, e[_t5], { fetching: !1, fetched: !0, error: !0, timestamp: new Date().getTime(), errorPayload: r }))) : e;
-      }default:
+      var i = Object.keys(e).filter(function (t) {
+        return e[t].fetching;
+      });if (i.length) {
+        var u = _extends({}, e);return i.forEach(function (e) {
+          return delete u[e];
+        }), u;
+      }return e;case FETCH_START:
+      var s,
+          o = a.cache.key;return _extends({}, e, ((s = {})[o] = _extends({}, e[o] || DEFAULT_KEY_STATE, { fetching: !0 }), s));case FETCH_SUCCESS:
+      var E,
+          l = a.cache.key;return l in e ? _extends({}, e, ((E = {})[l] = _extends({}, e[l], { fetching: !1, fetched: !0, error: !1, timestamp: new Date().getTime(), successPayload: n }), E)) : e;case FETCH_ERROR:
+      var T,
+          f = a.cache.key;return f in e ? _extends({}, e, ((T = {})[f] = _extends({}, e[f], { fetching: !1, fetched: !0, error: !0, timestamp: new Date().getTime(), errorPayload: n }), T)) : e;default:
       return e;}
-};var keyValue = function keyValue(e, t, r) {
-  var c = void 0;return e && e[NAME] && e[NAME][t] && (c = e[NAME][t][r]), void 0 === c ? DEFAULT_KEY_STATE[r] : c;
+},
+    keyValue = function keyValue(e, t, r) {
+  var n = void 0;return e && e[NAME] && e[NAME][t] && (n = e[NAME][t][r]), void 0 === n ? DEFAULT_KEY_STATE[r] : n;
 },
     isFetching = function isFetching(e, t) {
   return keyValue(e, t, "fetching");
@@ -32625,68 +32642,39 @@ var _extends = Object.assign || function (e) {
   if (hasFetched(e, t)) {
     var r = { error: isError(e, t), timestamp: getTimestamp(e, t) };return r.payload = r.error ? getErrorPayload(e, t) : getSuccessPayload(e, t), r;
   }
-};var selectors = Object.freeze({ isFetching: isFetching, hasFetched: hasFetched, isError: isError, getTimestamp: getTimestamp, getSuccessPayload: getSuccessPayload, getErrorPayload: getErrorPayload, getKeyState: getKeyState, getResult: getResult });var invalidateCache = function invalidateCache() {
+},
+    selectors = Object.freeze({ isFetching: isFetching, hasFetched: hasFetched, isError: isError, getTimestamp: getTimestamp, getSuccessPayload: getSuccessPayload, getErrorPayload: getErrorPayload, getKeyState: getKeyState, getResult: getResult }),
+    _this = void 0,
+    invalidateCache = function invalidateCache() {
   return { type: INVALIDATE_CACHE };
 },
     callAPI = function callAPI(e) {
-  var t = e.cache,
-      r = objectWithoutProperties(e, ["cache"]);return function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e, c) {
-      var a, _e, _r2;
-
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              a = Object.assign({ types: [] }, config$1.DEFAULT_EVENT, r);
-
-              if (!(t && t.key)) {
-                _context.next = 10;
-                break;
-              }
-
-              _e = t.strategy || config$1.DEFAULT_CACHE_STRATEGY, _r2 = getKeyState(c(), t.key);
-
-              if (!(a.types = [{ type: FETCH_START, meta: { cache: t } }, { type: FETCH_SUCCESS, meta: { cache: t } }, { type: FETCH_ERROR, meta: { cache: t } }], t.shouldFetch)) {
-                _context.next = 8;
-                break;
-              }
-
-              if (t.shouldFetch({ state: _r2, strategy: _e })) {
-                _context.next = 6;
-                break;
-              }
-
-              return _context.abrupt("return");
-
-            case 6:
-              _context.next = 10;
-              break;
-
-            case 8:
-              if (!(_e && !cacheStrategies.get(_e.type).shouldFetch({ state: _r2, strategy: _e }))) {
-                _context.next = 10;
-                break;
-              }
-
-              return _context.abrupt("return");
-
-            case 10:
-              return _context.abrupt("return", e(_defineProperty({}, _reduxApiMiddleware.RSAA, a)));
-
-            case 11:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, undefined);
-    }));
-
-    return function (_x2, _x3) {
-      return _ref8.apply(this, arguments);
-    };
-  }();
-};var actions = Object.freeze({ invalidateCache: invalidateCache, callAPI: callAPI });exports.config = config$1;
+  var t,
+      r = e.cache,
+      n = objectWithoutProperties(e, ["cache"]);return t = asyncToGenerator(regeneratorRuntime.mark(function e(t, a) {
+    var c, i, u, s;return regeneratorRuntime.wrap(function (e) {
+      for (;;) {
+        switch (e.prev = e.next) {case 0:
+            if (i = Object.assign({ types: [] }, config$1.DEFAULT_EVENT, n), !r || !r.key) {
+              e.next = 12;break;
+            }if (u = r.strategy || config$1.DEFAULT_CACHE_STRATEGY, s = getKeyState(a(), r.key), i.types = [{ type: FETCH_START, meta: { cache: r } }, { type: FETCH_SUCCESS, meta: { cache: r } }, { type: FETCH_ERROR, meta: { cache: r } }], !r.shouldFetch) {
+              e.next = 10;break;
+            }if (r.shouldFetch({ state: s, strategy: u })) {
+              e.next = 8;break;
+            }return e.abrupt("return", void 0);case 8:
+            e.next = 12;break;case 10:
+            if (!u || cacheStrategies.get(u.type).shouldFetch({ state: s, strategy: u })) {
+              e.next = 12;break;
+            }return e.abrupt("return", void 0);case 12:
+            return e.abrupt("return", t(((c = {})[_reduxApiMiddleware.RSAA] = i, c)));case 13:case "end":
+            return e.stop();}
+      }
+    }, e, _this);
+  })), function (e, r) {
+    return t.apply(this, arguments);
+  };
+},
+    actions = Object.freeze({ invalidateCache: invalidateCache, callAPI: callAPI });exports.config = config$1;
 exports.constants = constants;
 exports.cache = cacheStrategies;
 exports.actions = actions;
@@ -34149,4 +34137,4 @@ if (module.hot) {
   module.hot.accept();
 }
 },{"react":"1n8/","react-dom":"NKHc","react-redux":"jYI/","redux-persist/integration/react":"4j42","core-js/modules/es6.typed.array-buffer":"4NJ0","core-js/modules/es6.typed.int8-array":"wqM+","core-js/modules/es6.typed.uint8-array":"QTtY","core-js/modules/es6.typed.uint8-clamped-array":"Kqgs","core-js/modules/es6.typed.int16-array":"fEGw","core-js/modules/es6.typed.uint16-array":"xyd6","core-js/modules/es6.typed.int32-array":"hIko","core-js/modules/es6.typed.uint32-array":"tNPN","core-js/modules/es6.typed.float32-array":"/wis","core-js/modules/es6.typed.float64-array":"9mbT","core-js/modules/es6.map":"ioKM","core-js/modules/es6.set":"coyu","core-js/modules/es6.weak-map":"D6DP","core-js/modules/es6.weak-set":"bRUR","core-js/modules/es6.reflect.apply":"F0Xu","core-js/modules/es6.reflect.construct":"4JlF","core-js/modules/es6.reflect.define-property":"S841","core-js/modules/es6.reflect.delete-property":"JRlJ","core-js/modules/es6.reflect.get":"kv8Z","core-js/modules/es6.reflect.get-own-property-descriptor":"zj1X","core-js/modules/es6.reflect.get-prototype-of":"d0aC","core-js/modules/es6.reflect.has":"OWTq","core-js/modules/es6.reflect.is-extensible":"deHu","core-js/modules/es6.reflect.own-keys":"e6SV","core-js/modules/es6.reflect.prevent-extensions":"BmyK","core-js/modules/es6.reflect.set":"K46i","core-js/modules/es6.reflect.set-prototype-of":"L5z5","core-js/modules/es6.promise":"Pjta","core-js/modules/es6.symbol":"uVn9","core-js/modules/es6.object.freeze":"EO7q","core-js/modules/es6.object.seal":"+4GY","core-js/modules/es6.object.prevent-extensions":"3llM","core-js/modules/es6.object.is-frozen":"Z1rp","core-js/modules/es6.object.is-sealed":"Fckj","core-js/modules/es6.object.is-extensible":"1EYb","core-js/modules/es6.object.get-own-property-descriptor":"nIty","core-js/modules/es6.object.get-prototype-of":"ud3u","core-js/modules/es6.object.keys":"m9aB","core-js/modules/es6.object.get-own-property-names":"i23/","core-js/modules/es6.object.assign":"K3/J","core-js/modules/es6.object.is":"MlqR","core-js/modules/es6.object.set-prototype-of":"0JGj","core-js/modules/es6.function.name":"N3yi","core-js/modules/es6.string.raw":"t2/9","core-js/modules/es6.string.from-code-point":"xSM3","core-js/modules/es6.string.code-point-at":"zR9y","core-js/modules/es6.string.repeat":"C85R","core-js/modules/es6.string.starts-with":"w2SA","core-js/modules/es6.string.ends-with":"zRn7","core-js/modules/es6.string.includes":"fH7p","core-js/modules/es6.regexp.flags":"pDhD","core-js/modules/es6.regexp.match":"RTfC","core-js/modules/es6.regexp.replace":"KGao","core-js/modules/es6.regexp.split":"a/o/","core-js/modules/es6.regexp.search":"zOab","core-js/modules/es6.array.from":"RRcs","core-js/modules/es6.array.of":"RB6b","core-js/modules/es6.array.copy-within":"tWTB","core-js/modules/es6.array.find":"Qppk","core-js/modules/es6.array.find-index":"7sVm","core-js/modules/es6.array.fill":"hUQ6","core-js/modules/es6.array.iterator":"6w+v","core-js/modules/es6.number.is-finite":"FuY7","core-js/modules/es6.number.is-integer":"pwRL","core-js/modules/es6.number.is-safe-integer":"5qVI","core-js/modules/es6.number.is-nan":"SsgJ","core-js/modules/es6.number.epsilon":"DzYy","core-js/modules/es6.number.min-safe-integer":"+ifB","core-js/modules/es6.number.max-safe-integer":"4shx","core-js/modules/es6.math.acosh":"py3/","core-js/modules/es6.math.asinh":"ob11","core-js/modules/es6.math.atanh":"iUik","core-js/modules/es6.math.cbrt":"YRuK","core-js/modules/es6.math.clz32":"R2Qc","core-js/modules/es6.math.cosh":"nEse","core-js/modules/es6.math.expm1":"AmoX","core-js/modules/es6.math.fround":"vmlq","core-js/modules/es6.math.hypot":"kLut","core-js/modules/es6.math.imul":"A8J8","core-js/modules/es6.math.log1p":"qtpC","core-js/modules/es6.math.log10":"VUW8","core-js/modules/es6.math.log2":"1Jo9","core-js/modules/es6.math.sign":"mZl9","core-js/modules/es6.math.sinh":"m0zb","core-js/modules/es6.math.tanh":"Fnqw","core-js/modules/es6.math.trunc":"tiOR","core-js/modules/es7.array.includes":"TLss","core-js/modules/es7.object.values":"Ltmz","core-js/modules/es7.object.entries":"gxEP","core-js/modules/es7.object.get-own-property-descriptors":"BQD8","core-js/modules/es7.string.pad-start":"9SWN","core-js/modules/es7.string.pad-end":"n20m","core-js/modules/web.timers":"OTsy","core-js/modules/web.immediate":"5hZL","core-js/modules/web.dom.iterable":"v6Aj","regenerator-runtime/runtime":"QVnC","whatwg-fetch":"MCp7","./App":"lY9v","./state":"dm40","./index.css":"vKFU"}]},{},["Focm"], null)
-//# sourceMappingURL=/redux-cached-api-middleware/demo.b7f99c96.map
+//# sourceMappingURL=/redux-cached-api-middleware/demo.0392d70c.map
