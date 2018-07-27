@@ -22693,7 +22693,117 @@ var PersistGate = exports.PersistGate = function (_PureComponent) {
 PersistGate.defaultProps = {
   loading: null
 };
-},{"react":"1n8/"}],"5qf4":[function(require,module,exports) {
+},{"react":"1n8/"}],"xv3Y":[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = register;
+exports.unregister = unregister;
+/* eslint-disable */
+
+// In production, we register a service worker to serve assets from local cache.
+
+// This lets the app load faster on subsequent visits in production, and gives
+// it offline capabilities. However, it also means that developers (and users)
+// will only see deployed updates on the "N+1" visit to a page, since previously
+// cached resources are updated in the background.
+
+// To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
+// This link also includes instructions on opting out of this behavior.
+
+var isLocalhost = Boolean(window.location.hostname === 'localhost' ||
+// [::1] is the IPv6 localhost address.
+window.location.hostname === '[::1]' ||
+// 127.0.0.1/8 is considered localhost for IPv4.
+window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/));
+
+function register() {
+  if ('demo' === 'demo' && 'serviceWorker' in navigator) {
+    // The URL constructor is available in all browsers that support SW.
+    var publicUrl = new URL('/redux-cached-api-middleware' || '', window.location);
+    if (publicUrl.origin !== window.location.origin) {
+      // Our service worker won't work if PUBLIC_URL is on a different origin
+      // from what our page is served on. This might happen if a CDN is used to
+      // serve assets; see https://github.com/facebookincubator/create-react-app/issues/2374
+      return;
+    }
+
+    window.addEventListener('load', function () {
+      var swUrl = ('/redux-cached-api-middleware' || '') + '/service-worker.js';
+
+      if (isLocalhost) {
+        // This is running on localhost. Lets check if a service worker still exists or not.
+        checkValidServiceWorker(swUrl);
+
+        // Add some additional logging to localhost, pointing developers to the
+        // service worker/PWA documentation.
+        navigator.serviceWorker.ready.then(function () {
+          console.log('This web app is being served cache-first by a service ' + 'worker. To learn more, visit https://goo.gl/SC7cgQ');
+        });
+      } else {
+        // Is not local host. Just register service worker
+        registerValidSW(swUrl);
+      }
+    });
+  }
+}
+
+function registerValidSW(swUrl) {
+  navigator.serviceWorker.register(swUrl).then(function (registration) {
+    registration.onupdatefound = function () {
+      var installingWorker = registration.installing;
+      installingWorker.onstatechange = function () {
+        if (installingWorker.state === 'installed') {
+          if (navigator.serviceWorker.controller) {
+            // At this point, the old content will have been purged and
+            // the fresh content will have been added to the cache.
+            // It's the perfect time to display a "New content is
+            // available; please refresh." message in your web app.
+            console.log('New content is available; please refresh.');
+          } else {
+            // At this point, everything has been precached.
+            // It's the perfect time to display a
+            // "Content is cached for offline use." message.
+            console.log('Content is cached for offline use.');
+          }
+        }
+      };
+    };
+  }).catch(function (error) {
+    console.error('Error during service worker registration:', error);
+  });
+}
+
+function checkValidServiceWorker(swUrl) {
+  // Check if the service worker can be found. If it can't reload the page.
+  fetch(swUrl).then(function (response) {
+    // Ensure service worker exists, and that we really are getting a JS file.
+    if (response.status === 404 || response.headers.get('content-type').indexOf('javascript') === -1) {
+      // No service worker found. Probably a different app. Reload the page.
+      navigator.serviceWorker.ready.then(function (registration) {
+        registration.unregister().then(function () {
+          window.location.reload();
+        });
+      });
+    } else {
+      // Service worker found. Proceed as normal.
+      registerValidSW(swUrl);
+    }
+  }).catch(function () {
+    console.log('No internet connection found. App is running in offline mode.');
+  });
+}
+
+function unregister() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then(function (registration) {
+      registration.unregister();
+    });
+  }
+}
+},{}],"5qf4":[function(require,module,exports) {
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 var global = module.exports = typeof window != 'undefined' && window.Math == Math
@@ -32886,7 +32996,7 @@ function App() {
       url: 'https://api.github.com/users/reduxjs/repos',
       cache: {
         key: 'GET/reduxjs/repos',
-        strategy: cachedApi.cache.get(cachedApi.constants.CACHE_TYPES.TTL).buildStrategy({ ttl: 10 * 1000 }) // 30 seconds
+        strategy: cachedApi.cache.get(cachedApi.constants.CACHE_TYPES.TTL).buildStrategy({ ttl: 60 * 1000 }) // 1 minute
       }
     })
   );
@@ -33917,6 +34027,10 @@ var _reactRedux = require('react-redux');
 
 var _react3 = require('redux-persist/integration/react');
 
+var _registerServiceWorker = require('./registerServiceWorker');
+
+var _registerServiceWorker2 = _interopRequireDefault(_registerServiceWorker);
+
 require('core-js/modules/es6.typed.array-buffer');
 
 require('core-js/modules/es6.typed.int8-array');
@@ -34132,9 +34246,10 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(_App2.default, null)
   )
 ), document.getElementById('root'));
+(0, _registerServiceWorker2.default)();
 
 if (module.hot) {
   module.hot.accept();
 }
-},{"react":"1n8/","react-dom":"NKHc","react-redux":"jYI/","redux-persist/integration/react":"4j42","core-js/modules/es6.typed.array-buffer":"4NJ0","core-js/modules/es6.typed.int8-array":"wqM+","core-js/modules/es6.typed.uint8-array":"QTtY","core-js/modules/es6.typed.uint8-clamped-array":"Kqgs","core-js/modules/es6.typed.int16-array":"fEGw","core-js/modules/es6.typed.uint16-array":"xyd6","core-js/modules/es6.typed.int32-array":"hIko","core-js/modules/es6.typed.uint32-array":"tNPN","core-js/modules/es6.typed.float32-array":"/wis","core-js/modules/es6.typed.float64-array":"9mbT","core-js/modules/es6.map":"ioKM","core-js/modules/es6.set":"coyu","core-js/modules/es6.weak-map":"D6DP","core-js/modules/es6.weak-set":"bRUR","core-js/modules/es6.reflect.apply":"F0Xu","core-js/modules/es6.reflect.construct":"4JlF","core-js/modules/es6.reflect.define-property":"S841","core-js/modules/es6.reflect.delete-property":"JRlJ","core-js/modules/es6.reflect.get":"kv8Z","core-js/modules/es6.reflect.get-own-property-descriptor":"zj1X","core-js/modules/es6.reflect.get-prototype-of":"d0aC","core-js/modules/es6.reflect.has":"OWTq","core-js/modules/es6.reflect.is-extensible":"deHu","core-js/modules/es6.reflect.own-keys":"e6SV","core-js/modules/es6.reflect.prevent-extensions":"BmyK","core-js/modules/es6.reflect.set":"K46i","core-js/modules/es6.reflect.set-prototype-of":"L5z5","core-js/modules/es6.promise":"Pjta","core-js/modules/es6.symbol":"uVn9","core-js/modules/es6.object.freeze":"EO7q","core-js/modules/es6.object.seal":"+4GY","core-js/modules/es6.object.prevent-extensions":"3llM","core-js/modules/es6.object.is-frozen":"Z1rp","core-js/modules/es6.object.is-sealed":"Fckj","core-js/modules/es6.object.is-extensible":"1EYb","core-js/modules/es6.object.get-own-property-descriptor":"nIty","core-js/modules/es6.object.get-prototype-of":"ud3u","core-js/modules/es6.object.keys":"m9aB","core-js/modules/es6.object.get-own-property-names":"i23/","core-js/modules/es6.object.assign":"K3/J","core-js/modules/es6.object.is":"MlqR","core-js/modules/es6.object.set-prototype-of":"0JGj","core-js/modules/es6.function.name":"N3yi","core-js/modules/es6.string.raw":"t2/9","core-js/modules/es6.string.from-code-point":"xSM3","core-js/modules/es6.string.code-point-at":"zR9y","core-js/modules/es6.string.repeat":"C85R","core-js/modules/es6.string.starts-with":"w2SA","core-js/modules/es6.string.ends-with":"zRn7","core-js/modules/es6.string.includes":"fH7p","core-js/modules/es6.regexp.flags":"pDhD","core-js/modules/es6.regexp.match":"RTfC","core-js/modules/es6.regexp.replace":"KGao","core-js/modules/es6.regexp.split":"a/o/","core-js/modules/es6.regexp.search":"zOab","core-js/modules/es6.array.from":"RRcs","core-js/modules/es6.array.of":"RB6b","core-js/modules/es6.array.copy-within":"tWTB","core-js/modules/es6.array.find":"Qppk","core-js/modules/es6.array.find-index":"7sVm","core-js/modules/es6.array.fill":"hUQ6","core-js/modules/es6.array.iterator":"6w+v","core-js/modules/es6.number.is-finite":"FuY7","core-js/modules/es6.number.is-integer":"pwRL","core-js/modules/es6.number.is-safe-integer":"5qVI","core-js/modules/es6.number.is-nan":"SsgJ","core-js/modules/es6.number.epsilon":"DzYy","core-js/modules/es6.number.min-safe-integer":"+ifB","core-js/modules/es6.number.max-safe-integer":"4shx","core-js/modules/es6.math.acosh":"py3/","core-js/modules/es6.math.asinh":"ob11","core-js/modules/es6.math.atanh":"iUik","core-js/modules/es6.math.cbrt":"YRuK","core-js/modules/es6.math.clz32":"R2Qc","core-js/modules/es6.math.cosh":"nEse","core-js/modules/es6.math.expm1":"AmoX","core-js/modules/es6.math.fround":"vmlq","core-js/modules/es6.math.hypot":"kLut","core-js/modules/es6.math.imul":"A8J8","core-js/modules/es6.math.log1p":"qtpC","core-js/modules/es6.math.log10":"VUW8","core-js/modules/es6.math.log2":"1Jo9","core-js/modules/es6.math.sign":"mZl9","core-js/modules/es6.math.sinh":"m0zb","core-js/modules/es6.math.tanh":"Fnqw","core-js/modules/es6.math.trunc":"tiOR","core-js/modules/es7.array.includes":"TLss","core-js/modules/es7.object.values":"Ltmz","core-js/modules/es7.object.entries":"gxEP","core-js/modules/es7.object.get-own-property-descriptors":"BQD8","core-js/modules/es7.string.pad-start":"9SWN","core-js/modules/es7.string.pad-end":"n20m","core-js/modules/web.timers":"OTsy","core-js/modules/web.immediate":"5hZL","core-js/modules/web.dom.iterable":"v6Aj","regenerator-runtime/runtime":"QVnC","whatwg-fetch":"MCp7","./App":"lY9v","./state":"dm40","./index.css":"vKFU"}]},{},["Focm"], null)
-//# sourceMappingURL=/redux-cached-api-middleware/demo.0392d70c.map
+},{"react":"1n8/","react-dom":"NKHc","react-redux":"jYI/","redux-persist/integration/react":"4j42","./registerServiceWorker":"xv3Y","core-js/modules/es6.typed.array-buffer":"4NJ0","core-js/modules/es6.typed.int8-array":"wqM+","core-js/modules/es6.typed.uint8-array":"QTtY","core-js/modules/es6.typed.uint8-clamped-array":"Kqgs","core-js/modules/es6.typed.int16-array":"fEGw","core-js/modules/es6.typed.uint16-array":"xyd6","core-js/modules/es6.typed.int32-array":"hIko","core-js/modules/es6.typed.uint32-array":"tNPN","core-js/modules/es6.typed.float32-array":"/wis","core-js/modules/es6.typed.float64-array":"9mbT","core-js/modules/es6.map":"ioKM","core-js/modules/es6.set":"coyu","core-js/modules/es6.weak-map":"D6DP","core-js/modules/es6.weak-set":"bRUR","core-js/modules/es6.reflect.apply":"F0Xu","core-js/modules/es6.reflect.construct":"4JlF","core-js/modules/es6.reflect.define-property":"S841","core-js/modules/es6.reflect.delete-property":"JRlJ","core-js/modules/es6.reflect.get":"kv8Z","core-js/modules/es6.reflect.get-own-property-descriptor":"zj1X","core-js/modules/es6.reflect.get-prototype-of":"d0aC","core-js/modules/es6.reflect.has":"OWTq","core-js/modules/es6.reflect.is-extensible":"deHu","core-js/modules/es6.reflect.own-keys":"e6SV","core-js/modules/es6.reflect.prevent-extensions":"BmyK","core-js/modules/es6.reflect.set":"K46i","core-js/modules/es6.reflect.set-prototype-of":"L5z5","core-js/modules/es6.promise":"Pjta","core-js/modules/es6.symbol":"uVn9","core-js/modules/es6.object.freeze":"EO7q","core-js/modules/es6.object.seal":"+4GY","core-js/modules/es6.object.prevent-extensions":"3llM","core-js/modules/es6.object.is-frozen":"Z1rp","core-js/modules/es6.object.is-sealed":"Fckj","core-js/modules/es6.object.is-extensible":"1EYb","core-js/modules/es6.object.get-own-property-descriptor":"nIty","core-js/modules/es6.object.get-prototype-of":"ud3u","core-js/modules/es6.object.keys":"m9aB","core-js/modules/es6.object.get-own-property-names":"i23/","core-js/modules/es6.object.assign":"K3/J","core-js/modules/es6.object.is":"MlqR","core-js/modules/es6.object.set-prototype-of":"0JGj","core-js/modules/es6.function.name":"N3yi","core-js/modules/es6.string.raw":"t2/9","core-js/modules/es6.string.from-code-point":"xSM3","core-js/modules/es6.string.code-point-at":"zR9y","core-js/modules/es6.string.repeat":"C85R","core-js/modules/es6.string.starts-with":"w2SA","core-js/modules/es6.string.ends-with":"zRn7","core-js/modules/es6.string.includes":"fH7p","core-js/modules/es6.regexp.flags":"pDhD","core-js/modules/es6.regexp.match":"RTfC","core-js/modules/es6.regexp.replace":"KGao","core-js/modules/es6.regexp.split":"a/o/","core-js/modules/es6.regexp.search":"zOab","core-js/modules/es6.array.from":"RRcs","core-js/modules/es6.array.of":"RB6b","core-js/modules/es6.array.copy-within":"tWTB","core-js/modules/es6.array.find":"Qppk","core-js/modules/es6.array.find-index":"7sVm","core-js/modules/es6.array.fill":"hUQ6","core-js/modules/es6.array.iterator":"6w+v","core-js/modules/es6.number.is-finite":"FuY7","core-js/modules/es6.number.is-integer":"pwRL","core-js/modules/es6.number.is-safe-integer":"5qVI","core-js/modules/es6.number.is-nan":"SsgJ","core-js/modules/es6.number.epsilon":"DzYy","core-js/modules/es6.number.min-safe-integer":"+ifB","core-js/modules/es6.number.max-safe-integer":"4shx","core-js/modules/es6.math.acosh":"py3/","core-js/modules/es6.math.asinh":"ob11","core-js/modules/es6.math.atanh":"iUik","core-js/modules/es6.math.cbrt":"YRuK","core-js/modules/es6.math.clz32":"R2Qc","core-js/modules/es6.math.cosh":"nEse","core-js/modules/es6.math.expm1":"AmoX","core-js/modules/es6.math.fround":"vmlq","core-js/modules/es6.math.hypot":"kLut","core-js/modules/es6.math.imul":"A8J8","core-js/modules/es6.math.log1p":"qtpC","core-js/modules/es6.math.log10":"VUW8","core-js/modules/es6.math.log2":"1Jo9","core-js/modules/es6.math.sign":"mZl9","core-js/modules/es6.math.sinh":"m0zb","core-js/modules/es6.math.tanh":"Fnqw","core-js/modules/es6.math.trunc":"tiOR","core-js/modules/es7.array.includes":"TLss","core-js/modules/es7.object.values":"Ltmz","core-js/modules/es7.object.entries":"gxEP","core-js/modules/es7.object.get-own-property-descriptors":"BQD8","core-js/modules/es7.string.pad-start":"9SWN","core-js/modules/es7.string.pad-end":"n20m","core-js/modules/web.timers":"OTsy","core-js/modules/web.immediate":"5hZL","core-js/modules/web.dom.iterable":"v6Aj","regenerator-runtime/runtime":"QVnC","whatwg-fetch":"MCp7","./App":"lY9v","./state":"dm40","./index.css":"vKFU"}]},{},["Focm"], null)
+//# sourceMappingURL=/redux-cached-api-middleware/demo.c0f18b5f.map
