@@ -666,6 +666,16 @@ table {
   color: #dae1e7;
 }
 
+.loader {
+  border-width: 2px;
+  border-color: #b8c2cc;
+  border-radius: 9999px;
+  border-top-color: #6574cd;
+  width: 1rem;
+  height: 1rem;
+  animation: spin 1.3s linear infinite;
+}
+
 .list-reset {
   list-style: none;
   padding: 0;
@@ -6251,6 +6261,16 @@ table {
 
 .z-auto {
   z-index: auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @media (min-width: 576px) {
