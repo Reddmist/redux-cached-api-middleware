@@ -28774,18 +28774,7 @@ function Information() {
       _react2.default.createElement(
         "p",
         null,
-        "This is a React + Redux PWA demo application (",
-        _react2.default.createElement(
-          "a",
-          {
-            href: "https://github.com/buz-zard/redux-cached-api-middleware/tree/master/demo",
-            className: "link link--white",
-            target: "_blank",
-            rel: "noopener noreferrer"
-          },
-          "source"
-        ),
-        "). The Redux state is synced with localStorage, so all of the resources and API data can be accessed while in offline mode."
+        "This is a React + Redux PWA demo application. The Redux state is synced with localStorage, so all of the resources and API data can be accessed while in offline mode."
       ),
       _react2.default.createElement("br", null),
       _react2.default.createElement(
@@ -33992,8 +33981,6 @@ var _CryptoCard2 = _interopRequireDefault(_CryptoCard);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -34011,31 +33998,17 @@ var CryptoPrices = function (_React$Component) {
 
   _createClass(CryptoPrices, [{
     key: 'componentDidMount',
-    value: function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var fetchData;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                fetchData = this.props.fetchData;
+    value: function componentDidMount() {
+      var fetchCoinData = this.props.fetchCoinData;
 
-                fetchData();
-
-              case 2:
-              case 'end':
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function componentDidMount() {
-        return _ref.apply(this, arguments);
-      }
-
-      return componentDidMount;
-    }()
+      fetchCoinData();
+      this.interval = setInterval(fetchCoinData, 1000);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      clearInterval(this.interval);
+    }
   }, {
     key: 'render',
     value: function render() {
@@ -34065,36 +34038,45 @@ var CryptoPrices = function (_React$Component) {
           'div',
           { className: 'mx-2 my-6' },
           _react2.default.createElement(
-            'b',
+            'div',
+            { className: 'mb-4' },
+            'Data is gathered via separate API request for each coin. Requests are cached for 30 seconds. Check',
+            ' ',
+            _react2.default.createElement(
+              'a',
+              {
+                href: 'https://github.com/buz-zard/redux-cached-api-middleware/tree/master/demo',
+                className: 'link',
+                target: '_blank',
+                rel: 'noopener noreferrer'
+              },
+              'source code'
+            ),
+            ' ',
+            'for implementation details.'
+          ),
+          _react2.default.createElement(
+            'div',
             null,
-            'Note:'
-          ),
-          ' Cryptocurrency values are powered by',
-          ' ',
-          _react2.default.createElement(
-            'a',
-            {
-              href: 'https://www.cryptonator.com/api/',
-              className: 'link',
-              target: '_blank',
-              rel: 'noopener noreferrer'
-            },
-            'cryptonator API'
-          ),
-          '. Each request is cached for 10 minutes. Check',
-          ' ',
-          _react2.default.createElement(
-            'a',
-            {
-              href: 'https://github.com/buz-zard/redux-cached-api-middleware/tree/master/demo',
-              className: 'link',
-              target: '_blank',
-              rel: 'noopener noreferrer'
-            },
-            'source'
-          ),
-          ' ',
-          'for implementation details.'
+            _react2.default.createElement(
+              'b',
+              null,
+              'Note:'
+            ),
+            ' Cryptocurrency values are powered by',
+            ' ',
+            _react2.default.createElement(
+              'a',
+              {
+                href: 'https://www.cryptonator.com/api/',
+                className: 'link',
+                target: '_blank',
+                rel: 'noopener noreferrer'
+              },
+              'cryptonator API'
+            ),
+            '.'
+          )
         )
       );
     }
@@ -34104,7 +34086,7 @@ var CryptoPrices = function (_React$Component) {
 }(_react2.default.Component);
 
 CryptoPrices.propTypes = {
-  fetchData: _propTypes2.default.func.isRequired,
+  fetchCoinData: _propTypes2.default.func.isRequired,
   data: _propTypes2.default.shape({
     btc: _propTypes2.default.shape({}).isRequired,
     eth: _propTypes2.default.shape({}).isRequired,
@@ -34135,7 +34117,7 @@ var enhance = (0, _reactRedux.connect)(function (state) {
 }, function (dispatch) {
   return {
     dispatch: dispatch,
-    fetchData: function fetchData() {
+    fetchCoinData: function fetchCoinData() {
       var fetchCoinData = function fetchCoinData(url, cacheKey) {
         return dispatch(_es2.default.actions.invoke({
           method: 'GET',
@@ -34143,7 +34125,7 @@ var enhance = (0, _reactRedux.connect)(function (state) {
           endpoint: url,
           cache: {
             key: cacheKey,
-            strategy: _es2.default.cache.get(_es2.default.constants.CACHE_TYPES.TTL_SUCCESS).buildStrategy({ ttl: 10 * 60 * 1000 }) // 10 minutes
+            strategy: _es2.default.cache.get(_es2.default.constants.CACHE_TYPES.TTL_SUCCESS).buildStrategy({ ttl: 30 * 1000 }) // 30 seconds
           }
         }));
       };
@@ -35485,4 +35467,4 @@ _reactDom2.default.render(_react2.default.createElement(
 if (undefined !== 'true') (0, _registerServiceWorker2.default)();
 if (module.hot) module.hot.accept();
 },{"react":"1n8/","react-dom":"NKHc","react-redux":"jYI/","redux-persist/integration/react":"4j42","./registerServiceWorker":"xv3Y","core-js/modules/es6.typed.array-buffer":"4NJ0","core-js/modules/es6.typed.int8-array":"wqM+","core-js/modules/es6.typed.uint8-array":"QTtY","core-js/modules/es6.typed.uint8-clamped-array":"Kqgs","core-js/modules/es6.typed.int16-array":"fEGw","core-js/modules/es6.typed.uint16-array":"xyd6","core-js/modules/es6.typed.int32-array":"hIko","core-js/modules/es6.typed.uint32-array":"tNPN","core-js/modules/es6.typed.float32-array":"/wis","core-js/modules/es6.typed.float64-array":"9mbT","core-js/modules/es6.map":"ioKM","core-js/modules/es6.set":"coyu","core-js/modules/es6.weak-map":"D6DP","core-js/modules/es6.weak-set":"bRUR","core-js/modules/es6.reflect.apply":"F0Xu","core-js/modules/es6.reflect.construct":"4JlF","core-js/modules/es6.reflect.define-property":"S841","core-js/modules/es6.reflect.delete-property":"JRlJ","core-js/modules/es6.reflect.get":"kv8Z","core-js/modules/es6.reflect.get-own-property-descriptor":"zj1X","core-js/modules/es6.reflect.get-prototype-of":"d0aC","core-js/modules/es6.reflect.has":"OWTq","core-js/modules/es6.reflect.is-extensible":"deHu","core-js/modules/es6.reflect.own-keys":"e6SV","core-js/modules/es6.reflect.prevent-extensions":"BmyK","core-js/modules/es6.reflect.set":"K46i","core-js/modules/es6.reflect.set-prototype-of":"L5z5","core-js/modules/es6.promise":"Pjta","core-js/modules/es6.symbol":"uVn9","core-js/modules/es6.object.freeze":"EO7q","core-js/modules/es6.object.seal":"+4GY","core-js/modules/es6.object.prevent-extensions":"3llM","core-js/modules/es6.object.is-frozen":"Z1rp","core-js/modules/es6.object.is-sealed":"Fckj","core-js/modules/es6.object.is-extensible":"1EYb","core-js/modules/es6.object.get-own-property-descriptor":"nIty","core-js/modules/es6.object.get-prototype-of":"ud3u","core-js/modules/es6.object.keys":"m9aB","core-js/modules/es6.object.get-own-property-names":"i23/","core-js/modules/es6.object.assign":"K3/J","core-js/modules/es6.object.is":"MlqR","core-js/modules/es6.object.set-prototype-of":"0JGj","core-js/modules/es6.function.name":"N3yi","core-js/modules/es6.string.raw":"t2/9","core-js/modules/es6.string.from-code-point":"xSM3","core-js/modules/es6.string.code-point-at":"zR9y","core-js/modules/es6.string.repeat":"C85R","core-js/modules/es6.string.starts-with":"w2SA","core-js/modules/es6.string.ends-with":"zRn7","core-js/modules/es6.string.includes":"fH7p","core-js/modules/es6.regexp.flags":"pDhD","core-js/modules/es6.regexp.match":"RTfC","core-js/modules/es6.regexp.replace":"KGao","core-js/modules/es6.regexp.split":"a/o/","core-js/modules/es6.regexp.search":"zOab","core-js/modules/es6.array.from":"RRcs","core-js/modules/es6.array.of":"RB6b","core-js/modules/es6.array.copy-within":"tWTB","core-js/modules/es6.array.find":"Qppk","core-js/modules/es6.array.find-index":"7sVm","core-js/modules/es6.array.fill":"hUQ6","core-js/modules/es6.array.iterator":"6w+v","core-js/modules/es6.number.is-finite":"FuY7","core-js/modules/es6.number.is-integer":"pwRL","core-js/modules/es6.number.is-safe-integer":"5qVI","core-js/modules/es6.number.is-nan":"SsgJ","core-js/modules/es6.number.epsilon":"DzYy","core-js/modules/es6.number.min-safe-integer":"+ifB","core-js/modules/es6.number.max-safe-integer":"4shx","core-js/modules/es6.math.acosh":"py3/","core-js/modules/es6.math.asinh":"ob11","core-js/modules/es6.math.atanh":"iUik","core-js/modules/es6.math.cbrt":"YRuK","core-js/modules/es6.math.clz32":"R2Qc","core-js/modules/es6.math.cosh":"nEse","core-js/modules/es6.math.expm1":"AmoX","core-js/modules/es6.math.fround":"vmlq","core-js/modules/es6.math.hypot":"kLut","core-js/modules/es6.math.imul":"A8J8","core-js/modules/es6.math.log1p":"qtpC","core-js/modules/es6.math.log10":"VUW8","core-js/modules/es6.math.log2":"1Jo9","core-js/modules/es6.math.sign":"mZl9","core-js/modules/es6.math.sinh":"m0zb","core-js/modules/es6.math.tanh":"Fnqw","core-js/modules/es6.math.trunc":"tiOR","core-js/modules/es7.array.includes":"TLss","core-js/modules/es7.object.values":"Ltmz","core-js/modules/es7.object.entries":"gxEP","core-js/modules/es7.object.get-own-property-descriptors":"BQD8","core-js/modules/es7.string.pad-start":"9SWN","core-js/modules/es7.string.pad-end":"n20m","core-js/modules/web.timers":"OTsy","core-js/modules/web.immediate":"5hZL","core-js/modules/web.dom.iterable":"v6Aj","regenerator-runtime/runtime":"QVnC","whatwg-fetch":"MCp7","./App":"lY9v","./state":"dm40","./index.css":"vKFU"}]},{},["Focm"], null)
-//# sourceMappingURL=/redux-cached-api-middleware/demo.7a2f3470.map
+//# sourceMappingURL=/redux-cached-api-middleware/demo.b6e8d09e.map
