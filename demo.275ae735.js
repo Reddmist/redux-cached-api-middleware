@@ -32714,9 +32714,9 @@ var _reduxApiMiddleware = require("redux-api-middleware");
 var asyncToGenerator = function asyncToGenerator(e) {
   return function () {
     var t = e.apply(this, arguments);return new Promise(function (e, r) {
-      return function n(a, c) {
+      return function n(c, a) {
         try {
-          var i = t[a](c),
+          var i = t[c](a),
               u = i.value;
         } catch (e) {
           return void r(e);
@@ -32741,12 +32741,12 @@ var asyncToGenerator = function asyncToGenerator(e) {
     t.indexOf(n) >= 0 || Object.prototype.hasOwnProperty.call(e, n) && (r[n] = e[n]);
   }return r;
 },
-    DEFAULT_CONFIG = { DEFAULT_EVENT: {}, DEFAULT_CACHE_STRATEGY: void 0 },
+    DEFAULT_CONFIG = { DEFAULT_INVOKE_OPTIONS: {}, DEFAULT_CACHE_STRATEGY: void 0 },
     config = _extends({}, DEFAULT_CONFIG),
-    config$1 = { set DEFAULT_EVENT(e) {
-    config.DEFAULT_EVENT = e;
-  }, get DEFAULT_EVENT() {
-    return config.DEFAULT_EVENT;
+    config$1 = { set DEFAULT_INVOKE_OPTIONS(e) {
+    config.DEFAULT_INVOKE_OPTIONS = e;
+  }, get DEFAULT_INVOKE_OPTIONS() {
+    return config.DEFAULT_INVOKE_OPTIONS;
   }, set DEFAULT_CACHE_STRATEGY(e) {
     config.DEFAULT_CACHE_STRATEGY = e;
   }, get DEFAULT_CACHE_STRATEGY() {
@@ -32808,6 +32808,44 @@ var asyncToGenerator = function asyncToGenerator(e) {
     FETCH_START = NAME + ".FETCH_START",
     FETCH_SUCCESS = NAME + ".FETCH_SUCCESS",
     FETCH_ERROR = NAME + ".FETCH_ERROR",
+    getResult = function getResult(e, t) {
+  return e && e[NAME] ? e[NAME][t] : void 0;
+},
+    selectors = Object.freeze({ getResult: getResult }),
+    _this = void 0,
+    invalidateCache = function invalidateCache(e) {
+  return { type: INVALIDATE_CACHE, payload: e };
+},
+    clearCache = function clearCache(e) {
+  return { type: CLEAR_CACHE, payload: e };
+},
+    invoke = function invoke(e) {
+  var t,
+      r = e.cache,
+      n = objectWithoutProperties(e, ["cache"]);return t = asyncToGenerator(regeneratorRuntime.mark(function e(t, c) {
+    var a, i, u, o;return regeneratorRuntime.wrap(function (e) {
+      for (;;) {
+        switch (e.prev = e.next) {case 0:
+            if (i = Object.assign({ types: [] }, config$1.DEFAULT_INVOKE_OPTIONS, n), !r || !r.key) {
+              e.next = 12;break;
+            }if (u = r.strategy || config$1.DEFAULT_CACHE_STRATEGY, o = getResult(c(), r.key), i.types = [{ type: FETCH_START, meta: { cache: r } }, { type: FETCH_SUCCESS, meta: { cache: r } }, { type: FETCH_ERROR, meta: { cache: r } }], !r.shouldFetch) {
+              e.next = 10;break;
+            }if (r.shouldFetch({ state: o })) {
+              e.next = 8;break;
+            }return e.abrupt("return", void 0);case 8:
+            e.next = 12;break;case 10:
+            if (!u || cacheStrategies.get(u.type).shouldFetch({ state: o, strategy: u })) {
+              e.next = 12;break;
+            }return e.abrupt("return", void 0);case 12:
+            return e.abrupt("return", t(((a = {})[_reduxApiMiddleware.RSAA] = i, a)));case 13:case "end":
+            return e.stop();}
+      }
+    }, e, _this);
+  })), function (e, r) {
+    return t.apply(this, arguments);
+  };
+},
+    actions = Object.freeze({ invalidateCache: invalidateCache, clearCache: clearCache, invoke: invoke }),
     DEFAULT_KEY_STATE = { fetching: !1, fetched: !1, error: !1, timestamp: null, successPayload: null, errorPayload: null },
     DEFAULT_STATE = {},
     reducer = function reducer() {
@@ -32815,9 +32853,9 @@ var asyncToGenerator = function asyncToGenerator(e) {
       t = arguments[1],
       r = t.type,
       n = t.payload,
-      a = t.meta;switch (r) {case CLEAR_CACHE:
+      c = t.meta;switch (r) {case CLEAR_CACHE:
       if (n && e[n]) {
-        var c = _extends({}, e);return delete c[n], c;
+        var a = _extends({}, e);return delete a[n], a;
       }return DEFAULT_STATE;case INVALIDATE_CACHE:
       var i = Object.keys(e).filter(function (t) {
         return e[t].fetching;
@@ -32827,72 +32865,13 @@ var asyncToGenerator = function asyncToGenerator(e) {
         }), u;
       }return e;case FETCH_START:
       var o,
-          s = a.cache.key;return _extends({}, e, ((o = {})[s] = _extends({}, e[s] || DEFAULT_KEY_STATE, { fetching: !0 }), o));case FETCH_SUCCESS:
+          s = c.cache.key;return _extends({}, e, ((o = {})[s] = _extends({}, e[s] || DEFAULT_KEY_STATE, { fetching: !0 }), o));case FETCH_SUCCESS:
       var E,
-          l = a.cache.key;return l in e ? _extends({}, e, ((E = {})[l] = _extends({}, e[l], { fetching: !1, fetched: !0, error: !1, timestamp: new Date().getTime(), successPayload: n }), E)) : e;case FETCH_ERROR:
+          T = c.cache.key;return T in e ? _extends({}, e, ((E = {})[T] = _extends({}, e[T], { fetching: !1, fetched: !0, error: !1, timestamp: new Date().getTime(), successPayload: n }), E)) : e;case FETCH_ERROR:
       var f,
-          T = a.cache.key;return T in e ? _extends({}, e, ((f = {})[T] = _extends({}, e[T], { fetching: !1, fetched: !0, error: !0, timestamp: new Date().getTime(), errorPayload: n }), f)) : e;default:
+          C = c.cache.key;return C in e ? _extends({}, e, ((f = {})[C] = _extends({}, e[C], { fetching: !1, fetched: !0, error: !0, timestamp: new Date().getTime(), errorPayload: n }), f)) : e;default:
       return e;}
 },
-    keyValue = function keyValue(e, t, r) {
-  var n = void 0;return e && e[NAME] && e[NAME][t] && (n = e[NAME][t][r]), void 0 === n ? DEFAULT_KEY_STATE[r] : n;
-},
-    isFetching = function isFetching(e, t) {
-  return keyValue(e, t, "fetching");
-},
-    hasFetched = function hasFetched(e, t) {
-  return keyValue(e, t, "fetched");
-},
-    isError = function isError(e, t) {
-  return keyValue(e, t, "error");
-},
-    getTimestamp = function getTimestamp(e, t) {
-  return keyValue(e, t, "timestamp");
-},
-    getSuccessPayload = function getSuccessPayload(e, t) {
-  return keyValue(e, t, "successPayload");
-},
-    getErrorPayload = function getErrorPayload(e, t) {
-  return keyValue(e, t, "errorPayload");
-},
-    getKeyState = function getKeyState(e, t) {
-  return e && e[NAME] ? e[NAME][t] : void 0;
-},
-    getResult = function getResult(e, t) {
-  var r = getKeyState(e, t);return r ? { fetching: r.fetching, fetched: r.fetched, error: r.error, timestamp: r.timestamp, lastSuccessPayload: r.successPayload, lastErrorPayload: r.errorPayload, payload: r.error ? r.errorPayload : r.successPayload } : {};
-},
-    selectors = Object.freeze({ isFetching: isFetching, hasFetched: hasFetched, isError: isError, getTimestamp: getTimestamp, getSuccessPayload: getSuccessPayload, getErrorPayload: getErrorPayload, getKeyState: getKeyState, getResult: getResult }),
-    _this = void 0,
-    invalidateCache = function invalidateCache() {
-  return { type: INVALIDATE_CACHE };
-},
-    invoke = function invoke(e) {
-  var t,
-      r = e.cache,
-      n = objectWithoutProperties(e, ["cache"]);return t = asyncToGenerator(regeneratorRuntime.mark(function e(t, a) {
-    var c, i, u, o;return regeneratorRuntime.wrap(function (e) {
-      for (;;) {
-        switch (e.prev = e.next) {case 0:
-            if (i = Object.assign({ types: [] }, config$1.DEFAULT_EVENT, n), !r || !r.key) {
-              e.next = 12;break;
-            }if (u = r.strategy || config$1.DEFAULT_CACHE_STRATEGY, o = getKeyState(a(), r.key), i.types = [{ type: FETCH_START, meta: { cache: r } }, { type: FETCH_SUCCESS, meta: { cache: r } }, { type: FETCH_ERROR, meta: { cache: r } }], !r.shouldFetch) {
-              e.next = 10;break;
-            }if (r.shouldFetch({ state: o, strategy: u })) {
-              e.next = 8;break;
-            }return e.abrupt("return", void 0);case 8:
-            e.next = 12;break;case 10:
-            if (!u || cacheStrategies.get(u.type).shouldFetch({ state: o, strategy: u })) {
-              e.next = 12;break;
-            }return e.abrupt("return", void 0);case 12:
-            return e.abrupt("return", t(((c = {})[_reduxApiMiddleware.RSAA] = i, c)));case 13:case "end":
-            return e.stop();}
-      }
-    }, e, _this);
-  })), function (e, r) {
-    return t.apply(this, arguments);
-  };
-},
-    actions = Object.freeze({ invalidateCache: invalidateCache, invoke: invoke }),
     index = { config: config$1, constants: constants, cache: cacheStrategies, actions: actions, reducer: reducer, selectors: selectors };exports.default = index;
 //# sourceMappingURL=index.js.map
 },{"redux-api-middleware":"YLYZ"}],"CFBi":[function(require,module,exports) {
@@ -33894,11 +33873,13 @@ var CryptoCard = function (_React$Component) {
       var now = this.state.now;
 
 
-      if (data.lastSuccessPayload && data.lastSuccessPayload.success) {
-        var _data$lastSuccessPayl = data.lastSuccessPayload.ticker,
-            target = _data$lastSuccessPayl.target,
-            price = _data$lastSuccessPayl.price,
-            change = _data$lastSuccessPayl.change;
+      if (!data) return null;
+
+      if (data.successPayload && data.successPayload.success) {
+        var _data$successPayload$ = data.successPayload.ticker,
+            target = _data$successPayload$.target,
+            price = _data$successPayload$.price,
+            change = _data$successPayload$.change;
 
         var changeNumber = Number(change);
         return _react2.default.createElement(
@@ -33959,7 +33940,7 @@ var CryptoCard = function (_React$Component) {
         );
       }
 
-      if (data.error || data.lastSuccessPayload && !data.lastSuccessPayload.success) {
+      if (data.error || data.successPayload && !data.successPayload.success) {
         return _react2.default.createElement(
           'div',
           { className: 'inline-block border-2 border-red rounded py-2 px-3 m-2 flex-grow bg-red-lightest' },
@@ -33985,7 +33966,7 @@ var CryptoCard = function (_React$Component) {
 
 CryptoCard.propTypes = {
   name: _propTypes2.default.string.isRequired,
-  data: _propTypes2.default.shape({}).isRequired
+  data: _propTypes2.default.shape({})
 };
 
 exports.default = CryptoCard;
@@ -34125,10 +34106,10 @@ var CryptoPrices = function (_React$Component) {
 CryptoPrices.propTypes = {
   fetchCoinData: _propTypes2.default.func.isRequired,
   data: _propTypes2.default.shape({
-    btc: _propTypes2.default.shape({}).isRequired,
-    eth: _propTypes2.default.shape({}).isRequired,
-    xrp: _propTypes2.default.shape({}).isRequired,
-    ltc: _propTypes2.default.shape({}).isRequired
+    btc: _propTypes2.default.shape({}),
+    eth: _propTypes2.default.shape({}),
+    xrp: _propTypes2.default.shape({}),
+    ltc: _propTypes2.default.shape({})
   }).isRequired
 };
 
@@ -35504,4 +35485,4 @@ _reactDom2.default.render(_react2.default.createElement(
 if (undefined !== 'true') (0, _registerServiceWorker2.default)();
 if (module.hot) module.hot.accept();
 },{"react":"1n8/","react-dom":"NKHc","react-redux":"jYI/","redux-persist/integration/react":"4j42","./registerServiceWorker":"xv3Y","core-js/modules/es6.typed.array-buffer":"4NJ0","core-js/modules/es6.typed.int8-array":"wqM+","core-js/modules/es6.typed.uint8-array":"QTtY","core-js/modules/es6.typed.uint8-clamped-array":"Kqgs","core-js/modules/es6.typed.int16-array":"fEGw","core-js/modules/es6.typed.uint16-array":"xyd6","core-js/modules/es6.typed.int32-array":"hIko","core-js/modules/es6.typed.uint32-array":"tNPN","core-js/modules/es6.typed.float32-array":"/wis","core-js/modules/es6.typed.float64-array":"9mbT","core-js/modules/es6.map":"ioKM","core-js/modules/es6.set":"coyu","core-js/modules/es6.weak-map":"D6DP","core-js/modules/es6.weak-set":"bRUR","core-js/modules/es6.reflect.apply":"F0Xu","core-js/modules/es6.reflect.construct":"4JlF","core-js/modules/es6.reflect.define-property":"S841","core-js/modules/es6.reflect.delete-property":"JRlJ","core-js/modules/es6.reflect.get":"kv8Z","core-js/modules/es6.reflect.get-own-property-descriptor":"zj1X","core-js/modules/es6.reflect.get-prototype-of":"d0aC","core-js/modules/es6.reflect.has":"OWTq","core-js/modules/es6.reflect.is-extensible":"deHu","core-js/modules/es6.reflect.own-keys":"e6SV","core-js/modules/es6.reflect.prevent-extensions":"BmyK","core-js/modules/es6.reflect.set":"K46i","core-js/modules/es6.reflect.set-prototype-of":"L5z5","core-js/modules/es6.promise":"Pjta","core-js/modules/es6.symbol":"uVn9","core-js/modules/es6.object.freeze":"EO7q","core-js/modules/es6.object.seal":"+4GY","core-js/modules/es6.object.prevent-extensions":"3llM","core-js/modules/es6.object.is-frozen":"Z1rp","core-js/modules/es6.object.is-sealed":"Fckj","core-js/modules/es6.object.is-extensible":"1EYb","core-js/modules/es6.object.get-own-property-descriptor":"nIty","core-js/modules/es6.object.get-prototype-of":"ud3u","core-js/modules/es6.object.keys":"m9aB","core-js/modules/es6.object.get-own-property-names":"i23/","core-js/modules/es6.object.assign":"K3/J","core-js/modules/es6.object.is":"MlqR","core-js/modules/es6.object.set-prototype-of":"0JGj","core-js/modules/es6.function.name":"N3yi","core-js/modules/es6.string.raw":"t2/9","core-js/modules/es6.string.from-code-point":"xSM3","core-js/modules/es6.string.code-point-at":"zR9y","core-js/modules/es6.string.repeat":"C85R","core-js/modules/es6.string.starts-with":"w2SA","core-js/modules/es6.string.ends-with":"zRn7","core-js/modules/es6.string.includes":"fH7p","core-js/modules/es6.regexp.flags":"pDhD","core-js/modules/es6.regexp.match":"RTfC","core-js/modules/es6.regexp.replace":"KGao","core-js/modules/es6.regexp.split":"a/o/","core-js/modules/es6.regexp.search":"zOab","core-js/modules/es6.array.from":"RRcs","core-js/modules/es6.array.of":"RB6b","core-js/modules/es6.array.copy-within":"tWTB","core-js/modules/es6.array.find":"Qppk","core-js/modules/es6.array.find-index":"7sVm","core-js/modules/es6.array.fill":"hUQ6","core-js/modules/es6.array.iterator":"6w+v","core-js/modules/es6.number.is-finite":"FuY7","core-js/modules/es6.number.is-integer":"pwRL","core-js/modules/es6.number.is-safe-integer":"5qVI","core-js/modules/es6.number.is-nan":"SsgJ","core-js/modules/es6.number.epsilon":"DzYy","core-js/modules/es6.number.min-safe-integer":"+ifB","core-js/modules/es6.number.max-safe-integer":"4shx","core-js/modules/es6.math.acosh":"py3/","core-js/modules/es6.math.asinh":"ob11","core-js/modules/es6.math.atanh":"iUik","core-js/modules/es6.math.cbrt":"YRuK","core-js/modules/es6.math.clz32":"R2Qc","core-js/modules/es6.math.cosh":"nEse","core-js/modules/es6.math.expm1":"AmoX","core-js/modules/es6.math.fround":"vmlq","core-js/modules/es6.math.hypot":"kLut","core-js/modules/es6.math.imul":"A8J8","core-js/modules/es6.math.log1p":"qtpC","core-js/modules/es6.math.log10":"VUW8","core-js/modules/es6.math.log2":"1Jo9","core-js/modules/es6.math.sign":"mZl9","core-js/modules/es6.math.sinh":"m0zb","core-js/modules/es6.math.tanh":"Fnqw","core-js/modules/es6.math.trunc":"tiOR","core-js/modules/es7.array.includes":"TLss","core-js/modules/es7.object.values":"Ltmz","core-js/modules/es7.object.entries":"gxEP","core-js/modules/es7.object.get-own-property-descriptors":"BQD8","core-js/modules/es7.string.pad-start":"9SWN","core-js/modules/es7.string.pad-end":"n20m","core-js/modules/web.timers":"OTsy","core-js/modules/web.immediate":"5hZL","core-js/modules/web.dom.iterable":"v6Aj","regenerator-runtime/runtime":"QVnC","whatwg-fetch":"MCp7","./App":"lY9v","./state":"dm40","./index.css":"vKFU"}]},{},["Focm"], null)
-//# sourceMappingURL=/redux-cached-api-middleware/demo.771d6f2c.map
+//# sourceMappingURL=/redux-cached-api-middleware/demo.a3092495.map
