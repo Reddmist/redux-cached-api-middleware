@@ -460,7 +460,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 
 module.exports = checkPropTypes;
 },{"./lib/ReactPropTypesSecret":"Asjh"}],"dkFq":[function(require,module,exports) {
-/** @license React v16.4.1
+/** @license React v16.4.2
  * react.development.js
  *
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -484,7 +484,7 @@ if ('demo' !== "production") {
 
     // TODO: this is special because it gets imported during build.
 
-    var ReactVersion = '16.4.1';
+    var ReactVersion = '16.4.2';
 
     // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
     // nor polyfill, then a plain number is used for performance.
@@ -2306,7 +2306,7 @@ function camelizeStyleName(string) {
 
 module.exports = camelizeStyleName;
 },{"./camelize":"Kkik"}],"BU+h":[function(require,module,exports) {
-/** @license React v16.4.1
+/** @license React v16.4.2
  * react-dom.development.js
  *
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -4866,14 +4866,15 @@ if ('demo' !== "production") {
     var ROOT_ATTRIBUTE_NAME = 'data-reactroot';
     var VALID_ATTRIBUTE_NAME_REGEX = new RegExp('^[' + ATTRIBUTE_NAME_START_CHAR + '][' + ATTRIBUTE_NAME_CHAR + ']*$');
 
+    var hasOwnProperty = Object.prototype.hasOwnProperty;
     var illegalAttributeNameCache = {};
     var validatedAttributeNameCache = {};
 
     function isAttributeNameSafe(attributeName) {
-      if (validatedAttributeNameCache.hasOwnProperty(attributeName)) {
+      if (hasOwnProperty.call(validatedAttributeNameCache, attributeName)) {
         return true;
       }
-      if (illegalAttributeNameCache.hasOwnProperty(attributeName)) {
+      if (hasOwnProperty.call(illegalAttributeNameCache, attributeName)) {
         return false;
       }
       if (VALID_ATTRIBUTE_NAME_REGEX.test(attributeName)) {
@@ -9197,7 +9198,7 @@ if ('demo' !== "production") {
     var rARIA = new RegExp('^(aria)-[' + ATTRIBUTE_NAME_CHAR + ']*$');
     var rARIACamel = new RegExp('^(aria)[A-Z][' + ATTRIBUTE_NAME_CHAR + ']*$');
 
-    var hasOwnProperty = Object.prototype.hasOwnProperty;
+    var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
 
     function getStackAddendum() {
       var stack = ReactDebugCurrentFrame.getStackAddendum();
@@ -9205,7 +9206,7 @@ if ('demo' !== "production") {
     }
 
     function validateProperty(tagName, name) {
-      if (hasOwnProperty.call(warnedProperties, name) && warnedProperties[name]) {
+      if (hasOwnProperty$1.call(warnedProperties, name) && warnedProperties[name]) {
         return true;
       }
 
@@ -19211,7 +19212,7 @@ if ('demo' !== "production") {
 
     // TODO: this is special because it gets imported during build.
 
-    var ReactVersion = '16.4.1';
+    var ReactVersion = '16.4.2';
 
     // TODO: This type is shared between the reconciler and ReactDOM, but will
     // eventually be lifted out to the renderer.
@@ -28789,677 +28790,657 @@ function Information() {
 }
 
 exports.default = Information;
-},{"react":"1n8/"}],"U/o2":[function(require,module,exports) {
+},{"react":"1n8/"}],"XH+S":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
+var DEFAULT_CONFIG = {
+  DEFAULT_INVOKE_OPTIONS: {},
+  DEFAULT_CACHE_STRATEGY: undefined
+};
+
+var config = _extends({}, DEFAULT_CONFIG);
+
+var resetConfig = exports.resetConfig = function resetConfig() {
+  Object.entries(DEFAULT_CONFIG).forEach(function (_ref) {
+    var key = _ref[0],
+        value = _ref[1];
+
+    config[key] = value;
+  });
+};
+
+exports.default = {
+  set DEFAULT_INVOKE_OPTIONS(value) {
+    config.DEFAULT_INVOKE_OPTIONS = value;
+  },
+  get DEFAULT_INVOKE_OPTIONS() {
+    return config.DEFAULT_INVOKE_OPTIONS;
+  },
+  set DEFAULT_CACHE_STRATEGY(value) {
+    config.DEFAULT_CACHE_STRATEGY = value;
+  },
+  get DEFAULT_CACHE_STRATEGY() {
+    return config.DEFAULT_CACHE_STRATEGY;
+  }
+};
+//# sourceMappingURL=config.js.map
+},{}],"6Zj8":[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-/**
- * String key that carries API call info interpreted by this Redux middleware.
- *
- * @constant {string}
- * @access public
- * @default
- */
-var RSAA = '@@redux-api-middleware/RSAA';
+var NAME = exports.NAME = '@RCAM';
+var CACHE_TYPES = exports.CACHE_TYPES = {
+  SIMPLE: 'SIMPLE',
+  SIMPLE_SUCCESS: 'SIMPLE_SUCCESS',
+  TTL: 'TTL',
+  TTL_SUCCESS: 'TTL_SUCCESS'
+};
+//# sourceMappingURL=constants.js.map
+},{}],"eV/C":[function(require,module,exports) {
+'use strict';
 
-exports.default = RSAA;
-},{}],"ID6i":[function(require,module,exports) {
-module.exports = function () { /* empty */ };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.shouldFetch = exports.buildStrategy = exports.type = undefined;
 
-},{}],"E5Ce":[function(require,module,exports) {
-// fallback for non-array-like ES3 and non-enumerable old V8 strings
-var cof = require('./_cof');
-// eslint-disable-next-line no-prototype-builtins
-module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
-  return cof(it) == 'String' ? it.split('') : Object(it);
+var _constants = require('../constants');
+
+var type = exports.type = _constants.CACHE_TYPES.SIMPLE;
+
+var buildStrategy = exports.buildStrategy = function buildStrategy() {
+  return { type: type };
 };
 
-},{"./_cof":"Z5df"}],"Wyka":[function(require,module,exports) {
-// to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = require('./_iobject');
-var defined = require('./_defined');
-module.exports = function (it) {
-  return IObject(defined(it));
+var shouldFetch = exports.shouldFetch = function shouldFetch(_ref) {
+  var state = _ref.state;
+
+  if (state && (state.fetching || state.fetched)) return false;
+  return true;
+};
+//# sourceMappingURL=simple.js.map
+},{"../constants":"6Zj8"}],"B9av":[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.shouldFetch = exports.buildStrategy = exports.type = undefined;
+
+var _constants = require('../constants');
+
+var type = exports.type = _constants.CACHE_TYPES.SIMPLE_SUCCESS;
+
+var buildStrategy = exports.buildStrategy = function buildStrategy() {
+  return { type: type };
 };
 
-},{"./_iobject":"E5Ce","./_defined":"+Bjj"}],"1kq3":[function(require,module,exports) {
-module.exports = true;
+var shouldFetch = exports.shouldFetch = function shouldFetch(_ref) {
+  var state = _ref.state;
 
-},{}],"3zRh":[function(require,module,exports) {
-// optional / simple context binding
-var aFunction = require('./_a-function');
-module.exports = function (fn, that, length) {
-  aFunction(fn);
-  if (that === undefined) return fn;
-  switch (length) {
-    case 1: return function (a) {
-      return fn.call(that, a);
-    };
-    case 2: return function (a, b) {
-      return fn.call(that, a, b);
-    };
-    case 3: return function (a, b, c) {
-      return fn.call(that, a, b, c);
-    };
+  if (state) {
+    if (state.fetching) return false;
+    if (state.fetched && !state.error) return false;
   }
-  return function (/* ...args */) {
-    return fn.apply(that, arguments);
-  };
+  return true;
+};
+//# sourceMappingURL=simpleSuccess.js.map
+},{"../constants":"6Zj8"}],"nNhG":[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.shouldFetch = exports.buildStrategy = exports.type = undefined;
+
+var _constants = require('../constants');
+
+var type = exports.type = _constants.CACHE_TYPES.TTL;
+
+var buildStrategy = exports.buildStrategy = function buildStrategy(_ref) {
+  var ttl = _ref.ttl;
+  return { type: type, ttl: ttl };
 };
 
-},{"./_a-function":"6kYj"}],"zotD":[function(require,module,exports) {
-var isObject = require('./_is-object');
-module.exports = function (it) {
-  if (!isObject(it)) throw TypeError(it + ' is not an object!');
-  return it;
+var shouldFetch = exports.shouldFetch = function shouldFetch(_ref2) {
+  var state = _ref2.state,
+      strategy = _ref2.strategy;
+
+  if (state && strategy) {
+    if (state.fetching) return false;
+    if (state.fetched) {
+      return state.timestamp + strategy.ttl <= Date.now();
+    }
+  }
+  return true;
+};
+//# sourceMappingURL=ttl.js.map
+},{"../constants":"6Zj8"}],"XsfH":[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.shouldFetch = exports.buildStrategy = exports.type = undefined;
+
+var _constants = require('../constants');
+
+var type = exports.type = _constants.CACHE_TYPES.TTL_SUCCESS;
+
+var buildStrategy = exports.buildStrategy = function buildStrategy(_ref) {
+  var ttl = _ref.ttl;
+  return { type: type, ttl: ttl };
 };
 
-},{"./_is-object":"M7z6"}],"6MLN":[function(require,module,exports) {
-// Thank's IE8 for his funny defineProperty
-module.exports = !require('./_fails')(function () {
-  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
+var shouldFetch = exports.shouldFetch = function shouldFetch(_ref2) {
+  var state = _ref2.state,
+      strategy = _ref2.strategy;
+
+  if (state && strategy) {
+    if (state.fetching) return false;
+    if (state.fetched && !state.error) {
+      return state.timestamp + strategy.ttl <= Date.now();
+    }
+  }
+  return true;
+};
+//# sourceMappingURL=ttlSuccess.js.map
+},{"../constants":"6Zj8"}],"PntH":[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 
-},{"./_fails":"5BXi"}],"9kxq":[function(require,module,exports) {
-var isObject = require('./_is-object');
-var document = require('./_global').document;
-// typeof document.createElement is 'object' in old IE
-var is = isObject(document) && isObject(document.createElement);
-module.exports = function (it) {
-  return is ? document.createElement(it) : {};
-};
+var _simple = require('./simple');
 
-},{"./_is-object":"M7z6","./_global":"5qf4"}],"R6c1":[function(require,module,exports) {
-module.exports = !require('./_descriptors') && !require('./_fails')(function () {
-  return Object.defineProperty(require('./_dom-create')('div'), 'a', { get: function () { return 7; } }).a != 7;
-});
+var simple = _interopRequireWildcard(_simple);
 
-},{"./_descriptors":"6MLN","./_fails":"5BXi","./_dom-create":"9kxq"}],"EKwp":[function(require,module,exports) {
-// 7.1.1 ToPrimitive(input [, PreferredType])
-var isObject = require('./_is-object');
-// instead of the ES6 spec version, we didn't implement @@toPrimitive case
-// and the second argument - flag - preferred type is a string
-module.exports = function (it, S) {
-  if (!isObject(it)) return it;
-  var fn, val;
-  if (S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
-  if (typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it))) return val;
-  if (!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
-  throw TypeError("Can't convert object to primitive value");
-};
+var _simpleSuccess = require('./simpleSuccess');
 
-},{"./_is-object":"M7z6"}],"Gfzd":[function(require,module,exports) {
-var anObject = require('./_an-object');
-var IE8_DOM_DEFINE = require('./_ie8-dom-define');
-var toPrimitive = require('./_to-primitive');
-var dP = Object.defineProperty;
+var simpleSuccess = _interopRequireWildcard(_simpleSuccess);
 
-exports.f = require('./_descriptors') ? Object.defineProperty : function defineProperty(O, P, Attributes) {
-  anObject(O);
-  P = toPrimitive(P, true);
-  anObject(Attributes);
-  if (IE8_DOM_DEFINE) try {
-    return dP(O, P, Attributes);
-  } catch (e) { /* empty */ }
-  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
-  if ('value' in Attributes) O[P] = Attributes.value;
-  return O;
-};
+var _ttl = require('./ttl');
 
-},{"./_an-object":"zotD","./_ie8-dom-define":"R6c1","./_to-primitive":"EKwp","./_descriptors":"6MLN"}],"akPY":[function(require,module,exports) {
-var dP = require('./_object-dp');
-var createDesc = require('./_property-desc');
-module.exports = require('./_descriptors') ? function (object, key, value) {
-  return dP.f(object, key, createDesc(1, value));
-} : function (object, key, value) {
-  object[key] = value;
-  return object;
-};
+var ttl = _interopRequireWildcard(_ttl);
 
-},{"./_object-dp":"Gfzd","./_property-desc":"uJ6d","./_descriptors":"6MLN"}],"vSO4":[function(require,module,exports) {
+var _ttlSuccess = require('./ttlSuccess');
 
-var global = require('./_global');
-var core = require('./_core');
-var ctx = require('./_ctx');
-var hide = require('./_hide');
-var has = require('./_has');
-var PROTOTYPE = 'prototype';
+var ttlSuccess = _interopRequireWildcard(_ttlSuccess);
 
-var $export = function (type, name, source) {
-  var IS_FORCED = type & $export.F;
-  var IS_GLOBAL = type & $export.G;
-  var IS_STATIC = type & $export.S;
-  var IS_PROTO = type & $export.P;
-  var IS_BIND = type & $export.B;
-  var IS_WRAP = type & $export.W;
-  var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
-  var expProto = exports[PROTOTYPE];
-  var target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE];
-  var key, own, out;
-  if (IS_GLOBAL) source = name;
-  for (key in source) {
-    // contains in native
-    own = !IS_FORCED && target && target[key] !== undefined;
-    if (own && has(exports, key)) continue;
-    // export native or passed
-    out = own ? target[key] : source[key];
-    // prevent global pollution for namespaces
-    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
-    // bind timers to global for call from export context
-    : IS_BIND && own ? ctx(out, global)
-    // wrap global constructors for prevent change them in library
-    : IS_WRAP && target[key] == out ? (function (C) {
-      var F = function (a, b, c) {
-        if (this instanceof C) {
-          switch (arguments.length) {
-            case 0: return new C();
-            case 1: return new C(a);
-            case 2: return new C(a, b);
-          } return new C(a, b, c);
-        } return C.apply(this, arguments);
-      };
-      F[PROTOTYPE] = C[PROTOTYPE];
-      return F;
-    // make static versions for prototype methods
-    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
-    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
-    if (IS_PROTO) {
-      (exports.virtual || (exports.virtual = {}))[key] = out;
-      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
-      if (type & $export.R && expProto && !expProto[key]) hide(expProto, key, out);
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+exports.default = {
+  get: function get(type) {
+    switch (type) {
+      case simple.type:
+        return simple;
+      case simpleSuccess.type:
+        return simpleSuccess;
+      case ttl.type:
+        return ttl;
+      case ttlSuccess.type:
+        return ttlSuccess;
+      default:
+        throw new Error('Invalid cache type - ' + type);
     }
   }
 };
-// type bitmap
-$export.F = 1;   // forced
-$export.G = 2;   // global
-$export.S = 4;   // static
-$export.P = 8;   // proto
-$export.B = 16;  // bind
-$export.W = 32;  // wrap
-$export.U = 64;  // safe
-$export.R = 128; // real proto method for `library`
-module.exports = $export;
+//# sourceMappingURL=index.js.map
+},{"./simple":"eV/C","./simpleSuccess":"B9av","./ttl":"nNhG","./ttlSuccess":"XsfH"}],"pBGv":[function(require,module,exports) {
 
-},{"./_global":"5qf4","./_core":"ss9A","./_ctx":"3zRh","./_hide":"akPY","./_has":"2uHg"}],"gojl":[function(require,module,exports) {
-module.exports = require('./_hide');
+// shim for using process in browser
+var process = module.exports = {};
 
-},{"./_hide":"akPY"}],"S7IM":[function(require,module,exports) {
-// 7.1.15 ToLength
-var toInteger = require('./_to-integer');
-var min = Math.min;
-module.exports = function (it) {
-  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
-};
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
 
-},{"./_to-integer":"yjVO"}],"Zwq5":[function(require,module,exports) {
-var toInteger = require('./_to-integer');
-var max = Math.max;
-var min = Math.min;
-module.exports = function (index, length) {
-  index = toInteger(index);
-  return index < 0 ? max(index + length, 0) : min(index, length);
-};
+var cachedSetTimeout;
+var cachedClearTimeout;
 
-},{"./_to-integer":"yjVO"}],"LNnS":[function(require,module,exports) {
-// false -> Array#indexOf
-// true  -> Array#includes
-var toIObject = require('./_to-iobject');
-var toLength = require('./_to-length');
-var toAbsoluteIndex = require('./_to-absolute-index');
-module.exports = function (IS_INCLUDES) {
-  return function ($this, el, fromIndex) {
-    var O = toIObject($this);
-    var length = toLength(O.length);
-    var index = toAbsoluteIndex(fromIndex, length);
-    var value;
-    // Array#includes uses SameValueZero equality algorithm
-    // eslint-disable-next-line no-self-compare
-    if (IS_INCLUDES && el != el) while (length > index) {
-      value = O[index++];
-      // eslint-disable-next-line no-self-compare
-      if (value != value) return true;
-    // Array#indexOf ignores holes, Array#includes - not
-    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
-      if (O[index] === el) return IS_INCLUDES || index || 0;
-    } return !IS_INCLUDES && -1;
-  };
-};
-
-},{"./_to-iobject":"Wyka","./_to-length":"S7IM","./_to-absolute-index":"Zwq5"}],"NB7d":[function(require,module,exports) {
-
-var core = require('./_core');
-var global = require('./_global');
-var SHARED = '__core-js_shared__';
-var store = global[SHARED] || (global[SHARED] = {});
-
-(module.exports = function (key, value) {
-  return store[key] || (store[key] = value !== undefined ? value : {});
-})('versions', []).push({
-  version: core.version,
-  mode: require('./_library') ? 'pure' : 'global',
-  copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
-});
-
-},{"./_core":"ss9A","./_global":"5qf4","./_library":"1kq3"}],"/wuY":[function(require,module,exports) {
-var shared = require('./_shared')('keys');
-var uid = require('./_uid');
-module.exports = function (key) {
-  return shared[key] || (shared[key] = uid(key));
-};
-
-},{"./_shared":"NB7d","./_uid":"U49f"}],"B9Lq":[function(require,module,exports) {
-var has = require('./_has');
-var toIObject = require('./_to-iobject');
-var arrayIndexOf = require('./_array-includes')(false);
-var IE_PROTO = require('./_shared-key')('IE_PROTO');
-
-module.exports = function (object, names) {
-  var O = toIObject(object);
-  var i = 0;
-  var result = [];
-  var key;
-  for (key in O) if (key != IE_PROTO) has(O, key) && result.push(key);
-  // Don't enum bug & hidden keys
-  while (names.length > i) if (has(O, key = names[i++])) {
-    ~arrayIndexOf(result, key) || result.push(key);
-  }
-  return result;
-};
-
-},{"./_has":"2uHg","./_to-iobject":"Wyka","./_array-includes":"LNnS","./_shared-key":"/wuY"}],"knrM":[function(require,module,exports) {
-// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys = require('./_object-keys-internal');
-var enumBugKeys = require('./_enum-bug-keys');
-
-module.exports = Object.keys || function keys(O) {
-  return $keys(O, enumBugKeys);
-};
-
-},{"./_object-keys-internal":"B9Lq","./_enum-bug-keys":"9bbv"}],"gjjs":[function(require,module,exports) {
-var dP = require('./_object-dp');
-var anObject = require('./_an-object');
-var getKeys = require('./_object-keys');
-
-module.exports = require('./_descriptors') ? Object.defineProperties : function defineProperties(O, Properties) {
-  anObject(O);
-  var keys = getKeys(Properties);
-  var length = keys.length;
-  var i = 0;
-  var P;
-  while (length > i) dP.f(O, P = keys[i++], Properties[P]);
-  return O;
-};
-
-},{"./_object-dp":"Gfzd","./_an-object":"zotD","./_object-keys":"knrM","./_descriptors":"6MLN"}],"ebIA":[function(require,module,exports) {
-var document = require('./_global').document;
-module.exports = document && document.documentElement;
-
-},{"./_global":"5qf4"}],"TNJq":[function(require,module,exports) {
-// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject = require('./_an-object');
-var dPs = require('./_object-dps');
-var enumBugKeys = require('./_enum-bug-keys');
-var IE_PROTO = require('./_shared-key')('IE_PROTO');
-var Empty = function () { /* empty */ };
-var PROTOTYPE = 'prototype';
-
-// Create object with fake `null` prototype: use iframe Object with cleared prototype
-var createDict = function () {
-  // Thrash, waste and sodomy: IE GC bug
-  var iframe = require('./_dom-create')('iframe');
-  var i = enumBugKeys.length;
-  var lt = '<';
-  var gt = '>';
-  var iframeDocument;
-  iframe.style.display = 'none';
-  require('./_html').appendChild(iframe);
-  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
-  // createDict = iframe.contentWindow.Object;
-  // html.removeChild(iframe);
-  iframeDocument = iframe.contentWindow.document;
-  iframeDocument.open();
-  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
-  iframeDocument.close();
-  createDict = iframeDocument.F;
-  while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
-  return createDict();
-};
-
-module.exports = Object.create || function create(O, Properties) {
-  var result;
-  if (O !== null) {
-    Empty[PROTOTYPE] = anObject(O);
-    result = new Empty();
-    Empty[PROTOTYPE] = null;
-    // add "__proto__" for Object.getPrototypeOf polyfill
-    result[IE_PROTO] = O;
-  } else result = createDict();
-  return Properties === undefined ? result : dPs(result, Properties);
-};
-
-},{"./_an-object":"zotD","./_object-dps":"gjjs","./_enum-bug-keys":"9bbv","./_shared-key":"/wuY","./_dom-create":"9kxq","./_html":"ebIA"}],"Ug9I":[function(require,module,exports) {
-var store = require('./_shared')('wks');
-var uid = require('./_uid');
-var Symbol = require('./_global').Symbol;
-var USE_SYMBOL = typeof Symbol == 'function';
-
-var $exports = module.exports = function (name) {
-  return store[name] || (store[name] =
-    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
-};
-
-$exports.store = store;
-
-},{"./_shared":"NB7d","./_uid":"U49f","./_global":"5qf4"}],"11Ut":[function(require,module,exports) {
-var def = require('./_object-dp').f;
-var has = require('./_has');
-var TAG = require('./_wks')('toStringTag');
-
-module.exports = function (it, tag, stat) {
-  if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
-};
-
-},{"./_object-dp":"Gfzd","./_has":"2uHg","./_wks":"Ug9I"}],"b7Q2":[function(require,module,exports) {
-'use strict';
-var create = require('./_object-create');
-var descriptor = require('./_property-desc');
-var setToStringTag = require('./_set-to-string-tag');
-var IteratorPrototype = {};
-
-// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-require('./_hide')(IteratorPrototype, require('./_wks')('iterator'), function () { return this; });
-
-module.exports = function (Constructor, NAME, next) {
-  Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
-  setToStringTag(Constructor, NAME + ' Iterator');
-};
-
-},{"./_object-create":"TNJq","./_property-desc":"uJ6d","./_set-to-string-tag":"11Ut","./_hide":"akPY","./_wks":"Ug9I"}],"mbLO":[function(require,module,exports) {
-// 7.1.13 ToObject(argument)
-var defined = require('./_defined');
-module.exports = function (it) {
-  return Object(defined(it));
-};
-
-},{"./_defined":"+Bjj"}],"HHE0":[function(require,module,exports) {
-// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-var has = require('./_has');
-var toObject = require('./_to-object');
-var IE_PROTO = require('./_shared-key')('IE_PROTO');
-var ObjectProto = Object.prototype;
-
-module.exports = Object.getPrototypeOf || function (O) {
-  O = toObject(O);
-  if (has(O, IE_PROTO)) return O[IE_PROTO];
-  if (typeof O.constructor == 'function' && O instanceof O.constructor) {
-    return O.constructor.prototype;
-  } return O instanceof Object ? ObjectProto : null;
-};
-
-},{"./_has":"2uHg","./_to-object":"mbLO","./_shared-key":"/wuY"}],"uRfg":[function(require,module,exports) {
-'use strict';
-var LIBRARY = require('./_library');
-var $export = require('./_export');
-var redefine = require('./_redefine');
-var hide = require('./_hide');
-var Iterators = require('./_iterators');
-var $iterCreate = require('./_iter-create');
-var setToStringTag = require('./_set-to-string-tag');
-var getPrototypeOf = require('./_object-gpo');
-var ITERATOR = require('./_wks')('iterator');
-var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
-var FF_ITERATOR = '@@iterator';
-var KEYS = 'keys';
-var VALUES = 'values';
-
-var returnThis = function () { return this; };
-
-module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
-  $iterCreate(Constructor, NAME, next);
-  var getMethod = function (kind) {
-    if (!BUGGY && kind in proto) return proto[kind];
-    switch (kind) {
-      case KEYS: return function keys() { return new Constructor(this, kind); };
-      case VALUES: return function values() { return new Constructor(this, kind); };
-    } return function entries() { return new Constructor(this, kind); };
-  };
-  var TAG = NAME + ' Iterator';
-  var DEF_VALUES = DEFAULT == VALUES;
-  var VALUES_BUG = false;
-  var proto = Base.prototype;
-  var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
-  var $default = $native || getMethod(DEFAULT);
-  var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
-  var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
-  var methods, key, IteratorPrototype;
-  // Fix native
-  if ($anyNative) {
-    IteratorPrototype = getPrototypeOf($anyNative.call(new Base()));
-    if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
-      // Set @@toStringTag to native iterators
-      setToStringTag(IteratorPrototype, TAG, true);
-      // fix for some old engines
-      if (!LIBRARY && typeof IteratorPrototype[ITERATOR] != 'function') hide(IteratorPrototype, ITERATOR, returnThis);
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout() {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
     }
-  }
-  // fix Array#{values, @@iterator}.name in V8 / FF
-  if (DEF_VALUES && $native && $native.name !== VALUES) {
-    VALUES_BUG = true;
-    $default = function values() { return $native.call(this); };
-  }
-  // Define iterator
-  if ((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])) {
-    hide(proto, ITERATOR, $default);
-  }
-  // Plug for library
-  Iterators[NAME] = $default;
-  Iterators[TAG] = returnThis;
-  if (DEFAULT) {
-    methods = {
-      values: DEF_VALUES ? $default : getMethod(VALUES),
-      keys: IS_SET ? $default : getMethod(KEYS),
-      entries: $entries
-    };
-    if (FORCED) for (key in methods) {
-      if (!(key in proto)) redefine(proto, key, methods[key]);
-    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
-  }
-  return methods;
-};
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+})();
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch (e) {
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch (e) {
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e) {
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e) {
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
 
-},{"./_library":"1kq3","./_export":"vSO4","./_redefine":"gojl","./_hide":"akPY","./_iterators":"JO4d","./_iter-create":"b7Q2","./_set-to-string-tag":"11Ut","./_object-gpo":"HHE0","./_wks":"Ug9I"}],"OYXR":[function(require,module,exports) {
-'use strict';
-var addToUnscopables = require('./_add-to-unscopables');
-var step = require('./_iter-step');
-var Iterators = require('./_iterators');
-var toIObject = require('./_to-iobject');
-
-// 22.1.3.4 Array.prototype.entries()
-// 22.1.3.13 Array.prototype.keys()
-// 22.1.3.29 Array.prototype.values()
-// 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = require('./_iter-define')(Array, 'Array', function (iterated, kind) {
-  this._t = toIObject(iterated); // target
-  this._i = 0;                   // next index
-  this._k = kind;                // kind
-// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
-}, function () {
-  var O = this._t;
-  var kind = this._k;
-  var index = this._i++;
-  if (!O || index >= O.length) {
-    this._t = undefined;
-    return step(1);
-  }
-  if (kind == 'keys') return step(0, index);
-  if (kind == 'values') return step(0, O[index]);
-  return step(0, [index, O[index]]);
-}, 'values');
-
-// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
-Iterators.Arguments = Iterators.Array;
-
-addToUnscopables('keys');
-addToUnscopables('values');
-addToUnscopables('entries');
-
-},{"./_add-to-unscopables":"ID6i","./_iter-step":"x8b3","./_iterators":"JO4d","./_to-iobject":"Wyka","./_iter-define":"uRfg"}],"COf8":[function(require,module,exports) {
-
-require('./es6.array.iterator');
-var global = require('./_global');
-var hide = require('./_hide');
-var Iterators = require('./_iterators');
-var TO_STRING_TAG = require('./_wks')('toStringTag');
-
-var DOMIterables = ('CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,' +
-  'DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,' +
-  'MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,' +
-  'SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,' +
-  'TextTrackList,TouchList').split(',');
-
-for (var i = 0; i < DOMIterables.length; i++) {
-  var NAME = DOMIterables[i];
-  var Collection = global[NAME];
-  var proto = Collection && Collection.prototype;
-  if (proto && !proto[TO_STRING_TAG]) hide(proto, TO_STRING_TAG, NAME);
-  Iterators[NAME] = Iterators.Array;
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
 }
 
-},{"./es6.array.iterator":"OYXR","./_global":"5qf4","./_hide":"akPY","./_iterators":"JO4d","./_wks":"Ug9I"}],"lytE":[function(require,module,exports) {
-var toInteger = require('./_to-integer');
-var defined = require('./_defined');
-// true  -> String#at
-// false -> String#codePointAt
-module.exports = function (TO_STRING) {
-  return function (that, pos) {
-    var s = String(defined(that));
-    var i = toInteger(pos);
-    var l = s.length;
-    var a, b;
-    if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
-    a = s.charCodeAt(i);
-    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
-      ? TO_STRING ? s.charAt(i) : a
-      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
-  };
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while (len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
 };
 
-},{"./_to-integer":"yjVO","./_defined":"+Bjj"}],"i+u+":[function(require,module,exports) {
-'use strict';
-var $at = require('./_string-at')(true);
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
 
-// 21.1.3.27 String.prototype[@@iterator]()
-require('./_iter-define')(String, 'String', function (iterated) {
-  this._t = String(iterated); // target
-  this._i = 0;                // next index
-// 21.1.5.2.1 %StringIteratorPrototype%.next()
-}, function () {
-  var O = this._t;
-  var index = this._i;
-  var point;
-  if (index >= O.length) return { value: undefined, done: true };
-  point = $at(O, index);
-  this._i += point.length;
-  return { value: point, done: false };
-});
+function noop() {}
 
-},{"./_string-at":"lytE","./_iter-define":"uRfg"}],"ZHvQ":[function(require,module,exports) {
-// getting tag from 19.1.3.6 Object.prototype.toString()
-var cof = require('./_cof');
-var TAG = require('./_wks')('toStringTag');
-// ES3 wrong here
-var ARG = cof(function () { return arguments; }()) == 'Arguments';
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
 
-// fallback for IE11 Script Access Denied error
-var tryGet = function (it, key) {
-  try {
-    return it[key];
-  } catch (e) { /* empty */ }
+process.listeners = function (name) {
+    return [];
 };
 
-module.exports = function (it) {
-  var O, T, B;
-  return it === undefined ? 'Undefined' : it === null ? 'Null'
-    // @@toStringTag case
-    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
-    // builtinTag case
-    : ARG ? cof(O)
-    // ES3 arguments fallback
-    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
 };
 
-},{"./_cof":"Z5df","./_wks":"Ug9I"}],"By4a":[function(require,module,exports) {
-var classof = require('./_classof');
-var ITERATOR = require('./_wks')('iterator');
-var Iterators = require('./_iterators');
-module.exports = require('./_core').isIterable = function (it) {
-  var O = Object(it);
-  return O[ITERATOR] !== undefined
-    || '@@iterator' in O
-    // eslint-disable-next-line no-prototype-builtins
-    || Iterators.hasOwnProperty(classof(O));
+process.cwd = function () {
+    return '/';
 };
-
-},{"./_classof":"ZHvQ","./_wks":"Ug9I","./_iterators":"JO4d","./_core":"ss9A"}],"TEgB":[function(require,module,exports) {
-require('../modules/web.dom.iterable');
-require('../modules/es6.string.iterator');
-module.exports = require('../modules/core.is-iterable');
-
-},{"../modules/web.dom.iterable":"COf8","../modules/es6.string.iterator":"i+u+","../modules/core.is-iterable":"By4a"}],"gkZy":[function(require,module,exports) {
-module.exports = { "default": require("core-js/library/fn/is-iterable"), __esModule: true };
-},{"core-js/library/fn/is-iterable":"TEgB"}],"7AqT":[function(require,module,exports) {
-var classof = require('./_classof');
-var ITERATOR = require('./_wks')('iterator');
-var Iterators = require('./_iterators');
-module.exports = require('./_core').getIteratorMethod = function (it) {
-  if (it != undefined) return it[ITERATOR]
-    || it['@@iterator']
-    || Iterators[classof(it)];
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
 };
-
-},{"./_classof":"ZHvQ","./_wks":"Ug9I","./_iterators":"JO4d","./_core":"ss9A"}],"ugM7":[function(require,module,exports) {
-var anObject = require('./_an-object');
-var get = require('./core.get-iterator-method');
-module.exports = require('./_core').getIterator = function (it) {
-  var iterFn = get(it);
-  if (typeof iterFn != 'function') throw TypeError(it + ' is not iterable!');
-  return anObject(iterFn.call(it));
+process.umask = function () {
+    return 0;
 };
+},{}],"GrLF":[function(require,module,exports) {
+var define;
+var global = arguments[3];
+var process = require("process");
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (factory((global.ReduxApiMiddleware = {})));
+}(this, (function (exports) { 'use strict';
 
-},{"./_an-object":"zotD","./core.get-iterator-method":"7AqT","./_core":"ss9A"}],"Lvd3":[function(require,module,exports) {
-require('../modules/web.dom.iterable');
-require('../modules/es6.string.iterator');
-module.exports = require('../modules/core.get-iterator');
+  /**
+   * String key that carries API call info interpreted by this Redux middleware.
+   *
+   * @constant {string}
+   * @access public
+   * @default
+   */
+  var RSAA = '@@redux-api-middleware/RSAA';
 
-},{"../modules/web.dom.iterable":"COf8","../modules/es6.string.iterator":"i+u+","../modules/core.get-iterator":"ugM7"}],"X9RM":[function(require,module,exports) {
-module.exports = { "default": require("core-js/library/fn/get-iterator"), __esModule: true };
-},{"core-js/library/fn/get-iterator":"Lvd3"}],"m8OI":[function(require,module,exports) {
-"use strict";
+  function _typeof(obj) {
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof = function (obj) {
+        return typeof obj;
+      };
+    } else {
+      _typeof = function (obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      };
+    }
 
-exports.__esModule = true;
+    return _typeof(obj);
+  }
 
-var _isIterable2 = require("../core-js/is-iterable");
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+    try {
+      var info = gen[key](arg);
+      var value = info.value;
+    } catch (error) {
+      reject(error);
+      return;
+    }
 
-var _isIterable3 = _interopRequireDefault(_isIterable2);
+    if (info.done) {
+      resolve(value);
+    } else {
+      Promise.resolve(value).then(_next, _throw);
+    }
+  }
 
-var _getIterator2 = require("../core-js/get-iterator");
+  function _asyncToGenerator(fn) {
+    return function () {
+      var self = this,
+          args = arguments;
+      return new Promise(function (resolve, reject) {
+        var gen = fn.apply(self, args);
 
-var _getIterator3 = _interopRequireDefault(_getIterator2);
+        function _next(value) {
+          asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+        }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+        function _throw(err) {
+          asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+        }
 
-exports.default = function () {
-  function sliceIterator(arr, i) {
+        _next(undefined);
+      });
+    };
+  }
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
+  function _objectSpread(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+      var ownKeys = Object.keys(source);
+
+      if (typeof Object.getOwnPropertySymbols === 'function') {
+        ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+          return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+        }));
+      }
+
+      ownKeys.forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    }
+
+    return target;
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) _setPrototypeOf(subClass, superClass);
+  }
+
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+      return o.__proto__ || Object.getPrototypeOf(o);
+    };
+    return _getPrototypeOf(o);
+  }
+
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+      o.__proto__ = p;
+      return o;
+    };
+
+    return _setPrototypeOf(o, p);
+  }
+
+  function isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+    if (Reflect.construct.sham) return false;
+    if (typeof Proxy === "function") return true;
+
+    try {
+      Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function _construct(Parent, args, Class) {
+    if (isNativeReflectConstruct()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct(Parent, args, Class) {
+        var a = [null];
+        a.push.apply(a, args);
+        var Constructor = Function.bind.apply(Parent, a);
+        var instance = new Constructor();
+        if (Class) _setPrototypeOf(instance, Class.prototype);
+        return instance;
+      };
+    }
+
+    return _construct.apply(null, arguments);
+  }
+
+  function _wrapNativeSuper(Class) {
+    var _cache = typeof Map === "function" ? new Map() : undefined;
+
+    _wrapNativeSuper = function _wrapNativeSuper(Class) {
+      if (Class === null) return null;
+
+      if (typeof Class !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class)) return _cache.get(Class);
+
+        _cache.set(Class, Wrapper);
+      }
+
+      function Wrapper() {
+        return _construct(Class, arguments, _getPrototypeOf(this).constructor);
+      }
+
+      Wrapper.prototype = Object.create(Class.prototype, {
+        constructor: {
+          value: Wrapper,
+          enumerable: false,
+          writable: true,
+          configurable: true
+        }
+      });
+      return _setPrototypeOf(Wrapper, Class);
+    };
+
+    return _wrapNativeSuper(Class);
+  }
+
+  function _assertThisInitialized(self) {
+    if (self === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return self;
+  }
+
+  function _possibleConstructorReturn(self, call) {
+    if (call && (typeof call === "object" || typeof call === "function")) {
+      return call;
+    }
+
+    return _assertThisInitialized(self);
+  }
+
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+  }
+
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+  }
+
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+      return arr2;
+    }
+  }
+
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+
+  function _iterableToArray(iter) {
+    if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+  }
+
+  function _iterableToArrayLimit(arr, i) {
     var _arr = [];
     var _n = true;
     var _d = false;
     var _e = undefined;
 
     try {
-      for (var _i = (0, _getIterator3.default)(arr), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
 
         if (i && _arr.length === i) break;
@@ -29469,7 +29450,7 @@ exports.default = function () {
       _e = err;
     } finally {
       try {
-        if (!_n && _i["return"]) _i["return"]();
+        if (!_n && _i["return"] != null) _i["return"]();
       } finally {
         if (_d) throw _e;
       }
@@ -29478,3403 +29459,2953 @@ exports.default = function () {
     return _arr;
   }
 
-  return function (arr, i) {
-    if (Array.isArray(arr)) {
-      return arr;
-    } else if ((0, _isIterable3.default)(Object(arr))) {
-      return sliceIterator(arr, i);
-    } else {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance");
-    }
-  };
-}();
-},{"../core-js/is-iterable":"gkZy","../core-js/get-iterator":"X9RM"}],"ZxII":[function(require,module,exports) {
-exports.f = require('./_wks');
-
-},{"./_wks":"Ug9I"}],"nFDa":[function(require,module,exports) {
-require('../../modules/es6.string.iterator');
-require('../../modules/web.dom.iterable');
-module.exports = require('../../modules/_wks-ext').f('iterator');
-
-},{"../../modules/es6.string.iterator":"i+u+","../../modules/web.dom.iterable":"COf8","../../modules/_wks-ext":"ZxII"}],"6t7t":[function(require,module,exports) {
-module.exports = { "default": require("core-js/library/fn/symbol/iterator"), __esModule: true };
-},{"core-js/library/fn/symbol/iterator":"nFDa"}],"e8vu":[function(require,module,exports) {
-var META = require('./_uid')('meta');
-var isObject = require('./_is-object');
-var has = require('./_has');
-var setDesc = require('./_object-dp').f;
-var id = 0;
-var isExtensible = Object.isExtensible || function () {
-  return true;
-};
-var FREEZE = !require('./_fails')(function () {
-  return isExtensible(Object.preventExtensions({}));
-});
-var setMeta = function (it) {
-  setDesc(it, META, { value: {
-    i: 'O' + ++id, // object ID
-    w: {}          // weak collections IDs
-  } });
-};
-var fastKey = function (it, create) {
-  // return primitive with prefix
-  if (!isObject(it)) return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
-  if (!has(it, META)) {
-    // can't set metadata to uncaught frozen object
-    if (!isExtensible(it)) return 'F';
-    // not necessary to add metadata
-    if (!create) return 'E';
-    // add missing metadata
-    setMeta(it);
-  // return object ID
-  } return it[META].i;
-};
-var getWeak = function (it, create) {
-  if (!has(it, META)) {
-    // can't set metadata to uncaught frozen object
-    if (!isExtensible(it)) return true;
-    // not necessary to add metadata
-    if (!create) return false;
-    // add missing metadata
-    setMeta(it);
-  // return hash weak collections IDs
-  } return it[META].w;
-};
-// add metadata on freeze-family methods calling
-var onFreeze = function (it) {
-  if (FREEZE && meta.NEED && isExtensible(it) && !has(it, META)) setMeta(it);
-  return it;
-};
-var meta = module.exports = {
-  KEY: META,
-  NEED: false,
-  fastKey: fastKey,
-  getWeak: getWeak,
-  onFreeze: onFreeze
-};
-
-},{"./_uid":"U49f","./_is-object":"M7z6","./_has":"2uHg","./_object-dp":"Gfzd","./_fails":"5BXi"}],"c2zY":[function(require,module,exports) {
-
-var global = require('./_global');
-var core = require('./_core');
-var LIBRARY = require('./_library');
-var wksExt = require('./_wks-ext');
-var defineProperty = require('./_object-dp').f;
-module.exports = function (name) {
-  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
-  if (name.charAt(0) != '_' && !(name in $Symbol)) defineProperty($Symbol, name, { value: wksExt.f(name) });
-};
-
-},{"./_global":"5qf4","./_core":"ss9A","./_library":"1kq3","./_wks-ext":"ZxII","./_object-dp":"Gfzd"}],"ycyv":[function(require,module,exports) {
-// all enumerable object keys, includes symbols
-var getKeys = require('./_object-keys');
-var gOPS = require('./_object-gops');
-var pIE = require('./_object-pie');
-module.exports = function (it) {
-  var result = getKeys(it);
-  var getSymbols = gOPS.f;
-  if (getSymbols) {
-    var symbols = getSymbols(it);
-    var isEnum = pIE.f;
-    var i = 0;
-    var key;
-    while (symbols.length > i) if (isEnum.call(it, key = symbols[i++])) result.push(key);
-  } return result;
-};
-
-},{"./_object-keys":"knrM","./_object-gops":"EWMd","./_object-pie":"vjRp"}],"ayXv":[function(require,module,exports) {
-// 7.2.2 IsArray(argument)
-var cof = require('./_cof');
-module.exports = Array.isArray || function isArray(arg) {
-  return cof(arg) == 'Array';
-};
-
-},{"./_cof":"Z5df"}],"Ni5N":[function(require,module,exports) {
-// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys = require('./_object-keys-internal');
-var hiddenKeys = require('./_enum-bug-keys').concat('length', 'prototype');
-
-exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
-  return $keys(O, hiddenKeys);
-};
-
-},{"./_object-keys-internal":"B9Lq","./_enum-bug-keys":"9bbv"}],"rMkZ":[function(require,module,exports) {
-// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-var toIObject = require('./_to-iobject');
-var gOPN = require('./_object-gopn').f;
-var toString = {}.toString;
-
-var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
-  ? Object.getOwnPropertyNames(window) : [];
-
-var getWindowNames = function (it) {
-  try {
-    return gOPN(it);
-  } catch (e) {
-    return windowNames.slice();
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance");
   }
-};
 
-module.exports.f = function getOwnPropertyNames(it) {
-  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
-};
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance");
+  }
 
-},{"./_to-iobject":"Wyka","./_object-gopn":"Ni5N"}],"sxPs":[function(require,module,exports) {
-var pIE = require('./_object-pie');
-var createDesc = require('./_property-desc');
-var toIObject = require('./_to-iobject');
-var toPrimitive = require('./_to-primitive');
-var has = require('./_has');
-var IE8_DOM_DEFINE = require('./_ie8-dom-define');
-var gOPD = Object.getOwnPropertyDescriptor;
+  function createCommonjsModule(fn, module) {
+  	return module = { exports: {} }, fn(module, module.exports), module.exports;
+  }
 
-exports.f = require('./_descriptors') ? gOPD : function getOwnPropertyDescriptor(O, P) {
-  O = toIObject(O);
-  P = toPrimitive(P, true);
-  if (IE8_DOM_DEFINE) try {
-    return gOPD(O, P);
-  } catch (e) { /* empty */ }
-  if (has(O, P)) return createDesc(!pIE.f.call(O, P), O[P]);
-};
-
-},{"./_object-pie":"vjRp","./_property-desc":"uJ6d","./_to-iobject":"Wyka","./_to-primitive":"EKwp","./_has":"2uHg","./_ie8-dom-define":"R6c1","./_descriptors":"6MLN"}],"Aa2f":[function(require,module,exports) {
-
-'use strict';
-// ECMAScript 6 symbols shim
-var global = require('./_global');
-var has = require('./_has');
-var DESCRIPTORS = require('./_descriptors');
-var $export = require('./_export');
-var redefine = require('./_redefine');
-var META = require('./_meta').KEY;
-var $fails = require('./_fails');
-var shared = require('./_shared');
-var setToStringTag = require('./_set-to-string-tag');
-var uid = require('./_uid');
-var wks = require('./_wks');
-var wksExt = require('./_wks-ext');
-var wksDefine = require('./_wks-define');
-var enumKeys = require('./_enum-keys');
-var isArray = require('./_is-array');
-var anObject = require('./_an-object');
-var isObject = require('./_is-object');
-var toIObject = require('./_to-iobject');
-var toPrimitive = require('./_to-primitive');
-var createDesc = require('./_property-desc');
-var _create = require('./_object-create');
-var gOPNExt = require('./_object-gopn-ext');
-var $GOPD = require('./_object-gopd');
-var $DP = require('./_object-dp');
-var $keys = require('./_object-keys');
-var gOPD = $GOPD.f;
-var dP = $DP.f;
-var gOPN = gOPNExt.f;
-var $Symbol = global.Symbol;
-var $JSON = global.JSON;
-var _stringify = $JSON && $JSON.stringify;
-var PROTOTYPE = 'prototype';
-var HIDDEN = wks('_hidden');
-var TO_PRIMITIVE = wks('toPrimitive');
-var isEnum = {}.propertyIsEnumerable;
-var SymbolRegistry = shared('symbol-registry');
-var AllSymbols = shared('symbols');
-var OPSymbols = shared('op-symbols');
-var ObjectProto = Object[PROTOTYPE];
-var USE_NATIVE = typeof $Symbol == 'function';
-var QObject = global.QObject;
-// Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
-var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
-
-// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
-var setSymbolDesc = DESCRIPTORS && $fails(function () {
-  return _create(dP({}, 'a', {
-    get: function () { return dP(this, 'a', { value: 7 }).a; }
-  })).a != 7;
-}) ? function (it, key, D) {
-  var protoDesc = gOPD(ObjectProto, key);
-  if (protoDesc) delete ObjectProto[key];
-  dP(it, key, D);
-  if (protoDesc && it !== ObjectProto) dP(ObjectProto, key, protoDesc);
-} : dP;
-
-var wrap = function (tag) {
-  var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
-  sym._k = tag;
-  return sym;
-};
-
-var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function (it) {
-  return typeof it == 'symbol';
-} : function (it) {
-  return it instanceof $Symbol;
-};
-
-var $defineProperty = function defineProperty(it, key, D) {
-  if (it === ObjectProto) $defineProperty(OPSymbols, key, D);
-  anObject(it);
-  key = toPrimitive(key, true);
-  anObject(D);
-  if (has(AllSymbols, key)) {
-    if (!D.enumerable) {
-      if (!has(it, HIDDEN)) dP(it, HIDDEN, createDesc(1, {}));
-      it[HIDDEN][key] = true;
-    } else {
-      if (has(it, HIDDEN) && it[HIDDEN][key]) it[HIDDEN][key] = false;
-      D = _create(D, { enumerable: createDesc(0, false) });
-    } return setSymbolDesc(it, key, D);
-  } return dP(it, key, D);
-};
-var $defineProperties = function defineProperties(it, P) {
-  anObject(it);
-  var keys = enumKeys(P = toIObject(P));
-  var i = 0;
-  var l = keys.length;
-  var key;
-  while (l > i) $defineProperty(it, key = keys[i++], P[key]);
-  return it;
-};
-var $create = function create(it, P) {
-  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
-};
-var $propertyIsEnumerable = function propertyIsEnumerable(key) {
-  var E = isEnum.call(this, key = toPrimitive(key, true));
-  if (this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return false;
-  return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
-};
-var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key) {
-  it = toIObject(it);
-  key = toPrimitive(key, true);
-  if (it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return;
-  var D = gOPD(it, key);
-  if (D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key])) D.enumerable = true;
-  return D;
-};
-var $getOwnPropertyNames = function getOwnPropertyNames(it) {
-  var names = gOPN(toIObject(it));
-  var result = [];
-  var i = 0;
-  var key;
-  while (names.length > i) {
-    if (!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META) result.push(key);
-  } return result;
-};
-var $getOwnPropertySymbols = function getOwnPropertySymbols(it) {
-  var IS_OP = it === ObjectProto;
-  var names = gOPN(IS_OP ? OPSymbols : toIObject(it));
-  var result = [];
-  var i = 0;
-  var key;
-  while (names.length > i) {
-    if (has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true)) result.push(AllSymbols[key]);
-  } return result;
-};
-
-// 19.4.1.1 Symbol([description])
-if (!USE_NATIVE) {
-  $Symbol = function Symbol() {
-    if (this instanceof $Symbol) throw TypeError('Symbol is not a constructor!');
-    var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
-    var $set = function (value) {
-      if (this === ObjectProto) $set.call(OPSymbols, value);
-      if (has(this, HIDDEN) && has(this[HIDDEN], tag)) this[HIDDEN][tag] = false;
-      setSymbolDesc(this, tag, createDesc(1, value));
-    };
-    if (DESCRIPTORS && setter) setSymbolDesc(ObjectProto, tag, { configurable: true, set: $set });
-    return wrap(tag);
-  };
-  redefine($Symbol[PROTOTYPE], 'toString', function toString() {
-    return this._k;
+  var _global = createCommonjsModule(function (module) {
+  // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+  var global = module.exports = typeof window != 'undefined' && window.Math == Math
+    ? window : typeof self != 'undefined' && self.Math == Math ? self
+    // eslint-disable-next-line no-new-func
+    : Function('return this')();
+  if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
   });
 
-  $GOPD.f = $getOwnPropertyDescriptor;
-  $DP.f = $defineProperty;
-  require('./_object-gopn').f = gOPNExt.f = $getOwnPropertyNames;
-  require('./_object-pie').f = $propertyIsEnumerable;
-  require('./_object-gops').f = $getOwnPropertySymbols;
+  var _core = createCommonjsModule(function (module) {
+  var core = module.exports = { version: '2.5.3' };
+  if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+  });
+  var _core_1 = _core.version;
 
-  if (DESCRIPTORS && !require('./_library')) {
-    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
-  }
-
-  wksExt.f = function (name) {
-    return wrap(wks(name));
+  var _isObject = function (it) {
+    return typeof it === 'object' ? it !== null : typeof it === 'function';
   };
-}
 
-$export($export.G + $export.W + $export.F * !USE_NATIVE, { Symbol: $Symbol });
+  var _anObject = function (it) {
+    if (!_isObject(it)) throw TypeError(it + ' is not an object!');
+    return it;
+  };
 
-for (var es6Symbols = (
-  // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
-  'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
-).split(','), j = 0; es6Symbols.length > j;)wks(es6Symbols[j++]);
-
-for (var wellKnownSymbols = $keys(wks.store), k = 0; wellKnownSymbols.length > k;) wksDefine(wellKnownSymbols[k++]);
-
-$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
-  // 19.4.2.1 Symbol.for(key)
-  'for': function (key) {
-    return has(SymbolRegistry, key += '')
-      ? SymbolRegistry[key]
-      : SymbolRegistry[key] = $Symbol(key);
-  },
-  // 19.4.2.5 Symbol.keyFor(sym)
-  keyFor: function keyFor(sym) {
-    if (!isSymbol(sym)) throw TypeError(sym + ' is not a symbol!');
-    for (var key in SymbolRegistry) if (SymbolRegistry[key] === sym) return key;
-  },
-  useSetter: function () { setter = true; },
-  useSimple: function () { setter = false; }
-});
-
-$export($export.S + $export.F * !USE_NATIVE, 'Object', {
-  // 19.1.2.2 Object.create(O [, Properties])
-  create: $create,
-  // 19.1.2.4 Object.defineProperty(O, P, Attributes)
-  defineProperty: $defineProperty,
-  // 19.1.2.3 Object.defineProperties(O, Properties)
-  defineProperties: $defineProperties,
-  // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-  getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
-  // 19.1.2.7 Object.getOwnPropertyNames(O)
-  getOwnPropertyNames: $getOwnPropertyNames,
-  // 19.1.2.8 Object.getOwnPropertySymbols(O)
-  getOwnPropertySymbols: $getOwnPropertySymbols
-});
-
-// 24.3.2 JSON.stringify(value [, replacer [, space]])
-$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function () {
-  var S = $Symbol();
-  // MS Edge converts symbol values to JSON as {}
-  // WebKit converts symbol values to JSON as null
-  // V8 throws on boxed symbols
-  return _stringify([S]) != '[null]' || _stringify({ a: S }) != '{}' || _stringify(Object(S)) != '{}';
-})), 'JSON', {
-  stringify: function stringify(it) {
-    var args = [it];
-    var i = 1;
-    var replacer, $replacer;
-    while (arguments.length > i) args.push(arguments[i++]);
-    $replacer = replacer = args[1];
-    if (!isObject(replacer) && it === undefined || isSymbol(it)) return; // IE8 returns string on undefined
-    if (!isArray(replacer)) replacer = function (key, value) {
-      if (typeof $replacer == 'function') value = $replacer.call(this, key, value);
-      if (!isSymbol(value)) return value;
-    };
-    args[1] = replacer;
-    return _stringify.apply($JSON, args);
-  }
-});
-
-// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
-$Symbol[PROTOTYPE][TO_PRIMITIVE] || require('./_hide')($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
-// 19.4.3.5 Symbol.prototype[@@toStringTag]
-setToStringTag($Symbol, 'Symbol');
-// 20.2.1.9 Math[@@toStringTag]
-setToStringTag(Math, 'Math', true);
-// 24.3.3 JSON[@@toStringTag]
-setToStringTag(global.JSON, 'JSON', true);
-
-},{"./_global":"5qf4","./_has":"2uHg","./_descriptors":"6MLN","./_export":"vSO4","./_redefine":"gojl","./_meta":"e8vu","./_fails":"5BXi","./_shared":"NB7d","./_set-to-string-tag":"11Ut","./_uid":"U49f","./_wks":"Ug9I","./_wks-ext":"ZxII","./_wks-define":"c2zY","./_enum-keys":"ycyv","./_is-array":"ayXv","./_an-object":"zotD","./_is-object":"M7z6","./_to-iobject":"Wyka","./_to-primitive":"EKwp","./_property-desc":"uJ6d","./_object-create":"TNJq","./_object-gopn-ext":"rMkZ","./_object-gopd":"sxPs","./_object-dp":"Gfzd","./_object-keys":"knrM","./_object-gopn":"Ni5N","./_object-pie":"vjRp","./_object-gops":"EWMd","./_library":"1kq3","./_hide":"akPY"}],"tuDi":[function(require,module,exports) {
-
-},{}],"c6mp":[function(require,module,exports) {
-require('./_wks-define')('asyncIterator');
-
-},{"./_wks-define":"c2zY"}],"2mwf":[function(require,module,exports) {
-require('./_wks-define')('observable');
-
-},{"./_wks-define":"c2zY"}],"Ky5l":[function(require,module,exports) {
-require('../../modules/es6.symbol');
-require('../../modules/es6.object.to-string');
-require('../../modules/es7.symbol.async-iterator');
-require('../../modules/es7.symbol.observable');
-module.exports = require('../../modules/_core').Symbol;
-
-},{"../../modules/es6.symbol":"Aa2f","../../modules/es6.object.to-string":"tuDi","../../modules/es7.symbol.async-iterator":"c6mp","../../modules/es7.symbol.observable":"2mwf","../../modules/_core":"ss9A"}],"ibPW":[function(require,module,exports) {
-module.exports = { "default": require("core-js/library/fn/symbol"), __esModule: true };
-},{"core-js/library/fn/symbol":"Ky5l"}],"GyB/":[function(require,module,exports) {
-"use strict";
-
-exports.__esModule = true;
-
-var _iterator = require("../core-js/symbol/iterator");
-
-var _iterator2 = _interopRequireDefault(_iterator);
-
-var _symbol = require("../core-js/symbol");
-
-var _symbol2 = _interopRequireDefault(_symbol);
-
-var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
-  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
-} : function (obj) {
-  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
-};
-},{"../core-js/symbol/iterator":"6t7t","../core-js/symbol":"ibPW"}],"hT6N":[function(require,module,exports) {
-/**
- * lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash modularize exports="npm" -o ./`
- * Copyright jQuery Foundation and other contributors <https://jquery.org/>
- * Released under MIT license <https://lodash.com/license>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- */
-
-/** `Object#toString` result references. */
-var objectTag = '[object Object]';
-
-/**
- * Checks if `value` is a host object in IE < 9.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
- */
-function isHostObject(value) {
-  // Many host objects are `Object` objects that can coerce to strings
-  // despite having improperly defined `toString` methods.
-  var result = false;
-  if (value != null && typeof value.toString != 'function') {
+  var _fails = function (exec) {
     try {
-      result = !!(value + '');
-    } catch (e) {}
-  }
-  return result;
-}
-
-/**
- * Creates a unary function that invokes `func` with its argument transformed.
- *
- * @private
- * @param {Function} func The function to wrap.
- * @param {Function} transform The argument transform.
- * @returns {Function} Returns the new function.
- */
-function overArg(func, transform) {
-  return function(arg) {
-    return func(transform(arg));
+      return !!exec();
+    } catch (e) {
+      return true;
+    }
   };
-}
 
-/** Used for built-in method references. */
-var funcProto = Function.prototype,
-    objectProto = Object.prototype;
+  // Thank's IE8 for his funny defineProperty
+  var _descriptors = !_fails(function () {
+    return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
+  });
 
-/** Used to resolve the decompiled source of functions. */
-var funcToString = funcProto.toString;
+  var document$1 = _global.document;
+  // typeof document.createElement is 'object' in old IE
+  var is = _isObject(document$1) && _isObject(document$1.createElement);
+  var _domCreate = function (it) {
+    return is ? document$1.createElement(it) : {};
+  };
 
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
+  var _ie8DomDefine = !_descriptors && !_fails(function () {
+    return Object.defineProperty(_domCreate('div'), 'a', { get: function () { return 7; } }).a != 7;
+  });
 
-/** Used to infer the `Object` constructor. */
-var objectCtorString = funcToString.call(Object);
+  // 7.1.1 ToPrimitive(input [, PreferredType])
 
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var objectToString = objectProto.toString;
+  // instead of the ES6 spec version, we didn't implement @@toPrimitive case
+  // and the second argument - flag - preferred type is a string
+  var _toPrimitive = function (it, S) {
+    if (!_isObject(it)) return it;
+    var fn, val;
+    if (S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
+    if (typeof (fn = it.valueOf) == 'function' && !_isObject(val = fn.call(it))) return val;
+    if (!S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
+    throw TypeError("Can't convert object to primitive value");
+  };
 
-/** Built-in value references. */
-var getPrototype = overArg(Object.getPrototypeOf, Object);
+  var dP = Object.defineProperty;
 
-/**
- * Checks if `value` is object-like. A value is object-like if it's not `null`
- * and has a `typeof` result of "object".
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- * @example
- *
- * _.isObjectLike({});
- * // => true
- *
- * _.isObjectLike([1, 2, 3]);
- * // => true
- *
- * _.isObjectLike(_.noop);
- * // => false
- *
- * _.isObjectLike(null);
- * // => false
- */
-function isObjectLike(value) {
-  return !!value && typeof value == 'object';
-}
+  var f = _descriptors ? Object.defineProperty : function defineProperty(O, P, Attributes) {
+    _anObject(O);
+    P = _toPrimitive(P, true);
+    _anObject(Attributes);
+    if (_ie8DomDefine) try {
+      return dP(O, P, Attributes);
+    } catch (e) { /* empty */ }
+    if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
+    if ('value' in Attributes) O[P] = Attributes.value;
+    return O;
+  };
 
-/**
- * Checks if `value` is a plain object, that is, an object created by the
- * `Object` constructor or one with a `[[Prototype]]` of `null`.
- *
- * @static
- * @memberOf _
- * @since 0.8.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
- * @example
- *
- * function Foo() {
- *   this.a = 1;
- * }
- *
- * _.isPlainObject(new Foo);
- * // => false
- *
- * _.isPlainObject([1, 2, 3]);
- * // => false
- *
- * _.isPlainObject({ 'x': 0, 'y': 0 });
- * // => true
- *
- * _.isPlainObject(Object.create(null));
- * // => true
- */
-function isPlainObject(value) {
-  if (!isObjectLike(value) ||
-      objectToString.call(value) != objectTag || isHostObject(value)) {
-    return false;
+  var _objectDp = {
+  	f: f
+  };
+
+  var _propertyDesc = function (bitmap, value) {
+    return {
+      enumerable: !(bitmap & 1),
+      configurable: !(bitmap & 2),
+      writable: !(bitmap & 4),
+      value: value
+    };
+  };
+
+  var _hide = _descriptors ? function (object, key, value) {
+    return _objectDp.f(object, key, _propertyDesc(1, value));
+  } : function (object, key, value) {
+    object[key] = value;
+    return object;
+  };
+
+  var hasOwnProperty = {}.hasOwnProperty;
+  var _has = function (it, key) {
+    return hasOwnProperty.call(it, key);
+  };
+
+  var id$1 = 0;
+  var px = Math.random();
+  var _uid = function (key) {
+    return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id$1 + px).toString(36));
+  };
+
+  var _redefine = createCommonjsModule(function (module) {
+  var SRC = _uid('src');
+  var TO_STRING = 'toString';
+  var $toString = Function[TO_STRING];
+  var TPL = ('' + $toString).split(TO_STRING);
+
+  _core.inspectSource = function (it) {
+    return $toString.call(it);
+  };
+
+  (module.exports = function (O, key, val, safe) {
+    var isFunction = typeof val == 'function';
+    if (isFunction) _has(val, 'name') || _hide(val, 'name', key);
+    if (O[key] === val) return;
+    if (isFunction) _has(val, SRC) || _hide(val, SRC, O[key] ? '' + O[key] : TPL.join(String(key)));
+    if (O === _global) {
+      O[key] = val;
+    } else if (!safe) {
+      delete O[key];
+      _hide(O, key, val);
+    } else if (O[key]) {
+      O[key] = val;
+    } else {
+      _hide(O, key, val);
+    }
+  // add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
+  })(Function.prototype, TO_STRING, function toString() {
+    return typeof this == 'function' && this[SRC] || $toString.call(this);
+  });
+  });
+
+  var _aFunction = function (it) {
+    if (typeof it != 'function') throw TypeError(it + ' is not a function!');
+    return it;
+  };
+
+  // optional / simple context binding
+
+  var _ctx = function (fn, that, length) {
+    _aFunction(fn);
+    if (that === undefined) return fn;
+    switch (length) {
+      case 1: return function (a) {
+        return fn.call(that, a);
+      };
+      case 2: return function (a, b) {
+        return fn.call(that, a, b);
+      };
+      case 3: return function (a, b, c) {
+        return fn.call(that, a, b, c);
+      };
+    }
+    return function (/* ...args */) {
+      return fn.apply(that, arguments);
+    };
+  };
+
+  var PROTOTYPE = 'prototype';
+
+  var $export = function (type, name, source) {
+    var IS_FORCED = type & $export.F;
+    var IS_GLOBAL = type & $export.G;
+    var IS_STATIC = type & $export.S;
+    var IS_PROTO = type & $export.P;
+    var IS_BIND = type & $export.B;
+    var target = IS_GLOBAL ? _global : IS_STATIC ? _global[name] || (_global[name] = {}) : (_global[name] || {})[PROTOTYPE];
+    var exports = IS_GLOBAL ? _core : _core[name] || (_core[name] = {});
+    var expProto = exports[PROTOTYPE] || (exports[PROTOTYPE] = {});
+    var key, own, out, exp;
+    if (IS_GLOBAL) source = name;
+    for (key in source) {
+      // contains in native
+      own = !IS_FORCED && target && target[key] !== undefined;
+      // export native or passed
+      out = (own ? target : source)[key];
+      // bind timers to global for call from export context
+      exp = IS_BIND && own ? _ctx(out, _global) : IS_PROTO && typeof out == 'function' ? _ctx(Function.call, out) : out;
+      // extend global
+      if (target) _redefine(target, key, out, type & $export.U);
+      // export
+      if (exports[key] != out) _hide(exports, key, exp);
+      if (IS_PROTO && expProto[key] != out) expProto[key] = out;
+    }
+  };
+  _global.core = _core;
+  // type bitmap
+  $export.F = 1;   // forced
+  $export.G = 2;   // global
+  $export.S = 4;   // static
+  $export.P = 8;   // proto
+  $export.B = 16;  // bind
+  $export.W = 32;  // wrap
+  $export.U = 64;  // safe
+  $export.R = 128; // real proto method for `library`
+  var _export = $export;
+
+  var toString = {}.toString;
+
+  var _cof = function (it) {
+    return toString.call(it).slice(8, -1);
+  };
+
+  // 7.2.2 IsArray(argument)
+
+  var _isArray = Array.isArray || function isArray(arg) {
+    return _cof(arg) == 'Array';
+  };
+
+  // 22.1.2.2 / 15.4.3.2 Array.isArray(arg)
+
+
+  _export(_export.S, 'Array', { isArray: _isArray });
+
+  // fallback for non-array-like ES3 and non-enumerable old V8 strings
+
+  // eslint-disable-next-line no-prototype-builtins
+  var _iobject = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
+    return _cof(it) == 'String' ? it.split('') : Object(it);
+  };
+
+  // 7.2.1 RequireObjectCoercible(argument)
+  var _defined = function (it) {
+    if (it == undefined) throw TypeError("Can't call method on  " + it);
+    return it;
+  };
+
+  // to indexed object, toObject with fallback for non-array-like ES3 strings
+
+
+  var _toIobject = function (it) {
+    return _iobject(_defined(it));
+  };
+
+  // 7.1.4 ToInteger
+  var ceil = Math.ceil;
+  var floor = Math.floor;
+  var _toInteger = function (it) {
+    return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+  };
+
+  // 7.1.15 ToLength
+
+  var min = Math.min;
+  var _toLength = function (it) {
+    return it > 0 ? min(_toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+  };
+
+  var max = Math.max;
+  var min$1 = Math.min;
+  var _toAbsoluteIndex = function (index, length) {
+    index = _toInteger(index);
+    return index < 0 ? max(index + length, 0) : min$1(index, length);
+  };
+
+  // false -> Array#indexOf
+  // true  -> Array#includes
+
+
+
+  var _arrayIncludes = function (IS_INCLUDES) {
+    return function ($this, el, fromIndex) {
+      var O = _toIobject($this);
+      var length = _toLength(O.length);
+      var index = _toAbsoluteIndex(fromIndex, length);
+      var value;
+      // Array#includes uses SameValueZero equality algorithm
+      // eslint-disable-next-line no-self-compare
+      if (IS_INCLUDES && el != el) while (length > index) {
+        value = O[index++];
+        // eslint-disable-next-line no-self-compare
+        if (value != value) return true;
+      // Array#indexOf ignores holes, Array#includes - not
+      } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
+        if (O[index] === el) return IS_INCLUDES || index || 0;
+      } return !IS_INCLUDES && -1;
+    };
+  };
+
+  var _strictMethod = function (method, arg) {
+    return !!method && _fails(function () {
+      // eslint-disable-next-line no-useless-call
+      arg ? method.call(null, function () { /* empty */ }, 1) : method.call(null);
+    });
+  };
+
+  var $indexOf = _arrayIncludes(false);
+  var $native = [].indexOf;
+  var NEGATIVE_ZERO = !!$native && 1 / [1].indexOf(1, -0) < 0;
+
+  _export(_export.P + _export.F * (NEGATIVE_ZERO || !_strictMethod($native)), 'Array', {
+    // 22.1.3.11 / 15.4.4.14 Array.prototype.indexOf(searchElement [, fromIndex])
+    indexOf: function indexOf(searchElement /* , fromIndex = 0 */) {
+      return NEGATIVE_ZERO
+        // convert -0 to +0
+        ? $native.apply(this, arguments) || 0
+        : $indexOf(this, searchElement, arguments[1]);
+    }
+  });
+
+  /**
+   * Is the argument a plain object?
+   * Inspired by lodash.isplainobject
+   *
+   * @function isPlainObject
+   * @param {object} obj - The object to check
+   * @returns {boolean}
+   */
+
+  function isPlainObject(obj) {
+    return obj && _typeof(obj) == 'object' && Object.getPrototypeOf(obj) === Object.prototype;
   }
-  var proto = getPrototype(value);
-  if (proto === null) {
-    return true;
+  /**
+   * Is the given action a plain JavaScript object with an [RSAA] property?
+   *
+   * @function isRSAA
+   * @access public
+   * @param {object} action - The action to check
+   * @returns {boolean}
+   */
+
+
+  function isRSAA(action) {
+    return isPlainObject(action) && action.hasOwnProperty(RSAA);
   }
-  var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
-  return (typeof Ctor == 'function' &&
-    Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString);
-}
+  /**
+   * Is the given object a valid type descriptor?
+   *
+   * @function isValidTypeDescriptor
+   * @access private
+   * @param {object} obj - The object to check agains the type descriptor definition
+   * @returns {boolean}
+   */
 
-module.exports = isPlainObject;
 
-},{}],"UfNp":[function(require,module,exports) {
-'use strict';
+  function isValidTypeDescriptor(obj) {
+    var validKeys = ['type', 'payload', 'meta'];
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.isValidRSAA = exports.validateRSAA = exports.isValidTypeDescriptor = exports.isRSAA = undefined;
-
-var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
-
-var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
-
-var _typeof2 = require('babel-runtime/helpers/typeof');
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-var _RSAA = require('./RSAA');
-
-var _RSAA2 = _interopRequireDefault(_RSAA);
-
-var _lodash = require('lodash.isplainobject');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Is the given action a plain JavaScript object with an [RSAA] property?
- *
- * @function isRSAA
- * @access public
- * @param {object} action - The action to check
- * @returns {boolean}
- */
-function isRSAA(action) {
-  return (0, _lodash2.default)(action) && action.hasOwnProperty(_RSAA2.default);
-}
-
-/**
- * Is the given object a valid type descriptor?
- *
- * @function isValidTypeDescriptor
- * @access private
- * @param {object} obj - The object to check agains the type descriptor definition
- * @returns {boolean}
- */
-function isValidTypeDescriptor(obj) {
-  var validKeys = ['type', 'payload', 'meta'];
-
-  if (!(0, _lodash2.default)(obj)) {
-    return false;
-  }
-  for (var key in obj) {
-    if (!~validKeys.indexOf(key)) {
+    if (!isPlainObject(obj)) {
       return false;
     }
+
+    for (var key in obj) {
+      if (!~validKeys.indexOf(key)) {
+        return false;
+      }
+    }
+
+    if (!('type' in obj)) {
+      return false;
+    } else if (typeof obj.type !== 'string' && _typeof(obj.type) !== 'symbol') {
+      return false;
+    }
+
+    return true;
   }
-  if (!('type' in obj)) {
-    return false;
-  } else if (typeof obj.type !== 'string' && (0, _typeof3.default)(obj.type) !== 'symbol') {
-    return false;
-  }
+  /**
+   * Checks an action against the RSAA definition, returning a (possibly empty)
+   * array of validation errors.
+   *
+   * @function validateRSAA
+   * @access public
+   * @param {object} action - The action to check against the RSAA definition
+   * @returns {array}
+   */
 
-  return true;
-}
 
-/**
- * Checks an action against the RSAA definition, returning a (possibly empty)
- * array of validation errors.
- *
- * @function validateRSAA
- * @access public
- * @param {object} action - The action to check against the RSAA definition
- * @returns {array}
- */
-function validateRSAA(action) {
-  var validationErrors = [];
-  var validCallAPIKeys = ['endpoint', 'options', 'method', 'body', 'headers', 'credentials', 'bailout', 'types', 'fetch'];
-  var validMethods = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
-  var validCredentials = ['omit', 'same-origin', 'include'];
+  function validateRSAA(action) {
+    var validationErrors = [];
+    var validCallAPIKeys = ['endpoint', 'options', 'method', 'body', 'headers', 'credentials', 'bailout', 'types', 'fetch', 'ok'];
+    var validMethods = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
+    var validCredentials = ['omit', 'same-origin', 'include'];
 
-  if (!isRSAA(action)) {
-    validationErrors.push('RSAAs must be plain JavaScript objects with an [RSAA] property');
+    if (!isRSAA(action)) {
+      validationErrors.push('RSAAs must be plain JavaScript objects with an [RSAA] property');
+      return validationErrors;
+    }
+
+    var callAPI = action[RSAA];
+
+    if (!isPlainObject(callAPI)) {
+      validationErrors.push('[RSAA] property must be a plain JavaScript object');
+    }
+
+    for (var key in callAPI) {
+      if (!~validCallAPIKeys.indexOf(key)) {
+        validationErrors.push("Invalid [RSAA] key: ".concat(key));
+      }
+    }
+
+    var endpoint = callAPI.endpoint,
+        method = callAPI.method,
+        headers = callAPI.headers,
+        options = callAPI.options,
+        credentials = callAPI.credentials,
+        types = callAPI.types,
+        bailout = callAPI.bailout,
+        fetch = callAPI.fetch,
+        ok = callAPI.ok;
+
+    if (typeof endpoint === 'undefined') {
+      validationErrors.push('[RSAA] must have an endpoint property');
+    } else if (typeof endpoint !== 'string' && typeof endpoint !== 'function') {
+      validationErrors.push('[RSAA].endpoint property must be a string or a function');
+    }
+
+    if (typeof method === 'undefined') {
+      validationErrors.push('[RSAA] must have a method property');
+    } else if (typeof method !== 'string') {
+      validationErrors.push('[RSAA].method property must be a string');
+    } else if (!~validMethods.indexOf(method.toUpperCase())) {
+      validationErrors.push("Invalid [RSAA].method: ".concat(method.toUpperCase()));
+    }
+
+    if (typeof headers !== 'undefined' && !isPlainObject(headers) && typeof headers !== 'function') {
+      validationErrors.push('[RSAA].headers property must be undefined, a plain JavaScript object, or a function');
+    }
+
+    if (typeof options !== 'undefined' && !isPlainObject(options) && typeof options !== 'function') {
+      validationErrors.push('[RSAA].options property must be undefined, a plain JavaScript object, or a function');
+    }
+
+    if (typeof credentials !== 'undefined') {
+      if (typeof credentials !== 'string') {
+        validationErrors.push('[RSAA].credentials property must be undefined, or a string');
+      } else if (!~validCredentials.indexOf(credentials)) {
+        validationErrors.push("Invalid [RSAA].credentials: ".concat(credentials));
+      }
+    }
+
+    if (typeof bailout !== 'undefined' && typeof bailout !== 'boolean' && typeof bailout !== 'function') {
+      validationErrors.push('[RSAA].bailout property must be undefined, a boolean, or a function');
+    }
+
+    if (typeof types === 'undefined') {
+      validationErrors.push('[RSAA] must have a types property');
+    } else if (!Array.isArray(types) || types.length !== 3) {
+      validationErrors.push('[RSAA].types property must be an array of length 3');
+    } else {
+      var _types = _slicedToArray(types, 3),
+          requestType = _types[0],
+          successType = _types[1],
+          failureType = _types[2];
+
+      if (typeof requestType !== 'string' && _typeof(requestType) !== 'symbol' && !isValidTypeDescriptor(requestType)) {
+        validationErrors.push('Invalid request type');
+      }
+
+      if (typeof successType !== 'string' && _typeof(successType) !== 'symbol' && !isValidTypeDescriptor(successType)) {
+        validationErrors.push('Invalid success type');
+      }
+
+      if (typeof failureType !== 'string' && _typeof(failureType) !== 'symbol' && !isValidTypeDescriptor(failureType)) {
+        validationErrors.push('Invalid failure type');
+      }
+    }
+
+    if (typeof fetch !== 'undefined') {
+      if (typeof fetch !== 'function') {
+        validationErrors.push('[RSAA].fetch property must be a function');
+      }
+    }
+
+    if (typeof ok !== 'undefined') {
+      if (typeof ok !== 'function') {
+        validationErrors.push('[RSAA].ok property must be a function');
+      }
+    }
+
     return validationErrors;
   }
+  /**
+   * Is the given action a valid RSAA?
+   *
+   * @function isValidRSAA
+   * @access public
+   * @param {object} action - The action to check against the RSAA definition
+   * @returns {boolean}
+   */
 
-  for (var key in action) {
-    if (key !== _RSAA2.default) {
-      validationErrors.push('Invalid root key: ' + key);
+
+  function isValidRSAA(action) {
+    return !validateRSAA(action).length;
+  }
+
+  /**
+   * Error class for an RSAA that does not conform to the RSAA definition
+   *
+   * @class InvalidRSAA
+   * @access public
+   * @param {array} validationErrors - an array of validation errors
+   */
+  var InvalidRSAA =
+  /*#__PURE__*/
+  function (_Error) {
+    _inherits(InvalidRSAA, _Error);
+
+    function InvalidRSAA(validationErrors) {
+      var _this;
+
+      _classCallCheck(this, InvalidRSAA);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(InvalidRSAA).call(this));
+      _this.name = 'InvalidRSAA';
+      _this.message = 'Invalid RSAA';
+      _this.validationErrors = validationErrors;
+      return _this;
     }
-  }
 
-  var callAPI = action[_RSAA2.default];
-  if (!(0, _lodash2.default)(callAPI)) {
-    validationErrors.push('[RSAA] property must be a plain JavaScript object');
-  }
-  for (var _key in callAPI) {
-    if (!~validCallAPIKeys.indexOf(_key)) {
-      validationErrors.push('Invalid [RSAA] key: ' + _key);
+    return InvalidRSAA;
+  }(_wrapNativeSuper(Error));
+  /**
+   * Error class for a custom `payload` or `meta` function throwing
+   *
+   * @class InternalError
+   * @access public
+   * @param {string} message - the error message
+   */
+
+
+  var InternalError =
+  /*#__PURE__*/
+  function (_Error2) {
+    _inherits(InternalError, _Error2);
+
+    function InternalError(message) {
+      var _this2;
+
+      _classCallCheck(this, InternalError);
+
+      _this2 = _possibleConstructorReturn(this, _getPrototypeOf(InternalError).call(this));
+      _this2.name = 'InternalError';
+      _this2.message = message;
+      return _this2;
     }
-  }
 
-  var endpoint = callAPI.endpoint,
-      method = callAPI.method,
-      headers = callAPI.headers,
-      options = callAPI.options,
-      credentials = callAPI.credentials,
-      types = callAPI.types,
-      bailout = callAPI.bailout,
-      fetch = callAPI.fetch;
+    return InternalError;
+  }(_wrapNativeSuper(Error));
+  /**
+   * Error class for an error raised trying to make an API call
+   *
+   * @class RequestError
+   * @access public
+   * @param {string} message - the error message
+   */
 
-  if (typeof endpoint === 'undefined') {
-    validationErrors.push('[RSAA] must have an endpoint property');
-  } else if (typeof endpoint !== 'string' && typeof endpoint !== 'function') {
-    validationErrors.push('[RSAA].endpoint property must be a string or a function');
-  }
-  if (typeof method === 'undefined') {
-    validationErrors.push('[RSAA] must have a method property');
-  } else if (typeof method !== 'string') {
-    validationErrors.push('[RSAA].method property must be a string');
-  } else if (!~validMethods.indexOf(method.toUpperCase())) {
-    validationErrors.push('Invalid [RSAA].method: ' + method.toUpperCase());
-  }
 
-  if (typeof headers !== 'undefined' && !(0, _lodash2.default)(headers) && typeof headers !== 'function') {
-    validationErrors.push('[RSAA].headers property must be undefined, a plain JavaScript object, or a function');
-  }
-  if (typeof options !== 'undefined' && !(0, _lodash2.default)(options) && typeof options !== 'function') {
-    validationErrors.push('[RSAA].options property must be undefined, a plain JavaScript object, or a function');
-  }
-  if (typeof credentials !== 'undefined') {
-    if (typeof credentials !== 'string') {
-      validationErrors.push('[RSAA].credentials property must be undefined, or a string');
-    } else if (!~validCredentials.indexOf(credentials)) {
-      validationErrors.push('Invalid [RSAA].credentials: ' + credentials);
+  var RequestError =
+  /*#__PURE__*/
+  function (_Error3) {
+    _inherits(RequestError, _Error3);
+
+    function RequestError(message) {
+      var _this3;
+
+      _classCallCheck(this, RequestError);
+
+      _this3 = _possibleConstructorReturn(this, _getPrototypeOf(RequestError).call(this));
+      _this3.name = 'RequestError';
+      _this3.message = message;
+      return _this3;
     }
-  }
-  if (typeof bailout !== 'undefined' && typeof bailout !== 'boolean' && typeof bailout !== 'function') {
-    validationErrors.push('[RSAA].bailout property must be undefined, a boolean, or a function');
-  }
 
-  if (typeof types === 'undefined') {
-    validationErrors.push('[RSAA] must have a types property');
-  } else if (!Array.isArray(types) || types.length !== 3) {
-    validationErrors.push('[RSAA].types property must be an array of length 3');
-  } else {
-    var _types = (0, _slicedToArray3.default)(types, 3),
-        requestType = _types[0],
-        successType = _types[1],
-        failureType = _types[2];
+    return RequestError;
+  }(_wrapNativeSuper(Error));
+  /**
+   * Error class for an API response outside the 200 range
+   *
+   * @class ApiError
+   * @access public
+   * @param {number} status - the status code of the API response
+   * @param {string} statusText - the status text of the API response
+   * @param {object} response - the parsed JSON response of the API server if the
+   *  'Content-Type' header signals a JSON response
+   */
 
-    if (typeof requestType !== 'string' && (typeof requestType === 'undefined' ? 'undefined' : (0, _typeof3.default)(requestType)) !== 'symbol' && !isValidTypeDescriptor(requestType)) {
-      validationErrors.push('Invalid request type');
+
+  var ApiError =
+  /*#__PURE__*/
+  function (_Error4) {
+    _inherits(ApiError, _Error4);
+
+    function ApiError(status, statusText, response) {
+      var _this4;
+
+      _classCallCheck(this, ApiError);
+
+      _this4 = _possibleConstructorReturn(this, _getPrototypeOf(ApiError).call(this));
+      _this4.name = 'ApiError';
+      _this4.status = status;
+      _this4.statusText = statusText;
+      _this4.response = response;
+      _this4.message = "".concat(status, " - ").concat(statusText);
+      return _this4;
     }
-    if (typeof successType !== 'string' && (typeof successType === 'undefined' ? 'undefined' : (0, _typeof3.default)(successType)) !== 'symbol' && !isValidTypeDescriptor(successType)) {
-      validationErrors.push('Invalid success type');
-    }
-    if (typeof failureType !== 'string' && (typeof failureType === 'undefined' ? 'undefined' : (0, _typeof3.default)(failureType)) !== 'symbol' && !isValidTypeDescriptor(failureType)) {
-      validationErrors.push('Invalid failure type');
-    }
-  }
 
-  if (typeof fetch !== 'undefined') {
-    if (typeof fetch !== 'function') {
-      validationErrors.push('[RSAA].fetch property must be a function');
-    }
-  }
+    return ApiError;
+  }(_wrapNativeSuper(Error));
 
-  return validationErrors;
-}
+  var _library = false;
 
-/**
- * Is the given action a valid RSAA?
- *
- * @function isValidRSAA
- * @access public
- * @param {object} action - The action to check against the RSAA definition
- * @returns {boolean}
- */
-function isValidRSAA(action) {
-  return !validateRSAA(action).length;
-}
-
-exports.isRSAA = isRSAA;
-exports.isValidTypeDescriptor = isValidTypeDescriptor;
-exports.validateRSAA = validateRSAA;
-exports.isValidRSAA = isValidRSAA;
-},{"babel-runtime/helpers/slicedToArray":"m8OI","babel-runtime/helpers/typeof":"GyB/","./RSAA":"U/o2","lodash.isplainobject":"hT6N"}],"cOHw":[function(require,module,exports) {
-// most Object methods by ES6 should accept primitives
-var $export = require('./_export');
-var core = require('./_core');
-var fails = require('./_fails');
-module.exports = function (KEY, exec) {
-  var fn = (core.Object || {})[KEY] || Object[KEY];
-  var exp = {};
-  exp[KEY] = exec(fn);
-  $export($export.S + $export.F * fails(function () { fn(1); }), 'Object', exp);
-};
-
-},{"./_export":"vSO4","./_core":"ss9A","./_fails":"5BXi"}],"BtHH":[function(require,module,exports) {
-// 19.1.2.9 Object.getPrototypeOf(O)
-var toObject = require('./_to-object');
-var $getPrototypeOf = require('./_object-gpo');
-
-require('./_object-sap')('getPrototypeOf', function () {
-  return function getPrototypeOf(it) {
-    return $getPrototypeOf(toObject(it));
+  var SHARED = '__core-js_shared__';
+  var store = _global[SHARED] || (_global[SHARED] = {});
+  var _shared = function (key) {
+    return store[key] || (store[key] = {});
   };
-});
 
-},{"./_to-object":"mbLO","./_object-gpo":"HHE0","./_object-sap":"cOHw"}],"ky2m":[function(require,module,exports) {
-require('../../modules/es6.object.get-prototype-of');
-module.exports = require('../../modules/_core').Object.getPrototypeOf;
+  var _wks = createCommonjsModule(function (module) {
+  var store = _shared('wks');
 
-},{"../../modules/es6.object.get-prototype-of":"BtHH","../../modules/_core":"ss9A"}],"BX4+":[function(require,module,exports) {
-module.exports = { "default": require("core-js/library/fn/object/get-prototype-of"), __esModule: true };
-},{"core-js/library/fn/object/get-prototype-of":"ky2m"}],"dACh":[function(require,module,exports) {
-"use strict";
+  var Symbol = _global.Symbol;
+  var USE_SYMBOL = typeof Symbol == 'function';
 
-exports.__esModule = true;
+  var $exports = module.exports = function (name) {
+    return store[name] || (store[name] =
+      USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : _uid)('Symbol.' + name));
+  };
 
-exports.default = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-},{}],"VOrx":[function(require,module,exports) {
-"use strict";
+  $exports.store = store;
+  });
 
-exports.__esModule = true;
+  // getting tag from 19.1.3.6 Object.prototype.toString()
 
-var _typeof2 = require("../helpers/typeof");
+  var TAG = _wks('toStringTag');
+  // ES3 wrong here
+  var ARG = _cof(function () { return arguments; }()) == 'Arguments';
 
-var _typeof3 = _interopRequireDefault(_typeof2);
+  // fallback for IE11 Script Access Denied error
+  var tryGet = function (it, key) {
+    try {
+      return it[key];
+    } catch (e) { /* empty */ }
+  };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  var _classof = function (it) {
+    var O, T, B;
+    return it === undefined ? 'Undefined' : it === null ? 'Null'
+      // @@toStringTag case
+      : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+      // builtinTag case
+      : ARG ? _cof(O)
+      // ES3 arguments fallback
+      : (B = _cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+  };
 
-exports.default = function (self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
+  var _anInstance = function (it, Constructor, name, forbiddenField) {
+    if (!(it instanceof Constructor) || (forbiddenField !== undefined && forbiddenField in it)) {
+      throw TypeError(name + ': incorrect invocation!');
+    } return it;
+  };
 
-  return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
-};
-},{"../helpers/typeof":"GyB/"}],"ZaKr":[function(require,module,exports) {
-// Works with __proto__ only. Old v8 can't work with null proto objects.
-/* eslint-disable no-proto */
-var isObject = require('./_is-object');
-var anObject = require('./_an-object');
-var check = function (O, proto) {
-  anObject(O);
-  if (!isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
-};
-module.exports = {
-  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
-    function (test, buggy, set) {
-      try {
-        set = require('./_ctx')(Function.call, require('./_object-gopd').f(Object.prototype, '__proto__').set, 2);
-        set(test, []);
-        buggy = !(test instanceof Array);
-      } catch (e) { buggy = true; }
-      return function setPrototypeOf(O, proto) {
-        check(O, proto);
-        if (buggy) O.__proto__ = proto;
-        else set(O, proto);
-        return O;
+  // call something on iterator step with safe closing on error
+
+  var _iterCall = function (iterator, fn, value, entries) {
+    try {
+      return entries ? fn(_anObject(value)[0], value[1]) : fn(value);
+    // 7.4.6 IteratorClose(iterator, completion)
+    } catch (e) {
+      var ret = iterator['return'];
+      if (ret !== undefined) _anObject(ret.call(iterator));
+      throw e;
+    }
+  };
+
+  var _iterators = {};
+
+  // check on default Array iterator
+
+  var ITERATOR = _wks('iterator');
+  var ArrayProto = Array.prototype;
+
+  var _isArrayIter = function (it) {
+    return it !== undefined && (_iterators.Array === it || ArrayProto[ITERATOR] === it);
+  };
+
+  var ITERATOR$1 = _wks('iterator');
+
+  var core_getIteratorMethod = _core.getIteratorMethod = function (it) {
+    if (it != undefined) return it[ITERATOR$1]
+      || it['@@iterator']
+      || _iterators[_classof(it)];
+  };
+
+  var _forOf = createCommonjsModule(function (module) {
+  var BREAK = {};
+  var RETURN = {};
+  var exports = module.exports = function (iterable, entries, fn, that, ITERATOR) {
+    var iterFn = ITERATOR ? function () { return iterable; } : core_getIteratorMethod(iterable);
+    var f = _ctx(fn, that, entries ? 2 : 1);
+    var index = 0;
+    var length, step, iterator, result;
+    if (typeof iterFn != 'function') throw TypeError(iterable + ' is not iterable!');
+    // fast case for arrays with default iterator
+    if (_isArrayIter(iterFn)) for (length = _toLength(iterable.length); length > index; index++) {
+      result = entries ? f(_anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
+      if (result === BREAK || result === RETURN) return result;
+    } else for (iterator = iterFn.call(iterable); !(step = iterator.next()).done;) {
+      result = _iterCall(iterator, f, step.value, entries);
+      if (result === BREAK || result === RETURN) return result;
+    }
+  };
+  exports.BREAK = BREAK;
+  exports.RETURN = RETURN;
+  });
+
+  // 7.3.20 SpeciesConstructor(O, defaultConstructor)
+
+
+  var SPECIES = _wks('species');
+  var _speciesConstructor = function (O, D) {
+    var C = _anObject(O).constructor;
+    var S;
+    return C === undefined || (S = _anObject(C)[SPECIES]) == undefined ? D : _aFunction(S);
+  };
+
+  // fast apply, http://jsperf.lnkit.com/fast-apply/5
+  var _invoke = function (fn, args, that) {
+    var un = that === undefined;
+    switch (args.length) {
+      case 0: return un ? fn()
+                        : fn.call(that);
+      case 1: return un ? fn(args[0])
+                        : fn.call(that, args[0]);
+      case 2: return un ? fn(args[0], args[1])
+                        : fn.call(that, args[0], args[1]);
+      case 3: return un ? fn(args[0], args[1], args[2])
+                        : fn.call(that, args[0], args[1], args[2]);
+      case 4: return un ? fn(args[0], args[1], args[2], args[3])
+                        : fn.call(that, args[0], args[1], args[2], args[3]);
+    } return fn.apply(that, args);
+  };
+
+  var document$2 = _global.document;
+  var _html = document$2 && document$2.documentElement;
+
+  var process = _global.process;
+  var setTask = _global.setImmediate;
+  var clearTask = _global.clearImmediate;
+  var MessageChannel = _global.MessageChannel;
+  var Dispatch = _global.Dispatch;
+  var counter = 0;
+  var queue = {};
+  var ONREADYSTATECHANGE = 'onreadystatechange';
+  var defer, channel, port;
+  var run = function () {
+    var id = +this;
+    // eslint-disable-next-line no-prototype-builtins
+    if (queue.hasOwnProperty(id)) {
+      var fn = queue[id];
+      delete queue[id];
+      fn();
+    }
+  };
+  var listener = function (event) {
+    run.call(event.data);
+  };
+  // Node.js 0.9+ & IE10+ has setImmediate, otherwise:
+  if (!setTask || !clearTask) {
+    setTask = function setImmediate(fn) {
+      var args = [];
+      var i = 1;
+      while (arguments.length > i) args.push(arguments[i++]);
+      queue[++counter] = function () {
+        // eslint-disable-next-line no-new-func
+        _invoke(typeof fn == 'function' ? fn : Function(fn), args);
       };
-    }({}, false) : undefined),
-  check: check
-};
+      defer(counter);
+      return counter;
+    };
+    clearTask = function clearImmediate(id) {
+      delete queue[id];
+    };
+    // Node.js 0.8-
+    if (_cof(process) == 'process') {
+      defer = function (id) {
+        process.nextTick(_ctx(run, id, 1));
+      };
+    // Sphere (JS game engine) Dispatch API
+    } else if (Dispatch && Dispatch.now) {
+      defer = function (id) {
+        Dispatch.now(_ctx(run, id, 1));
+      };
+    // Browsers with MessageChannel, includes WebWorkers
+    } else if (MessageChannel) {
+      channel = new MessageChannel();
+      port = channel.port2;
+      channel.port1.onmessage = listener;
+      defer = _ctx(port.postMessage, port, 1);
+    // Browsers with postMessage, skip WebWorkers
+    // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
+    } else if (_global.addEventListener && typeof postMessage == 'function' && !_global.importScripts) {
+      defer = function (id) {
+        _global.postMessage(id + '', '*');
+      };
+      _global.addEventListener('message', listener, false);
+    // IE8-
+    } else if (ONREADYSTATECHANGE in _domCreate('script')) {
+      defer = function (id) {
+        _html.appendChild(_domCreate('script'))[ONREADYSTATECHANGE] = function () {
+          _html.removeChild(this);
+          run.call(id);
+        };
+      };
+    // Rest old browsers
+    } else {
+      defer = function (id) {
+        setTimeout(_ctx(run, id, 1), 0);
+      };
+    }
+  }
+  var _task = {
+    set: setTask,
+    clear: clearTask
+  };
 
-},{"./_is-object":"M7z6","./_an-object":"zotD","./_ctx":"3zRh","./_object-gopd":"sxPs"}],"b1tA":[function(require,module,exports) {
-// 19.1.3.19 Object.setPrototypeOf(O, proto)
-var $export = require('./_export');
-$export($export.S, 'Object', { setPrototypeOf: require('./_set-proto').set });
+  var macrotask = _task.set;
+  var Observer = _global.MutationObserver || _global.WebKitMutationObserver;
+  var process$1 = _global.process;
+  var Promise$1 = _global.Promise;
+  var isNode = _cof(process$1) == 'process';
 
-},{"./_export":"vSO4","./_set-proto":"ZaKr"}],"dXs8":[function(require,module,exports) {
-require('../../modules/es6.object.set-prototype-of');
-module.exports = require('../../modules/_core').Object.setPrototypeOf;
+  var _microtask = function () {
+    var head, last, notify;
 
-},{"../../modules/es6.object.set-prototype-of":"b1tA","../../modules/_core":"ss9A"}],"Aq8W":[function(require,module,exports) {
-module.exports = { "default": require("core-js/library/fn/object/set-prototype-of"), __esModule: true };
-},{"core-js/library/fn/object/set-prototype-of":"dXs8"}],"yOG5":[function(require,module,exports) {
-var $export = require('./_export');
-// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-$export($export.S, 'Object', { create: require('./_object-create') });
+    var flush = function () {
+      var parent, fn;
+      if (isNode && (parent = process$1.domain)) parent.exit();
+      while (head) {
+        fn = head.fn;
+        head = head.next;
+        try {
+          fn();
+        } catch (e) {
+          if (head) notify();
+          else last = undefined;
+          throw e;
+        }
+      } last = undefined;
+      if (parent) parent.enter();
+    };
 
-},{"./_export":"vSO4","./_object-create":"TNJq"}],"cjsw":[function(require,module,exports) {
-require('../../modules/es6.object.create');
-var $Object = require('../../modules/_core').Object;
-module.exports = function create(P, D) {
-  return $Object.create(P, D);
-};
+    // Node.js
+    if (isNode) {
+      notify = function () {
+        process$1.nextTick(flush);
+      };
+    // browsers with MutationObserver, except iOS Safari - https://github.com/zloirock/core-js/issues/339
+    } else if (Observer && !(_global.navigator && _global.navigator.standalone)) {
+      var toggle = true;
+      var node = document.createTextNode('');
+      new Observer(flush).observe(node, { characterData: true }); // eslint-disable-line no-new
+      notify = function () {
+        node.data = toggle = !toggle;
+      };
+    // environments with maybe non-completely correct, but existent Promise
+    } else if (Promise$1 && Promise$1.resolve) {
+      var promise = Promise$1.resolve();
+      notify = function () {
+        promise.then(flush);
+      };
+    // for other environments - macrotask based on:
+    // - setImmediate
+    // - MessageChannel
+    // - window.postMessag
+    // - onreadystatechange
+    // - setTimeout
+    } else {
+      notify = function () {
+        // strange IE + webpack dev server bug - use .call(global)
+        macrotask.call(_global, flush);
+      };
+    }
 
-},{"../../modules/es6.object.create":"yOG5","../../modules/_core":"ss9A"}],"yeEC":[function(require,module,exports) {
-module.exports = { "default": require("core-js/library/fn/object/create"), __esModule: true };
-},{"core-js/library/fn/object/create":"cjsw"}],"ZKjc":[function(require,module,exports) {
-"use strict";
+    return function (fn) {
+      var task = { fn: fn, next: undefined };
+      if (last) last.next = task;
+      if (!head) {
+        head = task;
+        notify();
+      } last = task;
+    };
+  };
 
-exports.__esModule = true;
+  // 25.4.1.5 NewPromiseCapability(C)
 
-var _setPrototypeOf = require("../core-js/object/set-prototype-of");
 
-var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
-
-var _create = require("../core-js/object/create");
-
-var _create2 = _interopRequireDefault(_create);
-
-var _typeof2 = require("../helpers/typeof");
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : (0, _typeof3.default)(superClass)));
+  function PromiseCapability(C) {
+    var resolve, reject;
+    this.promise = new C(function ($$resolve, $$reject) {
+      if (resolve !== undefined || reject !== undefined) throw TypeError('Bad Promise constructor');
+      resolve = $$resolve;
+      reject = $$reject;
+    });
+    this.resolve = _aFunction(resolve);
+    this.reject = _aFunction(reject);
   }
 
-  subClass.prototype = (0, _create2.default)(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
+  var f$1 = function (C) {
+    return new PromiseCapability(C);
+  };
+
+  var _newPromiseCapability = {
+  	f: f$1
+  };
+
+  var _perform = function (exec) {
+    try {
+      return { e: false, v: exec() };
+    } catch (e) {
+      return { e: true, v: e };
+    }
+  };
+
+  var _promiseResolve = function (C, x) {
+    _anObject(C);
+    if (_isObject(x) && x.constructor === C) return x;
+    var promiseCapability = _newPromiseCapability.f(C);
+    var resolve = promiseCapability.resolve;
+    resolve(x);
+    return promiseCapability.promise;
+  };
+
+  var _redefineAll = function (target, src, safe) {
+    for (var key in src) _redefine(target, key, src[key], safe);
+    return target;
+  };
+
+  var def = _objectDp.f;
+
+  var TAG$1 = _wks('toStringTag');
+
+  var _setToStringTag = function (it, tag, stat) {
+    if (it && !_has(it = stat ? it : it.prototype, TAG$1)) def(it, TAG$1, { configurable: true, value: tag });
+  };
+
+  var SPECIES$1 = _wks('species');
+
+  var _setSpecies = function (KEY) {
+    var C = _global[KEY];
+    if (_descriptors && C && !C[SPECIES$1]) _objectDp.f(C, SPECIES$1, {
+      configurable: true,
+      get: function () { return this; }
+    });
+  };
+
+  var ITERATOR$2 = _wks('iterator');
+  var SAFE_CLOSING = false;
+
+  try {
+    var riter = [7][ITERATOR$2]();
+    riter['return'] = function () { SAFE_CLOSING = true; };
+  } catch (e) { /* empty */ }
+
+  var _iterDetect = function (exec, skipClosing) {
+    if (!skipClosing && !SAFE_CLOSING) return false;
+    var safe = false;
+    try {
+      var arr = [7];
+      var iter = arr[ITERATOR$2]();
+      iter.next = function () { return { done: safe = true }; };
+      arr[ITERATOR$2] = function () { return iter; };
+      exec(arr);
+    } catch (e) { /* empty */ }
+    return safe;
+  };
+
+  var task = _task.set;
+  var microtask = _microtask();
+
+
+
+  var PROMISE = 'Promise';
+  var TypeError$1 = _global.TypeError;
+  var process$2 = _global.process;
+  var $Promise = _global[PROMISE];
+  var isNode$1 = _classof(process$2) == 'process';
+  var empty = function () { /* empty */ };
+  var Internal, newGenericPromiseCapability, OwnPromiseCapability, Wrapper;
+  var newPromiseCapability = newGenericPromiseCapability = _newPromiseCapability.f;
+
+  var USE_NATIVE = !!function () {
+    try {
+      // correct subclassing with @@species support
+      var promise = $Promise.resolve(1);
+      var FakePromise = (promise.constructor = {})[_wks('species')] = function (exec) {
+        exec(empty, empty);
+      };
+      // unhandled rejections tracking support, NodeJS Promise without it fails @@species test
+      return (isNode$1 || typeof PromiseRejectionEvent == 'function') && promise.then(empty) instanceof FakePromise;
+    } catch (e) { /* empty */ }
+  }();
+
+  // helpers
+  var isThenable = function (it) {
+    var then;
+    return _isObject(it) && typeof (then = it.then) == 'function' ? then : false;
+  };
+  var notify = function (promise, isReject) {
+    if (promise._n) return;
+    promise._n = true;
+    var chain = promise._c;
+    microtask(function () {
+      var value = promise._v;
+      var ok = promise._s == 1;
+      var i = 0;
+      var run = function (reaction) {
+        var handler = ok ? reaction.ok : reaction.fail;
+        var resolve = reaction.resolve;
+        var reject = reaction.reject;
+        var domain = reaction.domain;
+        var result, then;
+        try {
+          if (handler) {
+            if (!ok) {
+              if (promise._h == 2) onHandleUnhandled(promise);
+              promise._h = 1;
+            }
+            if (handler === true) result = value;
+            else {
+              if (domain) domain.enter();
+              result = handler(value);
+              if (domain) domain.exit();
+            }
+            if (result === reaction.promise) {
+              reject(TypeError$1('Promise-chain cycle'));
+            } else if (then = isThenable(result)) {
+              then.call(result, resolve, reject);
+            } else resolve(result);
+          } else reject(value);
+        } catch (e) {
+          reject(e);
+        }
+      };
+      while (chain.length > i) run(chain[i++]); // variable length - can't use forEach
+      promise._c = [];
+      promise._n = false;
+      if (isReject && !promise._h) onUnhandled(promise);
+    });
+  };
+  var onUnhandled = function (promise) {
+    task.call(_global, function () {
+      var value = promise._v;
+      var unhandled = isUnhandled(promise);
+      var result, handler, console;
+      if (unhandled) {
+        result = _perform(function () {
+          if (isNode$1) {
+            process$2.emit('unhandledRejection', value, promise);
+          } else if (handler = _global.onunhandledrejection) {
+            handler({ promise: promise, reason: value });
+          } else if ((console = _global.console) && console.error) {
+            console.error('Unhandled promise rejection', value);
+          }
+        });
+        // Browsers should not trigger `rejectionHandled` event if it was handled here, NodeJS - should
+        promise._h = isNode$1 || isUnhandled(promise) ? 2 : 1;
+      } promise._a = undefined;
+      if (unhandled && result.e) throw result.v;
+    });
+  };
+  var isUnhandled = function (promise) {
+    return promise._h !== 1 && (promise._a || promise._c).length === 0;
+  };
+  var onHandleUnhandled = function (promise) {
+    task.call(_global, function () {
+      var handler;
+      if (isNode$1) {
+        process$2.emit('rejectionHandled', promise);
+      } else if (handler = _global.onrejectionhandled) {
+        handler({ promise: promise, reason: promise._v });
+      }
+    });
+  };
+  var $reject = function (value) {
+    var promise = this;
+    if (promise._d) return;
+    promise._d = true;
+    promise = promise._w || promise; // unwrap
+    promise._v = value;
+    promise._s = 2;
+    if (!promise._a) promise._a = promise._c.slice();
+    notify(promise, true);
+  };
+  var $resolve = function (value) {
+    var promise = this;
+    var then;
+    if (promise._d) return;
+    promise._d = true;
+    promise = promise._w || promise; // unwrap
+    try {
+      if (promise === value) throw TypeError$1("Promise can't be resolved itself");
+      if (then = isThenable(value)) {
+        microtask(function () {
+          var wrapper = { _w: promise, _d: false }; // wrap
+          try {
+            then.call(value, _ctx($resolve, wrapper, 1), _ctx($reject, wrapper, 1));
+          } catch (e) {
+            $reject.call(wrapper, e);
+          }
+        });
+      } else {
+        promise._v = value;
+        promise._s = 1;
+        notify(promise, false);
+      }
+    } catch (e) {
+      $reject.call({ _w: promise, _d: false }, e); // wrap
+    }
+  };
+
+  // constructor polyfill
+  if (!USE_NATIVE) {
+    // 25.4.3.1 Promise(executor)
+    $Promise = function Promise(executor) {
+      _anInstance(this, $Promise, PROMISE, '_h');
+      _aFunction(executor);
+      Internal.call(this);
+      try {
+        executor(_ctx($resolve, this, 1), _ctx($reject, this, 1));
+      } catch (err) {
+        $reject.call(this, err);
+      }
+    };
+    // eslint-disable-next-line no-unused-vars
+    Internal = function Promise(executor) {
+      this._c = [];             // <- awaiting reactions
+      this._a = undefined;      // <- checked in isUnhandled reactions
+      this._s = 0;              // <- state
+      this._d = false;          // <- done
+      this._v = undefined;      // <- value
+      this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
+      this._n = false;          // <- notify
+    };
+    Internal.prototype = _redefineAll($Promise.prototype, {
+      // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
+      then: function then(onFulfilled, onRejected) {
+        var reaction = newPromiseCapability(_speciesConstructor(this, $Promise));
+        reaction.ok = typeof onFulfilled == 'function' ? onFulfilled : true;
+        reaction.fail = typeof onRejected == 'function' && onRejected;
+        reaction.domain = isNode$1 ? process$2.domain : undefined;
+        this._c.push(reaction);
+        if (this._a) this._a.push(reaction);
+        if (this._s) notify(this, false);
+        return reaction.promise;
+      },
+      // 25.4.5.1 Promise.prototype.catch(onRejected)
+      'catch': function (onRejected) {
+        return this.then(undefined, onRejected);
+      }
+    });
+    OwnPromiseCapability = function () {
+      var promise = new Internal();
+      this.promise = promise;
+      this.resolve = _ctx($resolve, promise, 1);
+      this.reject = _ctx($reject, promise, 1);
+    };
+    _newPromiseCapability.f = newPromiseCapability = function (C) {
+      return C === $Promise || C === Wrapper
+        ? new OwnPromiseCapability(C)
+        : newGenericPromiseCapability(C);
+    };
+  }
+
+  _export(_export.G + _export.W + _export.F * !USE_NATIVE, { Promise: $Promise });
+  _setToStringTag($Promise, PROMISE);
+  _setSpecies(PROMISE);
+  Wrapper = _core[PROMISE];
+
+  // statics
+  _export(_export.S + _export.F * !USE_NATIVE, PROMISE, {
+    // 25.4.4.5 Promise.reject(r)
+    reject: function reject(r) {
+      var capability = newPromiseCapability(this);
+      var $$reject = capability.reject;
+      $$reject(r);
+      return capability.promise;
     }
   });
-  if (superClass) _setPrototypeOf2.default ? (0, _setPrototypeOf2.default)(subClass, superClass) : subClass.__proto__ = superClass;
-};
-},{"../core-js/object/set-prototype-of":"Aq8W","../core-js/object/create":"yeEC","../helpers/typeof":"GyB/"}],"OONN":[function(require,module,exports) {
-'use strict';
+  _export(_export.S + _export.F * (_library || !USE_NATIVE), PROMISE, {
+    // 25.4.4.6 Promise.resolve(x)
+    resolve: function resolve(x) {
+      return _promiseResolve(_library && this === Wrapper ? $Promise : this, x);
+    }
+  });
+  _export(_export.S + _export.F * !(USE_NATIVE && _iterDetect(function (iter) {
+    $Promise.all(iter)['catch'](empty);
+  })), PROMISE, {
+    // 25.4.4.1 Promise.all(iterable)
+    all: function all(iterable) {
+      var C = this;
+      var capability = newPromiseCapability(C);
+      var resolve = capability.resolve;
+      var reject = capability.reject;
+      var result = _perform(function () {
+        var values = [];
+        var index = 0;
+        var remaining = 1;
+        _forOf(iterable, false, function (promise) {
+          var $index = index++;
+          var alreadyCalled = false;
+          values.push(undefined);
+          remaining++;
+          C.resolve(promise).then(function (value) {
+            if (alreadyCalled) return;
+            alreadyCalled = true;
+            values[$index] = value;
+            --remaining || resolve(values);
+          }, reject);
+        });
+        --remaining || resolve(values);
+      });
+      if (result.e) reject(result.v);
+      return capability.promise;
+    },
+    // 25.4.4.4 Promise.race(iterable)
+    race: function race(iterable) {
+      var C = this;
+      var capability = newPromiseCapability(C);
+      var reject = capability.reject;
+      var result = _perform(function () {
+        _forOf(iterable, false, function (promise) {
+          C.resolve(promise).then(capability.resolve, reject);
+        });
+      });
+      if (result.e) reject(result.v);
+      return capability.promise;
+    }
+  });
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ApiError = exports.RequestError = exports.InternalError = exports.InvalidRSAA = undefined;
+  var runtime = createCommonjsModule(function (module) {
+  /**
+   * Copyright (c) 2014-present, Facebook, Inc.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
 
-var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
+  !(function(global) {
 
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Error class for an RSAA that does not conform to the RSAA definition
- *
- * @class InvalidRSAA
- * @access public
- * @param {array} validationErrors - an array of validation errors
- */
-var InvalidRSAA = function (_Error) {
-  (0, _inherits3.default)(InvalidRSAA, _Error);
-
-  function InvalidRSAA(validationErrors) {
-    (0, _classCallCheck3.default)(this, InvalidRSAA);
-
-    var _this = (0, _possibleConstructorReturn3.default)(this, (InvalidRSAA.__proto__ || (0, _getPrototypeOf2.default)(InvalidRSAA)).call(this));
-
-    _this.name = 'InvalidRSAA';
-    _this.message = 'Invalid RSAA';
-    _this.validationErrors = validationErrors;
-    return _this;
-  }
-
-  return InvalidRSAA;
-}(Error);
-
-/**
- * Error class for a custom `payload` or `meta` function throwing
- *
- * @class InternalError
- * @access public
- * @param {string} message - the error message
- */
-
-
-var InternalError = function (_Error2) {
-  (0, _inherits3.default)(InternalError, _Error2);
-
-  function InternalError(message) {
-    (0, _classCallCheck3.default)(this, InternalError);
-
-    var _this2 = (0, _possibleConstructorReturn3.default)(this, (InternalError.__proto__ || (0, _getPrototypeOf2.default)(InternalError)).call(this));
-
-    _this2.name = 'InternalError';
-    _this2.message = message;
-    return _this2;
-  }
-
-  return InternalError;
-}(Error);
-
-/**
- * Error class for an error raised trying to make an API call
- *
- * @class RequestError
- * @access public
- * @param {string} message - the error message
- */
-
-
-var RequestError = function (_Error3) {
-  (0, _inherits3.default)(RequestError, _Error3);
-
-  function RequestError(message) {
-    (0, _classCallCheck3.default)(this, RequestError);
-
-    var _this3 = (0, _possibleConstructorReturn3.default)(this, (RequestError.__proto__ || (0, _getPrototypeOf2.default)(RequestError)).call(this));
-
-    _this3.name = 'RequestError';
-    _this3.message = message;
-    return _this3;
-  }
-
-  return RequestError;
-}(Error);
-
-/**
- * Error class for an API response outside the 200 range
- *
- * @class ApiError
- * @access public
- * @param {number} status - the status code of the API response
- * @param {string} statusText - the status text of the API response
- * @param {object} response - the parsed JSON response of the API server if the
- *  'Content-Type' header signals a JSON response
- */
-
-
-var ApiError = function (_Error4) {
-  (0, _inherits3.default)(ApiError, _Error4);
-
-  function ApiError(status, statusText, response) {
-    (0, _classCallCheck3.default)(this, ApiError);
-
-    var _this4 = (0, _possibleConstructorReturn3.default)(this, (ApiError.__proto__ || (0, _getPrototypeOf2.default)(ApiError)).call(this));
-
-    _this4.name = 'ApiError';
-    _this4.status = status;
-    _this4.statusText = statusText;
-    _this4.response = response;
-    _this4.message = status + ' - ' + statusText;
-    return _this4;
-  }
-
-  return ApiError;
-}(Error);
-
-exports.InvalidRSAA = InvalidRSAA;
-exports.InternalError = InternalError;
-exports.RequestError = RequestError;
-exports.ApiError = ApiError;
-},{"babel-runtime/core-js/object/get-prototype-of":"BX4+","babel-runtime/helpers/classCallCheck":"dACh","babel-runtime/helpers/possibleConstructorReturn":"VOrx","babel-runtime/helpers/inherits":"ZKjc"}],"hEIm":[function(require,module,exports) {
-// call something on iterator step with safe closing on error
-var anObject = require('./_an-object');
-module.exports = function (iterator, fn, value, entries) {
-  try {
-    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
-  // 7.4.6 IteratorClose(iterator, completion)
-  } catch (e) {
-    var ret = iterator['return'];
-    if (ret !== undefined) anObject(ret.call(iterator));
-    throw e;
-  }
-};
-
-},{"./_an-object":"zotD"}],"af0K":[function(require,module,exports) {
-// check on default Array iterator
-var Iterators = require('./_iterators');
-var ITERATOR = require('./_wks')('iterator');
-var ArrayProto = Array.prototype;
-
-module.exports = function (it) {
-  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
-};
-
-},{"./_iterators":"JO4d","./_wks":"Ug9I"}],"vUQk":[function(require,module,exports) {
-'use strict';
-var $defineProperty = require('./_object-dp');
-var createDesc = require('./_property-desc');
-
-module.exports = function (object, index, value) {
-  if (index in object) $defineProperty.f(object, index, createDesc(0, value));
-  else object[index] = value;
-};
-
-},{"./_object-dp":"Gfzd","./_property-desc":"uJ6d"}],"Lli7":[function(require,module,exports) {
-var ITERATOR = require('./_wks')('iterator');
-var SAFE_CLOSING = false;
-
-try {
-  var riter = [7][ITERATOR]();
-  riter['return'] = function () { SAFE_CLOSING = true; };
-  // eslint-disable-next-line no-throw-literal
-  Array.from(riter, function () { throw 2; });
-} catch (e) { /* empty */ }
-
-module.exports = function (exec, skipClosing) {
-  if (!skipClosing && !SAFE_CLOSING) return false;
-  var safe = false;
-  try {
-    var arr = [7];
-    var iter = arr[ITERATOR]();
-    iter.next = function () { return { done: safe = true }; };
-    arr[ITERATOR] = function () { return iter; };
-    exec(arr);
-  } catch (e) { /* empty */ }
-  return safe;
-};
-
-},{"./_wks":"Ug9I"}],"N484":[function(require,module,exports) {
-'use strict';
-var ctx = require('./_ctx');
-var $export = require('./_export');
-var toObject = require('./_to-object');
-var call = require('./_iter-call');
-var isArrayIter = require('./_is-array-iter');
-var toLength = require('./_to-length');
-var createProperty = require('./_create-property');
-var getIterFn = require('./core.get-iterator-method');
-
-$export($export.S + $export.F * !require('./_iter-detect')(function (iter) { Array.from(iter); }), 'Array', {
-  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
-  from: function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
-    var O = toObject(arrayLike);
-    var C = typeof this == 'function' ? this : Array;
-    var aLen = arguments.length;
-    var mapfn = aLen > 1 ? arguments[1] : undefined;
-    var mapping = mapfn !== undefined;
-    var index = 0;
-    var iterFn = getIterFn(O);
-    var length, result, step, iterator;
-    if (mapping) mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
-    // if object isn't iterable or it's array with default iterator - use simple case
-    if (iterFn != undefined && !(C == Array && isArrayIter(iterFn))) {
-      for (iterator = iterFn.call(O), result = new C(); !(step = iterator.next()).done; index++) {
-        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
+    var Op = Object.prototype;
+    var hasOwn = Op.hasOwnProperty;
+    var undefined; // More compressible than void 0.
+    var $Symbol = typeof Symbol === "function" ? Symbol : {};
+    var iteratorSymbol = $Symbol.iterator || "@@iterator";
+    var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+    var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+    var runtime = global.regeneratorRuntime;
+    if (runtime) {
+      {
+        // If regeneratorRuntime is defined globally and we're in a module,
+        // make the exports object identical to regeneratorRuntime.
+        module.exports = runtime;
       }
-    } else {
-      length = toLength(O.length);
-      for (result = new C(length); length > index; index++) {
-        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
+      // Don't bother evaluating the rest of this file if the runtime was
+      // already defined globally.
+      return;
+    }
+
+    // Define the runtime globally (as expected by generated code) as either
+    // module.exports (if we're in a module) or a new, empty object.
+    runtime = global.regeneratorRuntime = module.exports;
+
+    function wrap(innerFn, outerFn, self, tryLocsList) {
+      // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+      var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+      var generator = Object.create(protoGenerator.prototype);
+      var context = new Context(tryLocsList || []);
+
+      // The ._invoke method unifies the implementations of the .next,
+      // .throw, and .return methods.
+      generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+      return generator;
+    }
+    runtime.wrap = wrap;
+
+    // Try/catch helper to minimize deoptimizations. Returns a completion
+    // record like context.tryEntries[i].completion. This interface could
+    // have been (and was previously) designed to take a closure to be
+    // invoked without arguments, but in all the cases we care about we
+    // already have an existing method we want to call, so there's no need
+    // to create a new function object. We can even get away with assuming
+    // the method takes exactly one argument, since that happens to be true
+    // in every case, so we don't have to touch the arguments object. The
+    // only additional allocation required is the completion record, which
+    // has a stable shape and so hopefully should be cheap to allocate.
+    function tryCatch(fn, obj, arg) {
+      try {
+        return { type: "normal", arg: fn.call(obj, arg) };
+      } catch (err) {
+        return { type: "throw", arg: err };
       }
     }
-    result.length = index;
-    return result;
-  }
-});
 
-},{"./_ctx":"3zRh","./_export":"vSO4","./_to-object":"mbLO","./_iter-call":"hEIm","./_is-array-iter":"af0K","./_to-length":"S7IM","./_create-property":"vUQk","./core.get-iterator-method":"7AqT","./_iter-detect":"Lli7"}],"O35A":[function(require,module,exports) {
-require('../../modules/es6.string.iterator');
-require('../../modules/es6.array.from');
-module.exports = require('../../modules/_core').Array.from;
+    var GenStateSuspendedStart = "suspendedStart";
+    var GenStateSuspendedYield = "suspendedYield";
+    var GenStateExecuting = "executing";
+    var GenStateCompleted = "completed";
 
-},{"../../modules/es6.string.iterator":"i+u+","../../modules/es6.array.from":"N484","../../modules/_core":"ss9A"}],"VuZO":[function(require,module,exports) {
-module.exports = { "default": require("core-js/library/fn/array/from"), __esModule: true };
-},{"core-js/library/fn/array/from":"O35A"}],"mYpx":[function(require,module,exports) {
-"use strict";
+    // Returning this object from the innerFn has the same effect as
+    // breaking out of the dispatch switch statement.
+    var ContinueSentinel = {};
 
-exports.__esModule = true;
+    // Dummy constructor functions that we use as the .constructor and
+    // .constructor.prototype properties for functions that return Generator
+    // objects. For full spec compliance, you may wish to configure your
+    // minifier not to mangle the names of these two functions.
+    function Generator() {}
+    function GeneratorFunction() {}
+    function GeneratorFunctionPrototype() {}
 
-var _from = require("../core-js/array/from");
+    // This is a polyfill for %IteratorPrototype% for environments that
+    // don't natively support it.
+    var IteratorPrototype = {};
+    IteratorPrototype[iteratorSymbol] = function () {
+      return this;
+    };
 
-var _from2 = _interopRequireDefault(_from);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-      arr2[i] = arr[i];
+    var getProto = Object.getPrototypeOf;
+    var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+    if (NativeIteratorPrototype &&
+        NativeIteratorPrototype !== Op &&
+        hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+      // This environment has a native %IteratorPrototype%; use it instead
+      // of the polyfill.
+      IteratorPrototype = NativeIteratorPrototype;
     }
 
-    return arr2;
-  } else {
-    return (0, _from2.default)(arr);
-  }
-};
-},{"../core-js/array/from":"VuZO"}],"uj5A":[function(require,module,exports) {
-'use strict';
-// 19.1.2.1 Object.assign(target, source, ...)
-var getKeys = require('./_object-keys');
-var gOPS = require('./_object-gops');
-var pIE = require('./_object-pie');
-var toObject = require('./_to-object');
-var IObject = require('./_iobject');
-var $assign = Object.assign;
+    var Gp = GeneratorFunctionPrototype.prototype =
+      Generator.prototype = Object.create(IteratorPrototype);
+    GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+    GeneratorFunctionPrototype.constructor = GeneratorFunction;
+    GeneratorFunctionPrototype[toStringTagSymbol] =
+      GeneratorFunction.displayName = "GeneratorFunction";
 
-// should work with symbols and should have deterministic property order (V8 bug)
-module.exports = !$assign || require('./_fails')(function () {
-  var A = {};
-  var B = {};
-  // eslint-disable-next-line no-undef
-  var S = Symbol();
-  var K = 'abcdefghijklmnopqrst';
-  A[S] = 7;
-  K.split('').forEach(function (k) { B[k] = k; });
-  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
-}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
-  var T = toObject(target);
-  var aLen = arguments.length;
-  var index = 1;
-  var getSymbols = gOPS.f;
-  var isEnum = pIE.f;
-  while (aLen > index) {
-    var S = IObject(arguments[index++]);
-    var keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S);
-    var length = keys.length;
-    var j = 0;
-    var key;
-    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
-  } return T;
-} : $assign;
-
-},{"./_object-keys":"knrM","./_object-gops":"EWMd","./_object-pie":"vjRp","./_to-object":"mbLO","./_iobject":"E5Ce","./_fails":"5BXi"}],"YD0x":[function(require,module,exports) {
-// 19.1.3.1 Object.assign(target, source)
-var $export = require('./_export');
-
-$export($export.S + $export.F, 'Object', { assign: require('./_object-assign') });
-
-},{"./_export":"vSO4","./_object-assign":"uj5A"}],"vcHl":[function(require,module,exports) {
-require('../../modules/es6.object.assign');
-module.exports = require('../../modules/_core').Object.assign;
-
-},{"../../modules/es6.object.assign":"YD0x","../../modules/_core":"ss9A"}],"gc0D":[function(require,module,exports) {
-module.exports = { "default": require("core-js/library/fn/object/assign"), __esModule: true };
-},{"core-js/library/fn/object/assign":"vcHl"}],"T4f3":[function(require,module,exports) {
-"use strict";
-
-exports.__esModule = true;
-
-var _assign = require("../core-js/object/assign");
-
-var _assign2 = _interopRequireDefault(_assign);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _assign2.default || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];
-
-    for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
+    // Helper for defining the .next, .throw, and .return methods of the
+    // Iterator interface in terms of a single ._invoke method.
+    function defineIteratorMethods(prototype) {
+      ["next", "throw", "return"].forEach(function(method) {
+        prototype[method] = function(arg) {
+          return this._invoke(method, arg);
+        };
+      });
     }
-  }
 
-  return target;
-};
-},{"../core-js/object/assign":"gc0D"}],"jUky":[function(require,module,exports) {
-var global = arguments[3];
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+    runtime.isGeneratorFunction = function(genFun) {
+      var ctor = typeof genFun === "function" && genFun.constructor;
+      return ctor
+        ? ctor === GeneratorFunction ||
+          // For the native GeneratorFunction constructor, the best we can
+          // do is to check its .name property.
+          (ctor.displayName || ctor.name) === "GeneratorFunction"
+        : false;
+    };
 
-!(function(global) {
-  "use strict";
-
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
-  var undefined; // More compressible than void 0.
-  var $Symbol = typeof Symbol === "function" ? Symbol : {};
-  var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
-  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  var inModule = typeof module === "object";
-  var runtime = global.regeneratorRuntime;
-  if (runtime) {
-    if (inModule) {
-      // If regeneratorRuntime is defined globally and we're in a module,
-      // make the exports object identical to regeneratorRuntime.
-      module.exports = runtime;
-    }
-    // Don't bother evaluating the rest of this file if the runtime was
-    // already defined globally.
-    return;
-  }
-
-  // Define the runtime globally (as expected by generated code) as either
-  // module.exports (if we're in a module) or a new, empty object.
-  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
-    var generator = Object.create(protoGenerator.prototype);
-    var context = new Context(tryLocsList || []);
-
-    // The ._invoke method unifies the implementations of the .next,
-    // .throw, and .return methods.
-    generator._invoke = makeInvokeMethod(innerFn, self, context);
-
-    return generator;
-  }
-  runtime.wrap = wrap;
-
-  // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn, obj, arg) {
-    try {
-      return { type: "normal", arg: fn.call(obj, arg) };
-    } catch (err) {
-      return { type: "throw", arg: err };
-    }
-  }
-
-  var GenStateSuspendedStart = "suspendedStart";
-  var GenStateSuspendedYield = "suspendedYield";
-  var GenStateExecuting = "executing";
-  var GenStateCompleted = "completed";
-
-  // Returning this object from the innerFn has the same effect as
-  // breaking out of the dispatch switch statement.
-  var ContinueSentinel = {};
-
-  // Dummy constructor functions that we use as the .constructor and
-  // .constructor.prototype properties for functions that return Generator
-  // objects. For full spec compliance, you may wish to configure your
-  // minifier not to mangle the names of these two functions.
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-
-  // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-  var IteratorPrototype = {};
-  IteratorPrototype[iteratorSymbol] = function () {
-    return this;
-  };
-
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (NativeIteratorPrototype &&
-      NativeIteratorPrototype !== Op &&
-      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
-
-  var Gp = GeneratorFunctionPrototype.prototype =
-    Generator.prototype = Object.create(IteratorPrototype);
-  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunctionPrototype[toStringTagSymbol] =
-    GeneratorFunction.displayName = "GeneratorFunction";
-
-  // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function(method) {
-      prototype[method] = function(arg) {
-        return this._invoke(method, arg);
-      };
-    });
-  }
-
-  runtime.isGeneratorFunction = function(genFun) {
-    var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor
-      ? ctor === GeneratorFunction ||
-        // For the native GeneratorFunction constructor, the best we can
-        // do is to check its .name property.
-        (ctor.displayName || ctor.name) === "GeneratorFunction"
-      : false;
-  };
-
-  runtime.mark = function(genFun) {
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
-    } else {
-      genFun.__proto__ = GeneratorFunctionPrototype;
-      if (!(toStringTagSymbol in genFun)) {
-        genFun[toStringTagSymbol] = "GeneratorFunction";
-      }
-    }
-    genFun.prototype = Object.create(Gp);
-    return genFun;
-  };
-
-  // Within the body of any async function, `await x` is transformed to
-  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-  // `hasOwn.call(value, "__await")` to determine if the yielded value is
-  // meant to be awaited.
-  runtime.awrap = function(arg) {
-    return { __await: arg };
-  };
-
-  function AsyncIterator(generator) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if (record.type === "throw") {
-        reject(record.arg);
+    runtime.mark = function(genFun) {
+      if (Object.setPrototypeOf) {
+        Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
       } else {
-        var result = record.arg;
-        var value = result.value;
-        if (value &&
-            typeof value === "object" &&
-            hasOwn.call(value, "__await")) {
-          return Promise.resolve(value.__await).then(function(value) {
-            invoke("next", value, resolve, reject);
-          }, function(err) {
-            invoke("throw", err, resolve, reject);
+        genFun.__proto__ = GeneratorFunctionPrototype;
+        if (!(toStringTagSymbol in genFun)) {
+          genFun[toStringTagSymbol] = "GeneratorFunction";
+        }
+      }
+      genFun.prototype = Object.create(Gp);
+      return genFun;
+    };
+
+    // Within the body of any async function, `await x` is transformed to
+    // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+    // `hasOwn.call(value, "__await")` to determine if the yielded value is
+    // meant to be awaited.
+    runtime.awrap = function(arg) {
+      return { __await: arg };
+    };
+
+    function AsyncIterator(generator) {
+      function invoke(method, arg, resolve, reject) {
+        var record = tryCatch(generator[method], generator, arg);
+        if (record.type === "throw") {
+          reject(record.arg);
+        } else {
+          var result = record.arg;
+          var value = result.value;
+          if (value &&
+              typeof value === "object" &&
+              hasOwn.call(value, "__await")) {
+            return Promise.resolve(value.__await).then(function(value) {
+              invoke("next", value, resolve, reject);
+            }, function(err) {
+              invoke("throw", err, resolve, reject);
+            });
+          }
+
+          return Promise.resolve(value).then(function(unwrapped) {
+            // When a yielded Promise is resolved, its final value becomes
+            // the .value of the Promise<{value,done}> result for the
+            // current iteration. If the Promise is rejected, however, the
+            // result for this iteration will be rejected with the same
+            // reason. Note that rejections of yielded Promises are not
+            // thrown back into the generator function, as is the case
+            // when an awaited Promise is rejected. This difference in
+            // behavior between yield and await is important, because it
+            // allows the consumer to decide what to do with the yielded
+            // rejection (swallow it and continue, manually .throw it back
+            // into the generator, abandon iteration, whatever). With
+            // await, by contrast, there is no opportunity to examine the
+            // rejection reason outside the generator function, so the
+            // only option is to throw it from the await expression, and
+            // let the generator function handle the exception.
+            result.value = unwrapped;
+            resolve(result);
+          }, reject);
+        }
+      }
+
+      var previousPromise;
+
+      function enqueue(method, arg) {
+        function callInvokeWithMethodAndArg() {
+          return new Promise(function(resolve, reject) {
+            invoke(method, arg, resolve, reject);
           });
         }
 
-        return Promise.resolve(value).then(function(unwrapped) {
-          // When a yielded Promise is resolved, its final value becomes
-          // the .value of the Promise<{value,done}> result for the
-          // current iteration. If the Promise is rejected, however, the
-          // result for this iteration will be rejected with the same
-          // reason. Note that rejections of yielded Promises are not
-          // thrown back into the generator function, as is the case
-          // when an awaited Promise is rejected. This difference in
-          // behavior between yield and await is important, because it
-          // allows the consumer to decide what to do with the yielded
-          // rejection (swallow it and continue, manually .throw it back
-          // into the generator, abandon iteration, whatever). With
-          // await, by contrast, there is no opportunity to examine the
-          // rejection reason outside the generator function, so the
-          // only option is to throw it from the await expression, and
-          // let the generator function handle the exception.
-          result.value = unwrapped;
-          resolve(result);
-        }, reject);
+        return previousPromise =
+          // If enqueue has been called before, then we want to wait until
+          // all previous Promises have been resolved before calling invoke,
+          // so that results are always delivered in the correct order. If
+          // enqueue has not been called before, then it is important to
+          // call invoke immediately, without waiting on a callback to fire,
+          // so that the async generator function has the opportunity to do
+          // any necessary setup in a predictable way. This predictability
+          // is why the Promise constructor synchronously invokes its
+          // executor callback, and why async functions synchronously
+          // execute code before the first await. Since we implement simple
+          // async functions in terms of async generators, it is especially
+          // important to get this right, even though it requires care.
+          previousPromise ? previousPromise.then(
+            callInvokeWithMethodAndArg,
+            // Avoid propagating failures to Promises returned by later
+            // invocations of the iterator.
+            callInvokeWithMethodAndArg
+          ) : callInvokeWithMethodAndArg();
       }
+
+      // Define the unified helper method that is used to implement .next,
+      // .throw, and .return (see defineIteratorMethods).
+      this._invoke = enqueue;
     }
 
-    var previousPromise;
-
-    function enqueue(method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new Promise(function(resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise ? previousPromise.then(
-          callInvokeWithMethodAndArg,
-          // Avoid propagating failures to Promises returned by later
-          // invocations of the iterator.
-          callInvokeWithMethodAndArg
-        ) : callInvokeWithMethodAndArg();
-    }
-
-    // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-    this._invoke = enqueue;
-  }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
-    return this;
-  };
-  runtime.AsyncIterator = AsyncIterator;
-
-  // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList)
-    );
-
-    return runtime.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function(result) {
-          return result.done ? result.value : iter.next();
-        });
-  };
-
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = GenStateSuspendedStart;
-
-    return function invoke(method, arg) {
-      if (state === GenStateExecuting) {
-        throw new Error("Generator is already running");
-      }
-
-      if (state === GenStateCompleted) {
-        if (method === "throw") {
-          throw arg;
-        }
-
-        // Be forgiving, per 25.3.3.3.3 of the spec:
-        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-        return doneResult();
-      }
-
-      context.method = method;
-      context.arg = arg;
-
-      while (true) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
-          }
-        }
-
-        if (context.method === "next") {
-          // Setting context._sent for legacy support of Babel's
-          // function.sent implementation.
-          context.sent = context._sent = context.arg;
-
-        } else if (context.method === "throw") {
-          if (state === GenStateSuspendedStart) {
-            state = GenStateCompleted;
-            throw context.arg;
-          }
-
-          context.dispatchException(context.arg);
-
-        } else if (context.method === "return") {
-          context.abrupt("return", context.arg);
-        }
-
-        state = GenStateExecuting;
-
-        var record = tryCatch(innerFn, self, context);
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done
-            ? GenStateCompleted
-            : GenStateSuspendedYield;
-
-          if (record.arg === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.arg,
-            done: context.done
-          };
-
-        } else if (record.type === "throw") {
-          state = GenStateCompleted;
-          // Dispatch the exception by looping back around to the
-          // context.dispatchException(context.arg) call above.
-          context.method = "throw";
-          context.arg = record.arg;
-        }
-      }
+    defineIteratorMethods(AsyncIterator.prototype);
+    AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+      return this;
     };
-  }
+    runtime.AsyncIterator = AsyncIterator;
 
-  // Call delegate.iterator[context.method](context.arg) and handle the
-  // result, either by returning a { value, done } result from the
-  // delegate iterator, or by modifying context.method and context.arg,
-  // setting context.delegate to null, and returning the ContinueSentinel.
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-    if (method === undefined) {
-      // A .throw or .return when the delegate iterator has no .throw
-      // method always terminates the yield* loop.
-      context.delegate = null;
+    // Note that simple async functions are implemented on top of
+    // AsyncIterator objects; they just return a Promise for the value of
+    // the final result produced by the iterator.
+    runtime.async = function(innerFn, outerFn, self, tryLocsList) {
+      var iter = new AsyncIterator(
+        wrap(innerFn, outerFn, self, tryLocsList)
+      );
 
-      if (context.method === "throw") {
-        if (delegate.iterator.return) {
-          // If the delegate iterator has a return method, give it a
-          // chance to clean up.
-          context.method = "return";
-          context.arg = undefined;
-          maybeInvokeDelegate(delegate, context);
-
-          if (context.method === "throw") {
-            // If maybeInvokeDelegate(context) changed context.method from
-            // "return" to "throw", let that override the TypeError below.
-            return ContinueSentinel;
-          }
-        }
-
-        context.method = "throw";
-        context.arg = new TypeError(
-          "The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-
-    if (record.type === "throw") {
-      context.method = "throw";
-      context.arg = record.arg;
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    var info = record.arg;
-
-    if (! info) {
-      context.method = "throw";
-      context.arg = new TypeError("iterator result is not an object");
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    if (info.done) {
-      // Assign the result of the finished delegate to the temporary
-      // variable specified by delegate.resultName (see delegateYield).
-      context[delegate.resultName] = info.value;
-
-      // Resume execution at the desired location (see delegateYield).
-      context.next = delegate.nextLoc;
-
-      // If context.method was "throw" but the delegate handled the
-      // exception, let the outer generator proceed normally. If
-      // context.method was "next", forget context.arg since it has been
-      // "consumed" by the delegate iterator. If context.method was
-      // "return", allow the original .return call to continue in the
-      // outer generator.
-      if (context.method !== "return") {
-        context.method = "next";
-        context.arg = undefined;
-      }
-
-    } else {
-      // Re-yield the result returned by the delegate method.
-      return info;
-    }
-
-    // The delegate iterator is finished, so forget it and continue with
-    // the outer generator.
-    context.delegate = null;
-    return ContinueSentinel;
-  }
-
-  // Define Generator.prototype.{next,throw,return} in terms of the
-  // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
-
-  Gp[toStringTagSymbol] = "Generator";
-
-  // A Generator should always return itself as the iterator object when the
-  // @@iterator function is called on it. Some browsers' implementations of the
-  // iterator prototype chain incorrectly implement this, causing the Generator
-  // object to not be returned from this call. This ensures that doesn't happen.
-  // See https://github.com/facebook/regenerator/issues/274 for more details.
-  Gp[iteratorSymbol] = function() {
-    return this;
-  };
-
-  Gp.toString = function() {
-    return "[object Generator]";
-  };
-
-  function pushTryEntry(locs) {
-    var entry = { tryLoc: locs[0] };
-
-    if (1 in locs) {
-      entry.catchLoc = locs[1];
-    }
-
-    if (2 in locs) {
-      entry.finallyLoc = locs[2];
-      entry.afterLoc = locs[3];
-    }
-
-    this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal";
-    delete record.arg;
-    entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    // The root entry object (effectively a try statement without a catch
-    // or a finally block) gives us a place to store values thrown from
-    // locations where there is no enclosing try statement.
-    this.tryEntries = [{ tryLoc: "root" }];
-    tryLocsList.forEach(pushTryEntry, this);
-    this.reset(true);
-  }
-
-  runtime.keys = function(object) {
-    var keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
-    keys.reverse();
-
-    // Rather than returning an object with a next method, we keep
-    // things simple and return the next function itself.
-    return function next() {
-      while (keys.length) {
-        var key = keys.pop();
-        if (key in object) {
-          next.value = key;
-          next.done = false;
-          return next;
-        }
-      }
-
-      // To avoid creating an additional object, we just hang the .value
-      // and .done properties off the next function object itself. This
-      // also ensures that the minifier will not anonymize the function.
-      next.done = true;
-      return next;
+      return runtime.isGeneratorFunction(outerFn)
+        ? iter // If outerFn is a generator, return the full iterator.
+        : iter.next().then(function(result) {
+            return result.done ? result.value : iter.next();
+          });
     };
-  };
 
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) {
-        return iteratorMethod.call(iterable);
-      }
+    function makeInvokeMethod(innerFn, self, context) {
+      var state = GenStateSuspendedStart;
 
-      if (typeof iterable.next === "function") {
-        return iterable;
-      }
+      return function invoke(method, arg) {
+        if (state === GenStateExecuting) {
+          throw new Error("Generator is already running");
+        }
 
-      if (!isNaN(iterable.length)) {
-        var i = -1, next = function next() {
-          while (++i < iterable.length) {
-            if (hasOwn.call(iterable, i)) {
-              next.value = iterable[i];
-              next.done = false;
-              return next;
+        if (state === GenStateCompleted) {
+          if (method === "throw") {
+            throw arg;
+          }
+
+          // Be forgiving, per 25.3.3.3.3 of the spec:
+          // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+          return doneResult();
+        }
+
+        context.method = method;
+        context.arg = arg;
+
+        while (true) {
+          var delegate = context.delegate;
+          if (delegate) {
+            var delegateResult = maybeInvokeDelegate(delegate, context);
+            if (delegateResult) {
+              if (delegateResult === ContinueSentinel) continue;
+              return delegateResult;
             }
           }
 
-          next.value = undefined;
-          next.done = true;
+          if (context.method === "next") {
+            // Setting context._sent for legacy support of Babel's
+            // function.sent implementation.
+            context.sent = context._sent = context.arg;
 
-          return next;
-        };
+          } else if (context.method === "throw") {
+            if (state === GenStateSuspendedStart) {
+              state = GenStateCompleted;
+              throw context.arg;
+            }
 
-        return next.next = next;
-      }
-    }
+            context.dispatchException(context.arg);
 
-    // Return an iterator with no values.
-    return { next: doneResult };
-  }
-  runtime.values = values;
+          } else if (context.method === "return") {
+            context.abrupt("return", context.arg);
+          }
 
-  function doneResult() {
-    return { value: undefined, done: true };
-  }
+          state = GenStateExecuting;
 
-  Context.prototype = {
-    constructor: Context,
+          var record = tryCatch(innerFn, self, context);
+          if (record.type === "normal") {
+            // If an exception is thrown from innerFn, we leave state ===
+            // GenStateExecuting and loop back for another invocation.
+            state = context.done
+              ? GenStateCompleted
+              : GenStateSuspendedYield;
 
-    reset: function(skipTempReset) {
-      this.prev = 0;
-      this.next = 0;
-      // Resetting context._sent for legacy support of Babel's
-      // function.sent implementation.
-      this.sent = this._sent = undefined;
-      this.done = false;
-      this.delegate = null;
+            if (record.arg === ContinueSentinel) {
+              continue;
+            }
 
-      this.method = "next";
-      this.arg = undefined;
+            return {
+              value: record.arg,
+              done: context.done
+            };
 
-      this.tryEntries.forEach(resetTryEntry);
-
-      if (!skipTempReset) {
-        for (var name in this) {
-          // Not sure about the optimal order of these conditions:
-          if (name.charAt(0) === "t" &&
-              hasOwn.call(this, name) &&
-              !isNaN(+name.slice(1))) {
-            this[name] = undefined;
+          } else if (record.type === "throw") {
+            state = GenStateCompleted;
+            // Dispatch the exception by looping back around to the
+            // context.dispatchException(context.arg) call above.
+            context.method = "throw";
+            context.arg = record.arg;
           }
         }
+      };
+    }
+
+    // Call delegate.iterator[context.method](context.arg) and handle the
+    // result, either by returning a { value, done } result from the
+    // delegate iterator, or by modifying context.method and context.arg,
+    // setting context.delegate to null, and returning the ContinueSentinel.
+    function maybeInvokeDelegate(delegate, context) {
+      var method = delegate.iterator[context.method];
+      if (method === undefined) {
+        // A .throw or .return when the delegate iterator has no .throw
+        // method always terminates the yield* loop.
+        context.delegate = null;
+
+        if (context.method === "throw") {
+          if (delegate.iterator.return) {
+            // If the delegate iterator has a return method, give it a
+            // chance to clean up.
+            context.method = "return";
+            context.arg = undefined;
+            maybeInvokeDelegate(delegate, context);
+
+            if (context.method === "throw") {
+              // If maybeInvokeDelegate(context) changed context.method from
+              // "return" to "throw", let that override the TypeError below.
+              return ContinueSentinel;
+            }
+          }
+
+          context.method = "throw";
+          context.arg = new TypeError(
+            "The iterator does not provide a 'throw' method");
+        }
+
+        return ContinueSentinel;
       }
-    },
 
-    stop: function() {
-      this.done = true;
+      var record = tryCatch(method, delegate.iterator, context.arg);
 
-      var rootEntry = this.tryEntries[0];
-      var rootRecord = rootEntry.completion;
-      if (rootRecord.type === "throw") {
-        throw rootRecord.arg;
+      if (record.type === "throw") {
+        context.method = "throw";
+        context.arg = record.arg;
+        context.delegate = null;
+        return ContinueSentinel;
       }
 
-      return this.rval;
-    },
+      var info = record.arg;
 
-    dispatchException: function(exception) {
-      if (this.done) {
-        throw exception;
+      if (! info) {
+        context.method = "throw";
+        context.arg = new TypeError("iterator result is not an object");
+        context.delegate = null;
+        return ContinueSentinel;
       }
 
-      var context = this;
-      function handle(loc, caught) {
-        record.type = "throw";
-        record.arg = exception;
-        context.next = loc;
+      if (info.done) {
+        // Assign the result of the finished delegate to the temporary
+        // variable specified by delegate.resultName (see delegateYield).
+        context[delegate.resultName] = info.value;
 
-        if (caught) {
-          // If the dispatched exception was caught by a catch block,
-          // then let that catch block handle the exception normally.
+        // Resume execution at the desired location (see delegateYield).
+        context.next = delegate.nextLoc;
+
+        // If context.method was "throw" but the delegate handled the
+        // exception, let the outer generator proceed normally. If
+        // context.method was "next", forget context.arg since it has been
+        // "consumed" by the delegate iterator. If context.method was
+        // "return", allow the original .return call to continue in the
+        // outer generator.
+        if (context.method !== "return") {
           context.method = "next";
           context.arg = undefined;
         }
 
-        return !! caught;
+      } else {
+        // Re-yield the result returned by the delegate method.
+        return info;
       }
 
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        var record = entry.completion;
+      // The delegate iterator is finished, so forget it and continue with
+      // the outer generator.
+      context.delegate = null;
+      return ContinueSentinel;
+    }
 
-        if (entry.tryLoc === "root") {
-          // Exception thrown outside of any try block that could handle
-          // it, so set the completion value of the entire function to
-          // throw the exception.
-          return handle("end");
-        }
+    // Define Generator.prototype.{next,throw,return} in terms of the
+    // unified ._invoke helper method.
+    defineIteratorMethods(Gp);
 
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc");
-          var hasFinally = hasOwn.call(entry, "finallyLoc");
+    Gp[toStringTagSymbol] = "Generator";
 
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            } else if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
+    // A Generator should always return itself as the iterator object when the
+    // @@iterator function is called on it. Some browsers' implementations of the
+    // iterator prototype chain incorrectly implement this, causing the Generator
+    // object to not be returned from this call. This ensures that doesn't happen.
+    // See https://github.com/facebook/regenerator/issues/274 for more details.
+    Gp[iteratorSymbol] = function() {
+      return this;
+    };
 
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            }
+    Gp.toString = function() {
+      return "[object Generator]";
+    };
 
-          } else if (hasFinally) {
-            if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
+    function pushTryEntry(locs) {
+      var entry = { tryLoc: locs[0] };
 
-          } else {
-            throw new Error("try statement without catch or finally");
+      if (1 in locs) {
+        entry.catchLoc = locs[1];
+      }
+
+      if (2 in locs) {
+        entry.finallyLoc = locs[2];
+        entry.afterLoc = locs[3];
+      }
+
+      this.tryEntries.push(entry);
+    }
+
+    function resetTryEntry(entry) {
+      var record = entry.completion || {};
+      record.type = "normal";
+      delete record.arg;
+      entry.completion = record;
+    }
+
+    function Context(tryLocsList) {
+      // The root entry object (effectively a try statement without a catch
+      // or a finally block) gives us a place to store values thrown from
+      // locations where there is no enclosing try statement.
+      this.tryEntries = [{ tryLoc: "root" }];
+      tryLocsList.forEach(pushTryEntry, this);
+      this.reset(true);
+    }
+
+    runtime.keys = function(object) {
+      var keys = [];
+      for (var key in object) {
+        keys.push(key);
+      }
+      keys.reverse();
+
+      // Rather than returning an object with a next method, we keep
+      // things simple and return the next function itself.
+      return function next() {
+        while (keys.length) {
+          var key = keys.pop();
+          if (key in object) {
+            next.value = key;
+            next.done = false;
+            return next;
           }
         }
-      }
-    },
 
-    abrupt: function(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev &&
-            hasOwn.call(entry, "finallyLoc") &&
-            this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
+        // To avoid creating an additional object, we just hang the .value
+        // and .done properties off the next function object itself. This
+        // also ensures that the minifier will not anonymize the function.
+        next.done = true;
+        return next;
+      };
+    };
+
+    function values(iterable) {
+      if (iterable) {
+        var iteratorMethod = iterable[iteratorSymbol];
+        if (iteratorMethod) {
+          return iteratorMethod.call(iterable);
+        }
+
+        if (typeof iterable.next === "function") {
+          return iterable;
+        }
+
+        if (!isNaN(iterable.length)) {
+          var i = -1, next = function next() {
+            while (++i < iterable.length) {
+              if (hasOwn.call(iterable, i)) {
+                next.value = iterable[i];
+                next.done = false;
+                return next;
+              }
+            }
+
+            next.value = undefined;
+            next.done = true;
+
+            return next;
+          };
+
+          return next.next = next;
         }
       }
 
-      if (finallyEntry &&
-          (type === "break" ||
-           type === "continue") &&
-          finallyEntry.tryLoc <= arg &&
-          arg <= finallyEntry.finallyLoc) {
-        // Ignore the finally entry if control is not jumping to a
-        // location outside the try/catch block.
-        finallyEntry = null;
-      }
+      // Return an iterator with no values.
+      return { next: doneResult };
+    }
+    runtime.values = values;
 
-      var record = finallyEntry ? finallyEntry.completion : {};
-      record.type = type;
-      record.arg = arg;
+    function doneResult() {
+      return { value: undefined, done: true };
+    }
 
-      if (finallyEntry) {
+    Context.prototype = {
+      constructor: Context,
+
+      reset: function(skipTempReset) {
+        this.prev = 0;
+        this.next = 0;
+        // Resetting context._sent for legacy support of Babel's
+        // function.sent implementation.
+        this.sent = this._sent = undefined;
+        this.done = false;
+        this.delegate = null;
+
         this.method = "next";
-        this.next = finallyEntry.finallyLoc;
-        return ContinueSentinel;
-      }
+        this.arg = undefined;
 
-      return this.complete(record);
-    },
+        this.tryEntries.forEach(resetTryEntry);
 
-    complete: function(record, afterLoc) {
-      if (record.type === "throw") {
-        throw record.arg;
-      }
+        if (!skipTempReset) {
+          for (var name in this) {
+            // Not sure about the optimal order of these conditions:
+            if (name.charAt(0) === "t" &&
+                hasOwn.call(this, name) &&
+                !isNaN(+name.slice(1))) {
+              this[name] = undefined;
+            }
+          }
+        }
+      },
 
-      if (record.type === "break" ||
-          record.type === "continue") {
-        this.next = record.arg;
-      } else if (record.type === "return") {
-        this.rval = this.arg = record.arg;
-        this.method = "return";
-        this.next = "end";
-      } else if (record.type === "normal" && afterLoc) {
-        this.next = afterLoc;
-      }
+      stop: function() {
+        this.done = true;
 
-      return ContinueSentinel;
-    },
+        var rootEntry = this.tryEntries[0];
+        var rootRecord = rootEntry.completion;
+        if (rootRecord.type === "throw") {
+          throw rootRecord.arg;
+        }
 
-    finish: function(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) {
-          this.complete(entry.completion, entry.afterLoc);
-          resetTryEntry(entry);
+        return this.rval;
+      },
+
+      dispatchException: function(exception) {
+        if (this.done) {
+          throw exception;
+        }
+
+        var context = this;
+        function handle(loc, caught) {
+          record.type = "throw";
+          record.arg = exception;
+          context.next = loc;
+
+          if (caught) {
+            // If the dispatched exception was caught by a catch block,
+            // then let that catch block handle the exception normally.
+            context.method = "next";
+            context.arg = undefined;
+          }
+
+          return !! caught;
+        }
+
+        for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+          var entry = this.tryEntries[i];
+          var record = entry.completion;
+
+          if (entry.tryLoc === "root") {
+            // Exception thrown outside of any try block that could handle
+            // it, so set the completion value of the entire function to
+            // throw the exception.
+            return handle("end");
+          }
+
+          if (entry.tryLoc <= this.prev) {
+            var hasCatch = hasOwn.call(entry, "catchLoc");
+            var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+            if (hasCatch && hasFinally) {
+              if (this.prev < entry.catchLoc) {
+                return handle(entry.catchLoc, true);
+              } else if (this.prev < entry.finallyLoc) {
+                return handle(entry.finallyLoc);
+              }
+
+            } else if (hasCatch) {
+              if (this.prev < entry.catchLoc) {
+                return handle(entry.catchLoc, true);
+              }
+
+            } else if (hasFinally) {
+              if (this.prev < entry.finallyLoc) {
+                return handle(entry.finallyLoc);
+              }
+
+            } else {
+              throw new Error("try statement without catch or finally");
+            }
+          }
+        }
+      },
+
+      abrupt: function(type, arg) {
+        for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+          var entry = this.tryEntries[i];
+          if (entry.tryLoc <= this.prev &&
+              hasOwn.call(entry, "finallyLoc") &&
+              this.prev < entry.finallyLoc) {
+            var finallyEntry = entry;
+            break;
+          }
+        }
+
+        if (finallyEntry &&
+            (type === "break" ||
+             type === "continue") &&
+            finallyEntry.tryLoc <= arg &&
+            arg <= finallyEntry.finallyLoc) {
+          // Ignore the finally entry if control is not jumping to a
+          // location outside the try/catch block.
+          finallyEntry = null;
+        }
+
+        var record = finallyEntry ? finallyEntry.completion : {};
+        record.type = type;
+        record.arg = arg;
+
+        if (finallyEntry) {
+          this.method = "next";
+          this.next = finallyEntry.finallyLoc;
           return ContinueSentinel;
         }
-      }
-    },
 
-    "catch": function(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if (record.type === "throw") {
-            var thrown = record.arg;
+        return this.complete(record);
+      },
+
+      complete: function(record, afterLoc) {
+        if (record.type === "throw") {
+          throw record.arg;
+        }
+
+        if (record.type === "break" ||
+            record.type === "continue") {
+          this.next = record.arg;
+        } else if (record.type === "return") {
+          this.rval = this.arg = record.arg;
+          this.method = "return";
+          this.next = "end";
+        } else if (record.type === "normal" && afterLoc) {
+          this.next = afterLoc;
+        }
+
+        return ContinueSentinel;
+      },
+
+      finish: function(finallyLoc) {
+        for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+          var entry = this.tryEntries[i];
+          if (entry.finallyLoc === finallyLoc) {
+            this.complete(entry.completion, entry.afterLoc);
             resetTryEntry(entry);
+            return ContinueSentinel;
           }
-          return thrown;
         }
-      }
+      },
 
-      // The context.catch method must only be called with a location
-      // argument that corresponds to a known catch block.
-      throw new Error("illegal catch attempt");
-    },
-
-    delegateYield: function(iterable, resultName, nextLoc) {
-      this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      };
-
-      if (this.method === "next") {
-        // Deliberately forget the last sent value so that we don't
-        // accidentally pass it on to the delegate.
-        this.arg = undefined;
-      }
-
-      return ContinueSentinel;
-    }
-  };
-})(
-  // In sloppy mode, unbound `this` refers to the global object, fallback to
-  // Function constructor if we're in global strict mode. That is sadly a form
-  // of indirect eval which violates Content Security Policy.
-  (function() { return this })() || Function("return this")()
-);
-
-},{}],"QZxg":[function(require,module,exports) {
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-// This method of obtaining a reference to the global object needs to be
-// kept identical to the way it is obtained in runtime.js
-var g = (function() { return this })() || Function("return this")();
-
-// Use `getOwnPropertyNames` because not all browsers support calling
-// `hasOwnProperty` on the global `self` object in a worker. See #183.
-var hadRuntime = g.regeneratorRuntime &&
-  Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") >= 0;
-
-// Save the old regeneratorRuntime in case it needs to be restored later.
-var oldRuntime = hadRuntime && g.regeneratorRuntime;
-
-// Force reevalutation of runtime.js.
-g.regeneratorRuntime = undefined;
-
-module.exports = require("./runtime");
-
-if (hadRuntime) {
-  // Restore the original runtime.
-  g.regeneratorRuntime = oldRuntime;
-} else {
-  // Remove the global property added by runtime.js.
-  try {
-    delete g.regeneratorRuntime;
-  } catch(e) {
-    g.regeneratorRuntime = undefined;
-  }
-}
-
-},{"./runtime":"jUky"}],"aIIw":[function(require,module,exports) {
-module.exports = require("regenerator-runtime");
-
-},{"regenerator-runtime":"QZxg"}],"ozpD":[function(require,module,exports) {
-var ctx = require('./_ctx');
-var call = require('./_iter-call');
-var isArrayIter = require('./_is-array-iter');
-var anObject = require('./_an-object');
-var toLength = require('./_to-length');
-var getIterFn = require('./core.get-iterator-method');
-var BREAK = {};
-var RETURN = {};
-var exports = module.exports = function (iterable, entries, fn, that, ITERATOR) {
-  var iterFn = ITERATOR ? function () { return iterable; } : getIterFn(iterable);
-  var f = ctx(fn, that, entries ? 2 : 1);
-  var index = 0;
-  var length, step, iterator, result;
-  if (typeof iterFn != 'function') throw TypeError(iterable + ' is not iterable!');
-  // fast case for arrays with default iterator
-  if (isArrayIter(iterFn)) for (length = toLength(iterable.length); length > index; index++) {
-    result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
-    if (result === BREAK || result === RETURN) return result;
-  } else for (iterator = iterFn.call(iterable); !(step = iterator.next()).done;) {
-    result = call(iterator, f, step.value, entries);
-    if (result === BREAK || result === RETURN) return result;
-  }
-};
-exports.BREAK = BREAK;
-exports.RETURN = RETURN;
-
-},{"./_ctx":"3zRh","./_iter-call":"hEIm","./_is-array-iter":"af0K","./_an-object":"zotD","./_to-length":"S7IM","./core.get-iterator-method":"7AqT"}],"B1ls":[function(require,module,exports) {
-// 7.3.20 SpeciesConstructor(O, defaultConstructor)
-var anObject = require('./_an-object');
-var aFunction = require('./_a-function');
-var SPECIES = require('./_wks')('species');
-module.exports = function (O, D) {
-  var C = anObject(O).constructor;
-  var S;
-  return C === undefined || (S = anObject(C)[SPECIES]) == undefined ? D : aFunction(S);
-};
-
-},{"./_an-object":"zotD","./_a-function":"6kYj","./_wks":"Ug9I"}],"uzcO":[function(require,module,exports) {
-
-
-var ctx = require('./_ctx');
-var invoke = require('./_invoke');
-var html = require('./_html');
-var cel = require('./_dom-create');
-var global = require('./_global');
-var process = global.process;
-var setTask = global.setImmediate;
-var clearTask = global.clearImmediate;
-var MessageChannel = global.MessageChannel;
-var Dispatch = global.Dispatch;
-var counter = 0;
-var queue = {};
-var ONREADYSTATECHANGE = 'onreadystatechange';
-var defer, channel, port;
-var run = function () {
-  var id = +this;
-  // eslint-disable-next-line no-prototype-builtins
-  if (queue.hasOwnProperty(id)) {
-    var fn = queue[id];
-    delete queue[id];
-    fn();
-  }
-};
-var listener = function (event) {
-  run.call(event.data);
-};
-// Node.js 0.9+ & IE10+ has setImmediate, otherwise:
-if (!setTask || !clearTask) {
-  setTask = function setImmediate(fn) {
-    var args = [];
-    var i = 1;
-    while (arguments.length > i) args.push(arguments[i++]);
-    queue[++counter] = function () {
-      // eslint-disable-next-line no-new-func
-      invoke(typeof fn == 'function' ? fn : Function(fn), args);
-    };
-    defer(counter);
-    return counter;
-  };
-  clearTask = function clearImmediate(id) {
-    delete queue[id];
-  };
-  // Node.js 0.8-
-  if (require('./_cof')(process) == 'process') {
-    defer = function (id) {
-      process.nextTick(ctx(run, id, 1));
-    };
-  // Sphere (JS game engine) Dispatch API
-  } else if (Dispatch && Dispatch.now) {
-    defer = function (id) {
-      Dispatch.now(ctx(run, id, 1));
-    };
-  // Browsers with MessageChannel, includes WebWorkers
-  } else if (MessageChannel) {
-    channel = new MessageChannel();
-    port = channel.port2;
-    channel.port1.onmessage = listener;
-    defer = ctx(port.postMessage, port, 1);
-  // Browsers with postMessage, skip WebWorkers
-  // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
-  } else if (global.addEventListener && typeof postMessage == 'function' && !global.importScripts) {
-    defer = function (id) {
-      global.postMessage(id + '', '*');
-    };
-    global.addEventListener('message', listener, false);
-  // IE8-
-  } else if (ONREADYSTATECHANGE in cel('script')) {
-    defer = function (id) {
-      html.appendChild(cel('script'))[ONREADYSTATECHANGE] = function () {
-        html.removeChild(this);
-        run.call(id);
-      };
-    };
-  // Rest old browsers
-  } else {
-    defer = function (id) {
-      setTimeout(ctx(run, id, 1), 0);
-    };
-  }
-}
-module.exports = {
-  set: setTask,
-  clear: clearTask
-};
-
-},{"./_ctx":"3zRh","./_invoke":"xcbV","./_html":"ebIA","./_dom-create":"9kxq","./_global":"5qf4","./_cof":"Z5df"}],"H109":[function(require,module,exports) {
-
-
-var global = require('./_global');
-var macrotask = require('./_task').set;
-var Observer = global.MutationObserver || global.WebKitMutationObserver;
-var process = global.process;
-var Promise = global.Promise;
-var isNode = require('./_cof')(process) == 'process';
-
-module.exports = function () {
-  var head, last, notify;
-
-  var flush = function () {
-    var parent, fn;
-    if (isNode && (parent = process.domain)) parent.exit();
-    while (head) {
-      fn = head.fn;
-      head = head.next;
-      try {
-        fn();
-      } catch (e) {
-        if (head) notify();
-        else last = undefined;
-        throw e;
-      }
-    } last = undefined;
-    if (parent) parent.enter();
-  };
-
-  // Node.js
-  if (isNode) {
-    notify = function () {
-      process.nextTick(flush);
-    };
-  // browsers with MutationObserver, except iOS Safari - https://github.com/zloirock/core-js/issues/339
-  } else if (Observer && !(global.navigator && global.navigator.standalone)) {
-    var toggle = true;
-    var node = document.createTextNode('');
-    new Observer(flush).observe(node, { characterData: true }); // eslint-disable-line no-new
-    notify = function () {
-      node.data = toggle = !toggle;
-    };
-  // environments with maybe non-completely correct, but existent Promise
-  } else if (Promise && Promise.resolve) {
-    // Promise.resolve without an argument throws an error in LG WebOS 2
-    var promise = Promise.resolve(undefined);
-    notify = function () {
-      promise.then(flush);
-    };
-  // for other environments - macrotask based on:
-  // - setImmediate
-  // - MessageChannel
-  // - window.postMessag
-  // - onreadystatechange
-  // - setTimeout
-  } else {
-    notify = function () {
-      // strange IE + webpack dev server bug - use .call(global)
-      macrotask.call(global, flush);
-    };
-  }
-
-  return function (fn) {
-    var task = { fn: fn, next: undefined };
-    if (last) last.next = task;
-    if (!head) {
-      head = task;
-      notify();
-    } last = task;
-  };
-};
-
-},{"./_global":"5qf4","./_task":"uzcO","./_cof":"Z5df"}],"AIlg":[function(require,module,exports) {
-'use strict';
-// 25.4.1.5 NewPromiseCapability(C)
-var aFunction = require('./_a-function');
-
-function PromiseCapability(C) {
-  var resolve, reject;
-  this.promise = new C(function ($$resolve, $$reject) {
-    if (resolve !== undefined || reject !== undefined) throw TypeError('Bad Promise constructor');
-    resolve = $$resolve;
-    reject = $$reject;
-  });
-  this.resolve = aFunction(resolve);
-  this.reject = aFunction(reject);
-}
-
-module.exports.f = function (C) {
-  return new PromiseCapability(C);
-};
-
-},{"./_a-function":"6kYj"}],"/cCi":[function(require,module,exports) {
-
-var global = require('./_global');
-var navigator = global.navigator;
-
-module.exports = navigator && navigator.userAgent || '';
-
-},{"./_global":"5qf4"}],"5Czc":[function(require,module,exports) {
-var anObject = require('./_an-object');
-var isObject = require('./_is-object');
-var newPromiseCapability = require('./_new-promise-capability');
-
-module.exports = function (C, x) {
-  anObject(C);
-  if (isObject(x) && x.constructor === C) return x;
-  var promiseCapability = newPromiseCapability.f(C);
-  var resolve = promiseCapability.resolve;
-  resolve(x);
-  return promiseCapability.promise;
-};
-
-},{"./_an-object":"zotD","./_is-object":"M7z6","./_new-promise-capability":"AIlg"}],"O6kh":[function(require,module,exports) {
-var hide = require('./_hide');
-module.exports = function (target, src, safe) {
-  for (var key in src) {
-    if (safe && target[key]) target[key] = src[key];
-    else hide(target, key, src[key]);
-  } return target;
-};
-
-},{"./_hide":"akPY"}],"FGzK":[function(require,module,exports) {
-
-'use strict';
-var global = require('./_global');
-var core = require('./_core');
-var dP = require('./_object-dp');
-var DESCRIPTORS = require('./_descriptors');
-var SPECIES = require('./_wks')('species');
-
-module.exports = function (KEY) {
-  var C = typeof core[KEY] == 'function' ? core[KEY] : global[KEY];
-  if (DESCRIPTORS && C && !C[SPECIES]) dP.f(C, SPECIES, {
-    configurable: true,
-    get: function () { return this; }
-  });
-};
-
-},{"./_global":"5qf4","./_core":"ss9A","./_object-dp":"Gfzd","./_descriptors":"6MLN","./_wks":"Ug9I"}],"9kJF":[function(require,module,exports) {
-
-
-'use strict';
-var LIBRARY = require('./_library');
-var global = require('./_global');
-var ctx = require('./_ctx');
-var classof = require('./_classof');
-var $export = require('./_export');
-var isObject = require('./_is-object');
-var aFunction = require('./_a-function');
-var anInstance = require('./_an-instance');
-var forOf = require('./_for-of');
-var speciesConstructor = require('./_species-constructor');
-var task = require('./_task').set;
-var microtask = require('./_microtask')();
-var newPromiseCapabilityModule = require('./_new-promise-capability');
-var perform = require('./_perform');
-var userAgent = require('./_user-agent');
-var promiseResolve = require('./_promise-resolve');
-var PROMISE = 'Promise';
-var TypeError = global.TypeError;
-var process = global.process;
-var versions = process && process.versions;
-var v8 = versions && versions.v8 || '';
-var $Promise = global[PROMISE];
-var isNode = classof(process) == 'process';
-var empty = function () { /* empty */ };
-var Internal, newGenericPromiseCapability, OwnPromiseCapability, Wrapper;
-var newPromiseCapability = newGenericPromiseCapability = newPromiseCapabilityModule.f;
-
-var USE_NATIVE = !!function () {
-  try {
-    // correct subclassing with @@species support
-    var promise = $Promise.resolve(1);
-    var FakePromise = (promise.constructor = {})[require('./_wks')('species')] = function (exec) {
-      exec(empty, empty);
-    };
-    // unhandled rejections tracking support, NodeJS Promise without it fails @@species test
-    return (isNode || typeof PromiseRejectionEvent == 'function')
-      && promise.then(empty) instanceof FakePromise
-      // v8 6.6 (Node 10 and Chrome 66) have a bug with resolving custom thenables
-      // https://bugs.chromium.org/p/chromium/issues/detail?id=830565
-      // we can't detect it synchronously, so just check versions
-      && v8.indexOf('6.6') !== 0
-      && userAgent.indexOf('Chrome/66') === -1;
-  } catch (e) { /* empty */ }
-}();
-
-// helpers
-var isThenable = function (it) {
-  var then;
-  return isObject(it) && typeof (then = it.then) == 'function' ? then : false;
-};
-var notify = function (promise, isReject) {
-  if (promise._n) return;
-  promise._n = true;
-  var chain = promise._c;
-  microtask(function () {
-    var value = promise._v;
-    var ok = promise._s == 1;
-    var i = 0;
-    var run = function (reaction) {
-      var handler = ok ? reaction.ok : reaction.fail;
-      var resolve = reaction.resolve;
-      var reject = reaction.reject;
-      var domain = reaction.domain;
-      var result, then, exited;
-      try {
-        if (handler) {
-          if (!ok) {
-            if (promise._h == 2) onHandleUnhandled(promise);
-            promise._h = 1;
-          }
-          if (handler === true) result = value;
-          else {
-            if (domain) domain.enter();
-            result = handler(value); // may throw
-            if (domain) {
-              domain.exit();
-              exited = true;
+      "catch": function(tryLoc) {
+        for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+          var entry = this.tryEntries[i];
+          if (entry.tryLoc === tryLoc) {
+            var record = entry.completion;
+            if (record.type === "throw") {
+              var thrown = record.arg;
+              resetTryEntry(entry);
             }
+            return thrown;
           }
-          if (result === reaction.promise) {
-            reject(TypeError('Promise-chain cycle'));
-          } else if (then = isThenable(result)) {
-            then.call(result, resolve, reject);
-          } else resolve(result);
-        } else reject(value);
-      } catch (e) {
-        if (domain && !exited) domain.exit();
-        reject(e);
+        }
+
+        // The context.catch method must only be called with a location
+        // argument that corresponds to a known catch block.
+        throw new Error("illegal catch attempt");
+      },
+
+      delegateYield: function(iterable, resultName, nextLoc) {
+        this.delegate = {
+          iterator: values(iterable),
+          resultName: resultName,
+          nextLoc: nextLoc
+        };
+
+        if (this.method === "next") {
+          // Deliberately forget the last sent value so that we don't
+          // accidentally pass it on to the delegate.
+          this.arg = undefined;
+        }
+
+        return ContinueSentinel;
       }
     };
-    while (chain.length > i) run(chain[i++]); // variable length - can't use forEach
-    promise._c = [];
-    promise._n = false;
-    if (isReject && !promise._h) onUnhandled(promise);
-  });
-};
-var onUnhandled = function (promise) {
-  task.call(global, function () {
-    var value = promise._v;
-    var unhandled = isUnhandled(promise);
-    var result, handler, console;
-    if (unhandled) {
-      result = perform(function () {
-        if (isNode) {
-          process.emit('unhandledRejection', value, promise);
-        } else if (handler = global.onunhandledrejection) {
-          handler({ promise: promise, reason: value });
-        } else if ((console = global.console) && console.error) {
-          console.error('Unhandled promise rejection', value);
-        }
-      });
-      // Browsers should not trigger `rejectionHandled` event if it was handled here, NodeJS - should
-      promise._h = isNode || isUnhandled(promise) ? 2 : 1;
-    } promise._a = undefined;
-    if (unhandled && result.e) throw result.v;
-  });
-};
-var isUnhandled = function (promise) {
-  return promise._h !== 1 && (promise._a || promise._c).length === 0;
-};
-var onHandleUnhandled = function (promise) {
-  task.call(global, function () {
-    var handler;
-    if (isNode) {
-      process.emit('rejectionHandled', promise);
-    } else if (handler = global.onrejectionhandled) {
-      handler({ promise: promise, reason: promise._v });
-    }
-  });
-};
-var $reject = function (value) {
-  var promise = this;
-  if (promise._d) return;
-  promise._d = true;
-  promise = promise._w || promise; // unwrap
-  promise._v = value;
-  promise._s = 2;
-  if (!promise._a) promise._a = promise._c.slice();
-  notify(promise, true);
-};
-var $resolve = function (value) {
-  var promise = this;
-  var then;
-  if (promise._d) return;
-  promise._d = true;
-  promise = promise._w || promise; // unwrap
-  try {
-    if (promise === value) throw TypeError("Promise can't be resolved itself");
-    if (then = isThenable(value)) {
-      microtask(function () {
-        var wrapper = { _w: promise, _d: false }; // wrap
-        try {
-          then.call(value, ctx($resolve, wrapper, 1), ctx($reject, wrapper, 1));
-        } catch (e) {
-          $reject.call(wrapper, e);
-        }
-      });
-    } else {
-      promise._v = value;
-      promise._s = 1;
-      notify(promise, false);
-    }
-  } catch (e) {
-    $reject.call({ _w: promise, _d: false }, e); // wrap
-  }
-};
-
-// constructor polyfill
-if (!USE_NATIVE) {
-  // 25.4.3.1 Promise(executor)
-  $Promise = function Promise(executor) {
-    anInstance(this, $Promise, PROMISE, '_h');
-    aFunction(executor);
-    Internal.call(this);
-    try {
-      executor(ctx($resolve, this, 1), ctx($reject, this, 1));
-    } catch (err) {
-      $reject.call(this, err);
-    }
-  };
-  // eslint-disable-next-line no-unused-vars
-  Internal = function Promise(executor) {
-    this._c = [];             // <- awaiting reactions
-    this._a = undefined;      // <- checked in isUnhandled reactions
-    this._s = 0;              // <- state
-    this._d = false;          // <- done
-    this._v = undefined;      // <- value
-    this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
-    this._n = false;          // <- notify
-  };
-  Internal.prototype = require('./_redefine-all')($Promise.prototype, {
-    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
-    then: function then(onFulfilled, onRejected) {
-      var reaction = newPromiseCapability(speciesConstructor(this, $Promise));
-      reaction.ok = typeof onFulfilled == 'function' ? onFulfilled : true;
-      reaction.fail = typeof onRejected == 'function' && onRejected;
-      reaction.domain = isNode ? process.domain : undefined;
-      this._c.push(reaction);
-      if (this._a) this._a.push(reaction);
-      if (this._s) notify(this, false);
-      return reaction.promise;
-    },
-    // 25.4.5.1 Promise.prototype.catch(onRejected)
-    'catch': function (onRejected) {
-      return this.then(undefined, onRejected);
-    }
-  });
-  OwnPromiseCapability = function () {
-    var promise = new Internal();
-    this.promise = promise;
-    this.resolve = ctx($resolve, promise, 1);
-    this.reject = ctx($reject, promise, 1);
-  };
-  newPromiseCapabilityModule.f = newPromiseCapability = function (C) {
-    return C === $Promise || C === Wrapper
-      ? new OwnPromiseCapability(C)
-      : newGenericPromiseCapability(C);
-  };
-}
-
-$export($export.G + $export.W + $export.F * !USE_NATIVE, { Promise: $Promise });
-require('./_set-to-string-tag')($Promise, PROMISE);
-require('./_set-species')(PROMISE);
-Wrapper = require('./_core')[PROMISE];
-
-// statics
-$export($export.S + $export.F * !USE_NATIVE, PROMISE, {
-  // 25.4.4.5 Promise.reject(r)
-  reject: function reject(r) {
-    var capability = newPromiseCapability(this);
-    var $$reject = capability.reject;
-    $$reject(r);
-    return capability.promise;
-  }
-});
-$export($export.S + $export.F * (LIBRARY || !USE_NATIVE), PROMISE, {
-  // 25.4.4.6 Promise.resolve(x)
-  resolve: function resolve(x) {
-    return promiseResolve(LIBRARY && this === Wrapper ? $Promise : this, x);
-  }
-});
-$export($export.S + $export.F * !(USE_NATIVE && require('./_iter-detect')(function (iter) {
-  $Promise.all(iter)['catch'](empty);
-})), PROMISE, {
-  // 25.4.4.1 Promise.all(iterable)
-  all: function all(iterable) {
-    var C = this;
-    var capability = newPromiseCapability(C);
-    var resolve = capability.resolve;
-    var reject = capability.reject;
-    var result = perform(function () {
-      var values = [];
-      var index = 0;
-      var remaining = 1;
-      forOf(iterable, false, function (promise) {
-        var $index = index++;
-        var alreadyCalled = false;
-        values.push(undefined);
-        remaining++;
-        C.resolve(promise).then(function (value) {
-          if (alreadyCalled) return;
-          alreadyCalled = true;
-          values[$index] = value;
-          --remaining || resolve(values);
-        }, reject);
-      });
-      --remaining || resolve(values);
-    });
-    if (result.e) reject(result.v);
-    return capability.promise;
-  },
-  // 25.4.4.4 Promise.race(iterable)
-  race: function race(iterable) {
-    var C = this;
-    var capability = newPromiseCapability(C);
-    var reject = capability.reject;
-    var result = perform(function () {
-      forOf(iterable, false, function (promise) {
-        C.resolve(promise).then(capability.resolve, reject);
-      });
-    });
-    if (result.e) reject(result.v);
-    return capability.promise;
-  }
-});
-
-},{"./_library":"1kq3","./_global":"5qf4","./_ctx":"3zRh","./_classof":"ZHvQ","./_export":"vSO4","./_is-object":"M7z6","./_a-function":"6kYj","./_an-instance":"yJTF","./_for-of":"ozpD","./_species-constructor":"B1ls","./_task":"uzcO","./_microtask":"H109","./_new-promise-capability":"AIlg","./_perform":"tyG8","./_user-agent":"/cCi","./_promise-resolve":"5Czc","./_wks":"Ug9I","./_redefine-all":"O6kh","./_set-to-string-tag":"11Ut","./_set-species":"FGzK","./_core":"ss9A","./_iter-detect":"Lli7"}],"zaru":[function(require,module,exports) {
-
-// https://github.com/tc39/proposal-promise-finally
-'use strict';
-var $export = require('./_export');
-var core = require('./_core');
-var global = require('./_global');
-var speciesConstructor = require('./_species-constructor');
-var promiseResolve = require('./_promise-resolve');
-
-$export($export.P + $export.R, 'Promise', { 'finally': function (onFinally) {
-  var C = speciesConstructor(this, core.Promise || global.Promise);
-  var isFunction = typeof onFinally == 'function';
-  return this.then(
-    isFunction ? function (x) {
-      return promiseResolve(C, onFinally()).then(function () { return x; });
-    } : onFinally,
-    isFunction ? function (e) {
-      return promiseResolve(C, onFinally()).then(function () { throw e; });
-    } : onFinally
+  })(
+    // In sloppy mode, unbound `this` refers to the global object, fallback to
+    // Function constructor if we're in global strict mode. That is sadly a form
+    // of indirect eval which violates Content Security Policy.
+    (function() { return this })() || Function("return this")()
   );
-} });
+  });
 
-},{"./_export":"vSO4","./_core":"ss9A","./_global":"5qf4","./_species-constructor":"B1ls","./_promise-resolve":"5Czc"}],"+CEt":[function(require,module,exports) {
+  /**
+   * Extract JSON body from a server response
+   *
+   * @function getJSON
+   * @access public
+   * @param {object} res - A raw response object
+   * @returns {promise|undefined}
+   */
+
+  function getJSON(_x) {
+    return _getJSON.apply(this, arguments);
+  }
+  /**
+   * Blow up string or symbol types into full-fledged type descriptors,
+   *   and add defaults
+   *
+   * @function normalizeTypeDescriptors
+   * @access private
+   * @param {array} types - The [RSAA].types from a validated RSAA
+   * @returns {array}
+   */
+
+
+  function _getJSON() {
+    _getJSON = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee(res) {
+      var contentType, emptyCodes;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              contentType = res.headers.get('Content-Type');
+              emptyCodes = [204, 205];
+
+              if (!(!~emptyCodes.indexOf(res.status) && contentType && ~contentType.indexOf('json'))) {
+                _context.next = 8;
+                break;
+              }
+
+              _context.next = 5;
+              return res.json();
+
+            case 5:
+              return _context.abrupt("return", _context.sent);
+
+            case 8:
+              _context.next = 10;
+              return Promise.resolve();
+
+            case 10:
+              return _context.abrupt("return", _context.sent);
+
+            case 11:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    }));
+    return _getJSON.apply(this, arguments);
+  }
+
+  function normalizeTypeDescriptors(types) {
+    var _types = _slicedToArray(types, 3),
+        requestType = _types[0],
+        successType = _types[1],
+        failureType = _types[2];
+
+    if (typeof requestType === 'string' || _typeof(requestType) === 'symbol') {
+      requestType = {
+        type: requestType
+      };
+    }
+
+    if (typeof successType === 'string' || _typeof(successType) === 'symbol') {
+      successType = {
+        type: successType
+      };
+    }
+
+    successType = _objectSpread({
+      payload: function payload(action, state, res) {
+        return getJSON(res);
+      }
+    }, successType);
+
+    if (typeof failureType === 'string' || _typeof(failureType) === 'symbol') {
+      failureType = {
+        type: failureType
+      };
+    }
+
+    failureType = _objectSpread({
+      payload: function payload(action, state, res) {
+        return getJSON(res).then(function (json) {
+          return new ApiError(res.status, res.statusText, json);
+        });
+      }
+    }, failureType);
+    return [requestType, successType, failureType];
+  }
+  /**
+   * Evaluate a type descriptor to an FSA
+   *
+   * @function actionWith
+   * @access private
+   * @param {object} descriptor - A type descriptor
+   * @param {array} args - The array of arguments for `payload` and `meta` function properties
+   * @returns {object}
+   */
+
+
+  function actionWith(_x2) {
+    return _actionWith.apply(this, arguments);
+  }
+
+  function _actionWith() {
+    _actionWith = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee2(descriptor) {
+      var args,
+          _args2 = arguments;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              args = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : [];
+              _context2.prev = 1;
+
+              if (!(typeof descriptor.payload === 'function')) {
+                _context2.next = 8;
+                break;
+              }
+
+              _context2.next = 5;
+              return descriptor.payload.apply(descriptor, _toConsumableArray(args));
+
+            case 5:
+              _context2.t0 = _context2.sent;
+              _context2.next = 9;
+              break;
+
+            case 8:
+              _context2.t0 = descriptor.payload;
+
+            case 9:
+              descriptor.payload = _context2.t0;
+              _context2.next = 16;
+              break;
+
+            case 12:
+              _context2.prev = 12;
+              _context2.t1 = _context2["catch"](1);
+              descriptor.payload = new InternalError(_context2.t1.message);
+              descriptor.error = true;
+
+            case 16:
+              _context2.prev = 16;
+
+              if (!(typeof descriptor.meta === 'function')) {
+                _context2.next = 23;
+                break;
+              }
+
+              _context2.next = 20;
+              return descriptor.meta.apply(descriptor, _toConsumableArray(args));
+
+            case 20:
+              _context2.t2 = _context2.sent;
+              _context2.next = 24;
+              break;
+
+            case 23:
+              _context2.t2 = descriptor.meta;
+
+            case 24:
+              descriptor.meta = _context2.t2;
+              _context2.next = 32;
+              break;
+
+            case 27:
+              _context2.prev = 27;
+              _context2.t3 = _context2["catch"](16);
+              delete descriptor.meta;
+              descriptor.payload = new InternalError(_context2.t3.message);
+              descriptor.error = true;
+
+            case 32:
+              return _context2.abrupt("return", descriptor);
+
+            case 33:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this, [[1, 12], [16, 27]]);
+    }));
+    return _actionWith.apply(this, arguments);
+  }
+
+  var shared = _shared('keys');
+
+  var _sharedKey = function (key) {
+    return shared[key] || (shared[key] = _uid(key));
+  };
+
+  var arrayIndexOf = _arrayIncludes(false);
+  var IE_PROTO = _sharedKey('IE_PROTO');
+
+  var _objectKeysInternal = function (object, names) {
+    var O = _toIobject(object);
+    var i = 0;
+    var result = [];
+    var key;
+    for (key in O) if (key != IE_PROTO) _has(O, key) && result.push(key);
+    // Don't enum bug & hidden keys
+    while (names.length > i) if (_has(O, key = names[i++])) {
+      ~arrayIndexOf(result, key) || result.push(key);
+    }
+    return result;
+  };
+
+  // IE 8- don't enum bug keys
+  var _enumBugKeys = (
+    'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+  ).split(',');
+
+  // 19.1.2.14 / 15.2.3.14 Object.keys(O)
+
+
+
+  var _objectKeys = Object.keys || function keys(O) {
+    return _objectKeysInternal(O, _enumBugKeys);
+  };
+
+  var f$2 = Object.getOwnPropertySymbols;
+
+  var _objectGops = {
+  	f: f$2
+  };
+
+  var f$3 = {}.propertyIsEnumerable;
+
+  var _objectPie = {
+  	f: f$3
+  };
+
+  // 7.1.13 ToObject(argument)
+
+  var _toObject = function (it) {
+    return Object(_defined(it));
+  };
+
+  // 19.1.2.1 Object.assign(target, source, ...)
+
+
+
+
+
+  var $assign = Object.assign;
+
+  // should work with symbols and should have deterministic property order (V8 bug)
+  var _objectAssign = !$assign || _fails(function () {
+    var A = {};
+    var B = {};
+    // eslint-disable-next-line no-undef
+    var S = Symbol();
+    var K = 'abcdefghijklmnopqrst';
+    A[S] = 7;
+    K.split('').forEach(function (k) { B[k] = k; });
+    return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+  }) ? function assign(target, source) { // eslint-disable-line no-unused-vars
+    var T = _toObject(target);
+    var aLen = arguments.length;
+    var index = 1;
+    var getSymbols = _objectGops.f;
+    var isEnum = _objectPie.f;
+    while (aLen > index) {
+      var S = _iobject(arguments[index++]);
+      var keys = getSymbols ? _objectKeys(S).concat(getSymbols(S)) : _objectKeys(S);
+      var length = keys.length;
+      var j = 0;
+      var key;
+      while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
+    } return T;
+  } : $assign;
+
+  // 19.1.3.1 Object.assign(target, source)
+
+
+  _export(_export.S + _export.F, 'Object', { assign: _objectAssign });
+
+  /**
+   * Default options for redux-api-middleware
+   * These can be customized by passing options into `createMiddleware`
+   * @type {Object}
+   */
+
+  var defaults = {
+    ok: function ok(res) {
+      return res.ok;
+    },
+    fetch: fetch
+  };
+  /**
+   * A middleware creator used to create a ReduxApiMiddleware
+   * with custom defaults
+   *
+   * @type {function}
+   * @returns {ReduxMiddleware}
+   * @access public
+   */
+
+  function createMiddleware() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var middlewareOptions = Object.assign({}, defaults, options);
+    return function (_ref) {
+      var getState = _ref.getState;
+      return function (next) {
+        return function (action) {
+          // Do not process actions without an [RSAA] property
+          if (!isRSAA(action)) {
+            return next(action);
+          }
+
+          return _asyncToGenerator(
+          /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee() {
+            var validationErrors, _callAPI, _requestType, callAPI, endpoint, body, headers, _callAPI$options, options, _callAPI$fetch, doFetch, _callAPI$ok, ok, method, credentials, bailout, types, _normalizeTypeDescrip, _normalizeTypeDescrip2, requestType, successType, failureType, res, isOk;
+
+            return regeneratorRuntime.wrap(function _callee$(_context) {
+              while (1) {
+                switch (_context.prev = _context.next) {
+                  case 0:
+                    // Try to dispatch an error request FSA for invalid RSAAs
+                    validationErrors = validateRSAA(action);
+
+                    if (!validationErrors.length) {
+                      _context.next = 5;
+                      break;
+                    }
+
+                    _callAPI = action[RSAA];
+
+                    if (_callAPI.types && Array.isArray(_callAPI.types)) {
+                      _requestType = _callAPI.types[0];
+
+                      if (_requestType && _requestType.type) {
+                        _requestType = _requestType.type;
+                      }
+
+                      next({
+                        type: _requestType,
+                        payload: new InvalidRSAA(validationErrors),
+                        error: true
+                      });
+                    }
+
+                    return _context.abrupt("return");
+
+                  case 5:
+                    // Parse the validated RSAA action
+                    callAPI = action[RSAA];
+                    endpoint = callAPI.endpoint, body = callAPI.body, headers = callAPI.headers, _callAPI$options = callAPI.options, options = _callAPI$options === void 0 ? {} : _callAPI$options, _callAPI$fetch = callAPI.fetch, doFetch = _callAPI$fetch === void 0 ? middlewareOptions.fetch : _callAPI$fetch, _callAPI$ok = callAPI.ok, ok = _callAPI$ok === void 0 ? middlewareOptions.ok : _callAPI$ok;
+                    method = callAPI.method, credentials = callAPI.credentials, bailout = callAPI.bailout, types = callAPI.types;
+                    _normalizeTypeDescrip = normalizeTypeDescriptors(types), _normalizeTypeDescrip2 = _slicedToArray(_normalizeTypeDescrip, 3), requestType = _normalizeTypeDescrip2[0], successType = _normalizeTypeDescrip2[1], failureType = _normalizeTypeDescrip2[2]; // Should we bail out?
+
+                    _context.prev = 9;
+
+                    if (!(typeof bailout === 'boolean' && bailout || typeof bailout === 'function' && bailout(getState()))) {
+                      _context.next = 12;
+                      break;
+                    }
+
+                    return _context.abrupt("return");
+
+                  case 12:
+                    _context.next = 21;
+                    break;
+
+                  case 14:
+                    _context.prev = 14;
+                    _context.t0 = _context["catch"](9);
+                    _context.t1 = next;
+                    _context.next = 19;
+                    return actionWith(_objectSpread({}, failureType, {
+                      payload: new RequestError('[RSAA].bailout function failed'),
+                      error: true
+                    }), [action, getState()]);
+
+                  case 19:
+                    _context.t2 = _context.sent;
+                    return _context.abrupt("return", (0, _context.t1)(_context.t2));
+
+                  case 21:
+                    if (!(typeof endpoint === 'function')) {
+                      _context.next = 33;
+                      break;
+                    }
+
+                    _context.prev = 22;
+                    endpoint = endpoint(getState());
+                    _context.next = 33;
+                    break;
+
+                  case 26:
+                    _context.prev = 26;
+                    _context.t3 = _context["catch"](22);
+                    _context.t4 = next;
+                    _context.next = 31;
+                    return actionWith(_objectSpread({}, failureType, {
+                      payload: new RequestError('[RSAA].endpoint function failed'),
+                      error: true
+                    }), [action, getState()]);
+
+                  case 31:
+                    _context.t5 = _context.sent;
+                    return _context.abrupt("return", (0, _context.t4)(_context.t5));
+
+                  case 33:
+                    if (!(typeof body === 'function')) {
+                      _context.next = 45;
+                      break;
+                    }
+
+                    _context.prev = 34;
+                    body = body(getState());
+                    _context.next = 45;
+                    break;
+
+                  case 38:
+                    _context.prev = 38;
+                    _context.t6 = _context["catch"](34);
+                    _context.t7 = next;
+                    _context.next = 43;
+                    return actionWith(_objectSpread({}, failureType, {
+                      payload: new RequestError('[RSAA].body function failed'),
+                      error: true
+                    }), [action, getState()]);
+
+                  case 43:
+                    _context.t8 = _context.sent;
+                    return _context.abrupt("return", (0, _context.t7)(_context.t8));
+
+                  case 45:
+                    if (!(typeof headers === 'function')) {
+                      _context.next = 57;
+                      break;
+                    }
+
+                    _context.prev = 46;
+                    headers = headers(getState());
+                    _context.next = 57;
+                    break;
+
+                  case 50:
+                    _context.prev = 50;
+                    _context.t9 = _context["catch"](46);
+                    _context.t10 = next;
+                    _context.next = 55;
+                    return actionWith(_objectSpread({}, failureType, {
+                      payload: new RequestError('[RSAA].headers function failed'),
+                      error: true
+                    }), [action, getState()]);
+
+                  case 55:
+                    _context.t11 = _context.sent;
+                    return _context.abrupt("return", (0, _context.t10)(_context.t11));
+
+                  case 57:
+                    if (!(typeof options === 'function')) {
+                      _context.next = 69;
+                      break;
+                    }
+
+                    _context.prev = 58;
+                    options = options(getState());
+                    _context.next = 69;
+                    break;
+
+                  case 62:
+                    _context.prev = 62;
+                    _context.t12 = _context["catch"](58);
+                    _context.t13 = next;
+                    _context.next = 67;
+                    return actionWith(_objectSpread({}, failureType, {
+                      payload: new RequestError('[RSAA].options function failed'),
+                      error: true
+                    }), [action, getState()]);
+
+                  case 67:
+                    _context.t14 = _context.sent;
+                    return _context.abrupt("return", (0, _context.t13)(_context.t14));
+
+                  case 69:
+                    if (!(typeof requestType.payload === 'function' || typeof requestType.meta === 'function')) {
+                      _context.next = 77;
+                      break;
+                    }
+
+                    _context.t15 = next;
+                    _context.next = 73;
+                    return actionWith(requestType, [action, getState()]);
+
+                  case 73:
+                    _context.t16 = _context.sent;
+                    (0, _context.t15)(_context.t16);
+                    _context.next = 78;
+                    break;
+
+                  case 77:
+                    next(requestType);
+
+                  case 78:
+                    _context.prev = 78;
+                    _context.next = 81;
+                    return doFetch(endpoint, _objectSpread({}, options, {
+                      method: method,
+                      body: body || undefined,
+                      credentials: credentials,
+                      headers: headers || {}
+                    }));
+
+                  case 81:
+                    res = _context.sent;
+                    _context.next = 91;
+                    break;
+
+                  case 84:
+                    _context.prev = 84;
+                    _context.t17 = _context["catch"](78);
+                    _context.t18 = next;
+                    _context.next = 89;
+                    return actionWith(_objectSpread({}, failureType, {
+                      payload: new RequestError(_context.t17.message),
+                      error: true
+                    }), [action, getState()]);
+
+                  case 89:
+                    _context.t19 = _context.sent;
+                    return _context.abrupt("return", (0, _context.t18)(_context.t19));
+
+                  case 91:
+                    _context.prev = 91;
+                    isOk = ok(res);
+                    _context.next = 102;
+                    break;
+
+                  case 95:
+                    _context.prev = 95;
+                    _context.t20 = _context["catch"](91);
+                    _context.t21 = next;
+                    _context.next = 100;
+                    return actionWith(_objectSpread({}, failureType, {
+                      payload: new InternalError('[RSAA].ok function failed'),
+                      error: true
+                    }), [action, getState(), res]);
+
+                  case 100:
+                    _context.t22 = _context.sent;
+                    return _context.abrupt("return", (0, _context.t21)(_context.t22));
+
+                  case 102:
+                    if (!isOk) {
+                      _context.next = 110;
+                      break;
+                    }
+
+                    _context.t23 = next;
+                    _context.next = 106;
+                    return actionWith(successType, [action, getState(), res]);
+
+                  case 106:
+                    _context.t24 = _context.sent;
+                    return _context.abrupt("return", (0, _context.t23)(_context.t24));
+
+                  case 110:
+                    _context.t25 = next;
+                    _context.next = 113;
+                    return actionWith(_objectSpread({}, failureType, {
+                      error: true
+                    }), [action, getState(), res]);
+
+                  case 113:
+                    _context.t26 = _context.sent;
+                    return _context.abrupt("return", (0, _context.t25)(_context.t26));
+
+                  case 115:
+                  case "end":
+                    return _context.stop();
+                }
+              }
+            }, _callee, this, [[9, 14], [22, 26], [34, 38], [46, 50], [58, 62], [78, 84], [91, 95]]);
+          }))();
+        };
+      };
+    };
+  }
+  /**
+   * A Redux middleware that processes RSAA actions.
+   *
+   * @type {ReduxMiddleware}
+   * @access public
+   */
+
+
+  function apiMiddleware(_ref3) {
+    var getState = _ref3.getState;
+    return createMiddleware()({
+      getState: getState
+    });
+  }
+
+  /**
+   * Redux middleware for calling an API
+   * @module redux-api-middleware
+   * @requires lodash.isplainobject
+   * @exports {string} RSAA
+   * @exports {function} isRSAA
+   * @exports {function} validateRSAA
+   * @exports {function} isValidRSAA
+   * @exports {error} InvalidRSAA
+   * @exports {error} InternalError
+   * @exports {error} RequestError
+   * @exports {error} ApiError
+   * @exports {function} getJSON
+   * @exports {function} createMiddleware
+   * @exports {ReduxMiddleWare} apiMiddleware
+   */
+
+  exports.RSAA = RSAA;
+  exports.isRSAA = isRSAA;
+  exports.validateRSAA = validateRSAA;
+  exports.isValidRSAA = isValidRSAA;
+  exports.InvalidRSAA = InvalidRSAA;
+  exports.InternalError = InternalError;
+  exports.RequestError = RequestError;
+  exports.ApiError = ApiError;
+  exports.getJSON = getJSON;
+  exports.createMiddleware = createMiddleware;
+  exports.apiMiddleware = apiMiddleware;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+
+},{"process":"pBGv"}],"ndtK":[function(require,module,exports) {
 'use strict';
-// https://github.com/tc39/proposal-promise-try
-var $export = require('./_export');
-var newPromiseCapability = require('./_new-promise-capability');
-var perform = require('./_perform');
 
-$export($export.S, 'Promise', { 'try': function (callbackfn) {
-  var promiseCapability = newPromiseCapability.f(this);
-  var result = perform(callbackfn);
-  (result.e ? promiseCapability.reject : promiseCapability.resolve)(result.v);
-  return promiseCapability.promise;
-} });
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FETCH_ERROR = exports.FETCH_SUCCESS = exports.FETCH_START = exports.CLEAR_CACHE = exports.INVALIDATE_CACHE = undefined;
 
-},{"./_export":"vSO4","./_new-promise-capability":"AIlg","./_perform":"tyG8"}],"9u1Q":[function(require,module,exports) {
-require('../modules/es6.object.to-string');
-require('../modules/es6.string.iterator');
-require('../modules/web.dom.iterable');
-require('../modules/es6.promise');
-require('../modules/es7.promise.finally');
-require('../modules/es7.promise.try');
-module.exports = require('../modules/_core').Promise;
+var _constants = require('./constants');
 
-},{"../modules/es6.object.to-string":"tuDi","../modules/es6.string.iterator":"i+u+","../modules/web.dom.iterable":"COf8","../modules/es6.promise":"9kJF","../modules/es7.promise.finally":"zaru","../modules/es7.promise.try":"+CEt","../modules/_core":"ss9A"}],"L3Vt":[function(require,module,exports) {
-module.exports = { "default": require("core-js/library/fn/promise"), __esModule: true };
-},{"core-js/library/fn/promise":"9u1Q"}],"kcQR":[function(require,module,exports) {
+var INVALIDATE_CACHE = exports.INVALIDATE_CACHE = _constants.NAME + '.INVALIDATE_CACHE';
+var CLEAR_CACHE = exports.CLEAR_CACHE = _constants.NAME + '.CLEAR_CACHE';
+
+var FETCH_START = exports.FETCH_START = _constants.NAME + '.FETCH_START';
+var FETCH_SUCCESS = exports.FETCH_SUCCESS = _constants.NAME + '.FETCH_SUCCESS';
+var FETCH_ERROR = exports.FETCH_ERROR = _constants.NAME + '.FETCH_ERROR';
+//# sourceMappingURL=actionTypes.js.map
+},{"./constants":"6Zj8"}],"ZDIO":[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getResult = undefined;
+
+var _constants = require('./constants');
+
+var getResult = exports.getResult = function getResult(state, key) {
+  return state && state[_constants.NAME] ? state[_constants.NAME][key] : undefined;
+};
+//# sourceMappingURL=selectors.js.map
+},{"./constants":"6Zj8"}],"6EgQ":[function(require,module,exports) {
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.invoke = exports.clearCache = exports.invalidateCache = undefined;
 
-var _promise = require("../core-js/promise");
+var _reduxApiMiddleware = require("redux-api-middleware");
 
-var _promise2 = _interopRequireDefault(_promise);
+var _cache = require("./cache");
+
+var _cache2 = _interopRequireDefault(_cache);
+
+var _config = require("./config");
+
+var _config2 = _interopRequireDefault(_config);
+
+var _actionTypes = require("./actionTypes");
+
+var types = _interopRequireWildcard(_actionTypes);
+
+var _selectors = require("./selectors");
+
+var selectors = _interopRequireWildcard(_selectors);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (fn) {
+var _this = undefined;
+
+function _asyncToGenerator(fn) {
   return function () {
-    var gen = fn.apply(this, arguments);
-    return new _promise2.default(function (resolve, reject) {
+    var gen = fn.apply(this, arguments);return new Promise(function (resolve, reject) {
       function step(key, arg) {
         try {
-          var info = gen[key](arg);
-          var value = info.value;
+          var info = gen[key](arg);var value = info.value;
         } catch (error) {
-          reject(error);
-          return;
-        }
-
-        if (info.done) {
+          reject(error);return;
+        }if (info.done) {
           resolve(value);
         } else {
-          return _promise2.default.resolve(value).then(function (value) {
+          return Promise.resolve(value).then(function (value) {
             step("next", value);
           }, function (err) {
             step("throw", err);
           });
         }
-      }
-
-      return step("next");
+      }return step("next");
     });
-  };
-};
-},{"../core-js/promise":"L3Vt"}],"BP5q":[function(require,module,exports) {
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.actionWith = exports.normalizeTypeDescriptors = exports.getJSON = undefined;
-
-var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
-
-var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
-var _extends2 = require('babel-runtime/helpers/extends');
-
-var _extends3 = _interopRequireDefault(_extends2);
-
-var _typeof2 = require('babel-runtime/helpers/typeof');
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
-
-var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
-
-var _regenerator = require('babel-runtime/regenerator');
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _promise = require('babel-runtime/core-js/promise');
-
-var _promise2 = _interopRequireDefault(_promise);
-
-var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-/**
- * Extract JSON body from a server response
- *
- * @function getJSON
- * @access public
- * @param {object} res - A raw response object
- * @returns {promise|undefined}
- */
-var getJSON = function () {
-  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(res) {
-    var contentType, emptyCodes;
-    return _regenerator2.default.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            contentType = res.headers.get('Content-Type');
-            emptyCodes = [204, 205];
-
-            if (!(!~emptyCodes.indexOf(res.status) && contentType && ~contentType.indexOf('json'))) {
-              _context.next = 8;
-              break;
-            }
-
-            _context.next = 5;
-            return res.json();
-
-          case 5:
-            return _context.abrupt('return', _context.sent);
-
-          case 8:
-            _context.next = 10;
-            return _promise2.default.resolve();
-
-          case 10:
-            return _context.abrupt('return', _context.sent);
-
-          case 11:
-          case 'end':
-            return _context.stop();
-        }
-      }
-    }, _callee, this);
-  }));
-
-  return function getJSON(_x) {
-    return _ref.apply(this, arguments);
-  };
-}();
-
-/**
- * Blow up string or symbol types into full-fledged type descriptors,
- *   and add defaults
- *
- * @function normalizeTypeDescriptors
- * @access private
- * @param {array} types - The [RSAA].types from a validated RSAA
- * @returns {array}
- */
-
-
-/**
- * Evaluate a type descriptor to an FSA
- *
- * @function actionWith
- * @access private
- * @param {object} descriptor - A type descriptor
- * @param {array} args - The array of arguments for `payload` and `meta` function properties
- * @returns {object}
- */
-var actionWith = function () {
-  var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(descriptor, args) {
-    return _regenerator2.default.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
-            return typeof descriptor.payload === 'function' ? descriptor.payload.apply(descriptor, (0, _toConsumableArray3.default)(args)) : descriptor.payload;
-
-          case 3:
-            descriptor.payload = _context2.sent;
-            _context2.next = 10;
-            break;
-
-          case 6:
-            _context2.prev = 6;
-            _context2.t0 = _context2['catch'](0);
-
-            descriptor.payload = new _errors.InternalError(_context2.t0.message);
-            descriptor.error = true;
-
-          case 10:
-            _context2.prev = 10;
-            _context2.next = 13;
-            return typeof descriptor.meta === 'function' ? descriptor.meta.apply(descriptor, (0, _toConsumableArray3.default)(args)) : descriptor.meta;
-
-          case 13:
-            descriptor.meta = _context2.sent;
-            _context2.next = 21;
-            break;
-
-          case 16:
-            _context2.prev = 16;
-            _context2.t1 = _context2['catch'](10);
-
-            delete descriptor.meta;
-            descriptor.payload = new _errors.InternalError(_context2.t1.message);
-            descriptor.error = true;
-
-          case 21:
-            return _context2.abrupt('return', descriptor);
-
-          case 22:
-          case 'end':
-            return _context2.stop();
-        }
-      }
-    }, _callee2, this, [[0, 6], [10, 16]]);
-  }));
-
-  return function actionWith(_x2, _x3) {
-    return _ref2.apply(this, arguments);
-  };
-}();
-
-var _errors = require('./errors');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function normalizeTypeDescriptors(types) {
-  var _types = (0, _slicedToArray3.default)(types, 3),
-      requestType = _types[0],
-      successType = _types[1],
-      failureType = _types[2];
-
-  if (typeof requestType === 'string' || (typeof requestType === 'undefined' ? 'undefined' : (0, _typeof3.default)(requestType)) === 'symbol') {
-    requestType = { type: requestType };
-  }
-
-  if (typeof successType === 'string' || (typeof successType === 'undefined' ? 'undefined' : (0, _typeof3.default)(successType)) === 'symbol') {
-    successType = { type: successType };
-  }
-  successType = (0, _extends3.default)({
-    payload: function payload(action, state, res) {
-      return getJSON(res);
-    }
-  }, successType);
-
-  if (typeof failureType === 'string' || (typeof failureType === 'undefined' ? 'undefined' : (0, _typeof3.default)(failureType)) === 'symbol') {
-    failureType = { type: failureType };
-  }
-  failureType = (0, _extends3.default)({
-    payload: function payload(action, state, res) {
-      return getJSON(res).then(function (json) {
-        return new _errors.ApiError(res.status, res.statusText, json);
-      });
-    }
-  }, failureType);
-
-  return [requestType, successType, failureType];
-}exports.getJSON = getJSON;
-exports.normalizeTypeDescriptors = normalizeTypeDescriptors;
-exports.actionWith = actionWith;
-},{"babel-runtime/helpers/toConsumableArray":"mYpx","babel-runtime/helpers/extends":"T4f3","babel-runtime/helpers/typeof":"GyB/","babel-runtime/helpers/slicedToArray":"m8OI","babel-runtime/regenerator":"aIIw","babel-runtime/core-js/promise":"L3Vt","babel-runtime/helpers/asyncToGenerator":"kcQR","./errors":"OONN"}],"ZnWH":[function(require,module,exports) {
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.apiMiddleware = undefined;
-
-var _regenerator = require('babel-runtime/regenerator');
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _extends2 = require('babel-runtime/helpers/extends');
-
-var _extends3 = _interopRequireDefault(_extends2);
-
-var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
-
-var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
-
-var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-var _RSAA = require('./RSAA');
-
-var _RSAA2 = _interopRequireDefault(_RSAA);
-
-var _validation = require('./validation');
-
-var _errors = require('./errors');
-
-var _util = require('./util');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * A Redux middleware that processes RSAA actions.
- *
- * @type {ReduxMiddleware}
- * @access public
- */
-function apiMiddleware(_ref) {
-  var _this = this;
-
-  var getState = _ref.getState;
-
-  return function (next) {
-    return function (action) {
-      // Do not process actions without an [RSAA] property
-      if (!(0, _validation.isRSAA)(action)) {
-        return next(action);
-      }
-
-      return (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
-        var validationErrors, _callAPI, _requestType, callAPI, endpoint, body, headers, _callAPI$options, options, _callAPI$fetch, doFetch, method, credentials, bailout, types, _normalizeTypeDescrip, _normalizeTypeDescrip2, requestType, successType, failureType, res;
-
-        return _regenerator2.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                // Try to dispatch an error request FSA for invalid RSAAs
-                validationErrors = (0, _validation.validateRSAA)(action);
-
-                if (!validationErrors.length) {
-                  _context.next = 5;
-                  break;
-                }
-
-                _callAPI = action[_RSAA2.default];
-
-                if (_callAPI.types && Array.isArray(_callAPI.types)) {
-                  _requestType = _callAPI.types[0];
-
-                  if (_requestType && _requestType.type) {
-                    _requestType = _requestType.type;
-                  }
-                  next({
-                    type: _requestType,
-                    payload: new _errors.InvalidRSAA(validationErrors),
-                    error: true
-                  });
-                }
-                return _context.abrupt('return');
-
-              case 5:
-
-                // Parse the validated RSAA action
-                callAPI = action[_RSAA2.default];
-                endpoint = callAPI.endpoint, body = callAPI.body, headers = callAPI.headers, _callAPI$options = callAPI.options, options = _callAPI$options === undefined ? {} : _callAPI$options, _callAPI$fetch = callAPI.fetch, doFetch = _callAPI$fetch === undefined ? fetch : _callAPI$fetch;
-                method = callAPI.method, credentials = callAPI.credentials, bailout = callAPI.bailout, types = callAPI.types;
-                _normalizeTypeDescrip = (0, _util.normalizeTypeDescriptors)(types), _normalizeTypeDescrip2 = (0, _slicedToArray3.default)(_normalizeTypeDescrip, 3), requestType = _normalizeTypeDescrip2[0], successType = _normalizeTypeDescrip2[1], failureType = _normalizeTypeDescrip2[2];
-
-                // Should we bail out?
-
-                _context.prev = 9;
-
-                if (!(typeof bailout === 'boolean' && bailout || typeof bailout === 'function' && bailout(getState()))) {
-                  _context.next = 12;
-                  break;
-                }
-
-                return _context.abrupt('return');
-
-              case 12:
-                _context.next = 21;
-                break;
-
-              case 14:
-                _context.prev = 14;
-                _context.t0 = _context['catch'](9);
-                _context.t1 = next;
-                _context.next = 19;
-                return (0, _util.actionWith)((0, _extends3.default)({}, requestType, {
-                  payload: new _errors.RequestError('[RSAA].bailout function failed'),
-                  error: true
-                }), [action, getState()]);
-
-              case 19:
-                _context.t2 = _context.sent;
-                return _context.abrupt('return', (0, _context.t1)(_context.t2));
-
-              case 21:
-                if (!(typeof endpoint === 'function')) {
-                  _context.next = 33;
-                  break;
-                }
-
-                _context.prev = 22;
-
-                endpoint = endpoint(getState());
-                _context.next = 33;
-                break;
-
-              case 26:
-                _context.prev = 26;
-                _context.t3 = _context['catch'](22);
-                _context.t4 = next;
-                _context.next = 31;
-                return (0, _util.actionWith)((0, _extends3.default)({}, requestType, {
-                  payload: new _errors.RequestError('[RSAA].endpoint function failed'),
-                  error: true
-                }), [action, getState()]);
-
-              case 31:
-                _context.t5 = _context.sent;
-                return _context.abrupt('return', (0, _context.t4)(_context.t5));
-
-              case 33:
-                if (!(typeof body === 'function')) {
-                  _context.next = 45;
-                  break;
-                }
-
-                _context.prev = 34;
-
-                body = body(getState());
-                _context.next = 45;
-                break;
-
-              case 38:
-                _context.prev = 38;
-                _context.t6 = _context['catch'](34);
-                _context.t7 = next;
-                _context.next = 43;
-                return (0, _util.actionWith)((0, _extends3.default)({}, requestType, {
-                  payload: new _errors.RequestError('[RSAA].body function failed'),
-                  error: true
-                }), [action, getState()]);
-
-              case 43:
-                _context.t8 = _context.sent;
-                return _context.abrupt('return', (0, _context.t7)(_context.t8));
-
-              case 45:
-                if (!(typeof headers === 'function')) {
-                  _context.next = 57;
-                  break;
-                }
-
-                _context.prev = 46;
-
-                headers = headers(getState());
-                _context.next = 57;
-                break;
-
-              case 50:
-                _context.prev = 50;
-                _context.t9 = _context['catch'](46);
-                _context.t10 = next;
-                _context.next = 55;
-                return (0, _util.actionWith)((0, _extends3.default)({}, requestType, {
-                  payload: new _errors.RequestError('[RSAA].headers function failed'),
-                  error: true
-                }), [action, getState()]);
-
-              case 55:
-                _context.t11 = _context.sent;
-                return _context.abrupt('return', (0, _context.t10)(_context.t11));
-
-              case 57:
-                if (!(typeof options === 'function')) {
-                  _context.next = 69;
-                  break;
-                }
-
-                _context.prev = 58;
-
-                options = options(getState());
-                _context.next = 69;
-                break;
-
-              case 62:
-                _context.prev = 62;
-                _context.t12 = _context['catch'](58);
-                _context.t13 = next;
-                _context.next = 67;
-                return (0, _util.actionWith)((0, _extends3.default)({}, requestType, {
-                  payload: new _errors.RequestError('[RSAA].options function failed'),
-                  error: true
-                }), [action, getState()]);
-
-              case 67:
-                _context.t14 = _context.sent;
-                return _context.abrupt('return', (0, _context.t13)(_context.t14));
-
-              case 69:
-                if (!(typeof requestType.payload === 'function' || typeof requestType.meta === 'function')) {
-                  _context.next = 77;
-                  break;
-                }
-
-                _context.t15 = next;
-                _context.next = 73;
-                return (0, _util.actionWith)(requestType, [action, getState()]);
-
-              case 73:
-                _context.t16 = _context.sent;
-                (0, _context.t15)(_context.t16);
-                _context.next = 78;
-                break;
-
-              case 77:
-                next(requestType);
-
-              case 78:
-                _context.prev = 78;
-                _context.next = 81;
-                return doFetch(endpoint, (0, _extends3.default)({}, options, {
-                  method: method,
-                  body: body || undefined,
-                  credentials: credentials,
-                  headers: headers || {}
-                }));
-
-              case 81:
-                res = _context.sent;
-                _context.next = 91;
-                break;
-
-              case 84:
-                _context.prev = 84;
-                _context.t17 = _context['catch'](78);
-                _context.t18 = next;
-                _context.next = 89;
-                return (0, _util.actionWith)((0, _extends3.default)({}, requestType, {
-                  payload: new _errors.RequestError(_context.t17.message),
-                  error: true
-                }), [action, getState()]);
-
-              case 89:
-                _context.t19 = _context.sent;
-                return _context.abrupt('return', (0, _context.t18)(_context.t19));
-
-              case 91:
-                if (!res.ok) {
-                  _context.next = 99;
-                  break;
-                }
-
-                _context.t20 = next;
-                _context.next = 95;
-                return (0, _util.actionWith)(successType, [action, getState(), res]);
-
-              case 95:
-                _context.t21 = _context.sent;
-                return _context.abrupt('return', (0, _context.t20)(_context.t21));
-
-              case 99:
-                _context.t22 = next;
-                _context.next = 102;
-                return (0, _util.actionWith)((0, _extends3.default)({}, failureType, {
-                  error: true
-                }), [action, getState(), res]);
-
-              case 102:
-                _context.t23 = _context.sent;
-                return _context.abrupt('return', (0, _context.t22)(_context.t23));
-
-              case 104:
-              case 'end':
-                return _context.stop();
-            }
-          }
-        }, _callee, _this, [[9, 14], [22, 26], [34, 38], [46, 50], [58, 62], [78, 84]]);
-      }))();
-    };
   };
 }
 
-exports.apiMiddleware = apiMiddleware;
-},{"babel-runtime/regenerator":"aIIw","babel-runtime/helpers/extends":"T4f3","babel-runtime/helpers/slicedToArray":"m8OI","babel-runtime/helpers/asyncToGenerator":"kcQR","./RSAA":"U/o2","./validation":"UfNp","./errors":"OONN","./util":"BP5q"}],"YLYZ":[function(require,module,exports) {
+function _objectWithoutProperties(obj, keys) {
+  var target = {};for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
+  }return target;
+}
+
+var invalidateCache = exports.invalidateCache = function invalidateCache(payload) {
+  return {
+    type: types.INVALIDATE_CACHE,
+    payload: payload
+  };
+};
+
+var clearCache = exports.clearCache = function clearCache(payload) {
+  return {
+    type: types.CLEAR_CACHE,
+    payload: payload
+  };
+};
+
+var invoke = function invoke(_ref) {
+  var cache = _ref.cache,
+      restOptions = _objectWithoutProperties(_ref, ['cache']);
+
+  return function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch, getState) {
+      var _dispatch;
+
+      var action, cacheStrategy, result;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              action = Object.assign({ types: [] }, _config2.default.DEFAULT_INVOKE_OPTIONS, restOptions);
+
+              if (!(cache && cache.key)) {
+                _context.next = 12;
+                break;
+              }
+
+              cacheStrategy = cache.strategy || _config2.default.DEFAULT_CACHE_STRATEGY;
+              result = selectors.getResult(getState(), cache.key);
+
+              action.types = [{ type: types.FETCH_START, meta: { cache: cache } }, { type: types.FETCH_SUCCESS, meta: { cache: cache } }, { type: types.FETCH_ERROR, meta: { cache: cache } }];
+
+              if (!cache.shouldFetch) {
+                _context.next = 10;
+                break;
+              }
+
+              if (cache.shouldFetch({ state: result })) {
+                _context.next = 8;
+                break;
+              }
+
+              return _context.abrupt('return', undefined);
+
+            case 8:
+              _context.next = 12;
+              break;
+
+            case 10:
+              if (!(cacheStrategy && !_cache2.default.get(cacheStrategy.type).shouldFetch({ state: result, strategy: cacheStrategy }))) {
+                _context.next = 12;
+                break;
+              }
+
+              return _context.abrupt('return', undefined);
+
+            case 12:
+              return _context.abrupt('return', dispatch((_dispatch = {}, _dispatch[_reduxApiMiddleware.RSAA] = action, _dispatch)));
+
+            case 13:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, _this);
+    }));
+
+    return function (_x, _x2) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+};
+exports.invoke = invoke;
+//# sourceMappingURL=actions.js.map
+},{"redux-api-middleware":"GrLF","./cache":"PntH","./config":"XH+S","./actionTypes":"ndtK","./selectors":"ZDIO"}],"xBFq":[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.apiMiddleware = exports.getJSON = exports.ApiError = exports.RequestError = exports.InternalError = exports.InvalidRSAA = exports.isValidRSAA = exports.validateRSAA = exports.isRSAA = exports.RSAA = exports.CALL_API = undefined;
+exports.DEFAULT_KEY_STATE = undefined;
 
-var _RSAA = require('./RSAA');
+var _actionTypes = require('./actionTypes');
 
-var _RSAA2 = _interopRequireDefault(_RSAA);
+var types = _interopRequireWildcard(_actionTypes);
 
-var _validation = require('./validation');
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var _errors = require('./errors');
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
 
-var _util = require('./util');
+var DEFAULT_KEY_STATE = exports.DEFAULT_KEY_STATE = {
+  fetching: false,
+  fetched: false,
+  error: false,
+  timestamp: null,
+  successPayload: null,
+  errorPayload: null
+};
 
-var _middleware = require('./middleware');
+var DEFAULT_STATE = {};
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+exports.default = function () {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
+  var _ref = arguments[1];
+  var type = _ref.type,
+      payload = _ref.payload,
+      meta = _ref.meta;
 
-exports.CALL_API = _RSAA2.default;
-exports.RSAA = _RSAA2.default;
-exports.isRSAA = _validation.isRSAA;
-exports.validateRSAA = _validation.validateRSAA;
-exports.isValidRSAA = _validation.isValidRSAA;
-exports.InvalidRSAA = _errors.InvalidRSAA;
-exports.InternalError = _errors.InternalError;
-exports.RequestError = _errors.RequestError;
-exports.ApiError = _errors.ApiError;
-exports.getJSON = _util.getJSON;
-exports.apiMiddleware = _middleware.apiMiddleware; /**
-                                                    * Redux middleware for calling an API
-                                                    * @module redux-api-middleware
-                                                    * @requires lodash.isplainobject
-                                                    * @exports {string} RSAA
-                                                    * @exports {string} CALL_API - alias of RSAA, to be deprecated in v3
-                                                    * @exports {function} isRSAA
-                                                    * @exports {function} validateRSAA
-                                                    * @exports {function} isValidRSAA
-                                                    * @exports {error} InvalidRSAA
-                                                    * @exports {error} InternalError
-                                                    * @exports {error} RequestError
-                                                    * @exports {error} ApiError
-                                                    * @exports {function} getJSON
-                                                    * @exports {ReduxMiddleWare} apiMiddleware
-                                                    */
+  switch (type) {
+    case types.CLEAR_CACHE:
+      {
+        if (payload && state[payload]) {
+          var newState = _extends({}, state);
+          delete newState[payload];
+          return newState;
+        }
+        return DEFAULT_STATE;
+      }
 
-/**
- * @typedef {function} ReduxMiddleware
- * @param {object} store
- * @returns {ReduxNextHandler}
- *
- * @typedef {function} ReduxNextHandler
- * @param {function} next
- * @returns {ReduxActionHandler}
- *
- * @typedef {function} ReduxActionHandler
- * @param {object} action
- * @returns undefined
- */
-},{"./RSAA":"U/o2","./validation":"UfNp","./errors":"OONN","./util":"BP5q","./middleware":"ZnWH"}],"uaY5":[function(require,module,exports) {
-"use strict";
+    case types.INVALIDATE_CACHE:
+      {
+        var invalidStateKeys = Object.keys(state).filter(function (item) {
+          return state[item].fetching;
+        });
+        if (invalidStateKeys.length) {
+          var _newState = _extends({}, state);
+          invalidStateKeys.forEach(function (key) {
+            _newState[key].fetching = false;
+          });
+          return _newState;
+        }
+        return state;
+      }
+
+    case types.FETCH_START:
+      {
+        var _extends2;
+
+        var key = meta.cache.key; // eslint-disable-line prefer-destructuring
+        return _extends({}, state, (_extends2 = {}, _extends2[key] = _extends({}, state[key] || DEFAULT_KEY_STATE, {
+          fetching: true
+        }), _extends2));
+      }
+
+    case types.FETCH_SUCCESS:
+      {
+        var _key = meta.cache.key; // eslint-disable-line prefer-destructuring
+        if (_key in state) {
+          var _extends3;
+
+          return _extends({}, state, (_extends3 = {}, _extends3[_key] = _extends({}, state[_key], {
+            fetching: false,
+            fetched: true,
+            error: false,
+            timestamp: new Date().getTime(),
+            successPayload: payload
+          }), _extends3));
+        }
+        return state;
+      }
+
+    case types.FETCH_ERROR:
+      {
+        var _key2 = meta.cache.key; // eslint-disable-line prefer-destructuring
+        if (_key2 in state) {
+          var _extends4;
+
+          return _extends({}, state, (_extends4 = {}, _extends4[_key2] = _extends({}, state[_key2], {
+            fetching: false,
+            fetched: true,
+            error: true,
+            timestamp: new Date().getTime(),
+            errorPayload: payload
+          }), _extends4));
+        }
+        return state;
+      }
+
+    default:
+      return state;
+  }
+};
+//# sourceMappingURL=reducer.js.map
+},{"./actionTypes":"ndtK"}],"uaY5":[function(require,module,exports) {
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _reduxApiMiddleware = require("redux-api-middleware");
+var _config = require('./config');
 
-var asyncToGenerator = function asyncToGenerator(e) {
-  return function () {
-    var t = e.apply(this, arguments);return new Promise(function (e, r) {
-      return function n(c, a) {
-        try {
-          var i = t[c](a),
-              u = i.value;
-        } catch (e) {
-          return void r(e);
-        }if (!i.done) return Promise.resolve(u).then(function (e) {
-          n("next", e);
-        }, function (e) {
-          n("throw", e);
-        });e(u);
-      }("next");
-    });
-  };
-},
-    _extends = Object.assign || function (e) {
-  for (var t = 1; t < arguments.length; t++) {
-    var r = arguments[t];for (var n in r) {
-      Object.prototype.hasOwnProperty.call(r, n) && (e[n] = r[n]);
-    }
-  }return e;
-},
-    objectWithoutProperties = function objectWithoutProperties(e, t) {
-  var r = {};for (var n in e) {
-    t.indexOf(n) >= 0 || Object.prototype.hasOwnProperty.call(e, n) && (r[n] = e[n]);
-  }return r;
-},
-    DEFAULT_CONFIG = { DEFAULT_INVOKE_OPTIONS: {}, DEFAULT_CACHE_STRATEGY: void 0 },
-    config = _extends({}, DEFAULT_CONFIG),
-    config$1 = { set DEFAULT_INVOKE_OPTIONS(e) {
-    config.DEFAULT_INVOKE_OPTIONS = e;
-  }, get DEFAULT_INVOKE_OPTIONS() {
-    return config.DEFAULT_INVOKE_OPTIONS;
-  }, set DEFAULT_CACHE_STRATEGY(e) {
-    config.DEFAULT_CACHE_STRATEGY = e;
-  }, get DEFAULT_CACHE_STRATEGY() {
-    return config.DEFAULT_CACHE_STRATEGY;
-  } },
-    NAME = "@RCAM",
-    CACHE_TYPES = { SIMPLE: "SIMPLE", SIMPLE_SUCCESS: "SIMPLE_SUCCESS", TTL: "TTL", TTL_SUCCESS: "TTL_SUCCESS" },
-    constants = Object.freeze({ NAME: NAME, CACHE_TYPES: CACHE_TYPES }),
-    type = CACHE_TYPES.SIMPLE,
-    buildStrategy = function buildStrategy() {
-  return { type: type };
-},
-    shouldFetch = function shouldFetch(e) {
-  var t = e.state;return !t || !t.fetching && !t.fetched;
-},
-    simple = Object.freeze({ type: type, buildStrategy: buildStrategy, shouldFetch: shouldFetch }),
-    type$1 = CACHE_TYPES.SIMPLE_SUCCESS,
-    buildStrategy$1 = function buildStrategy$1() {
-  return { type: type$1 };
-},
-    shouldFetch$1 = function shouldFetch$1(e) {
-  var t = e.state;if (t) {
-    if (t.fetching) return !1;if (t.fetched && !t.error) return !1;
-  }return !0;
-},
-    simpleSuccess = Object.freeze({ type: type$1, buildStrategy: buildStrategy$1, shouldFetch: shouldFetch$1 }),
-    type$2 = CACHE_TYPES.TTL,
-    buildStrategy$2 = function buildStrategy$2(e) {
-  var t = e.ttl;return { type: type$2, ttl: t };
-},
-    shouldFetch$2 = function shouldFetch$2(e) {
-  var t = e.state,
-      r = e.strategy;if (t && r) {
-    if (t.fetching) return !1;if (t.fetched) return t.timestamp + r.ttl <= Date.now();
-  }return !0;
-},
-    ttl = Object.freeze({ type: type$2, buildStrategy: buildStrategy$2, shouldFetch: shouldFetch$2 }),
-    type$3 = CACHE_TYPES.TTL_SUCCESS,
-    buildStrategy$3 = function buildStrategy$3(e) {
-  var t = e.ttl;return { type: type$3, ttl: t };
-},
-    shouldFetch$3 = function shouldFetch$3(e) {
-  var t = e.state,
-      r = e.strategy;if (t && r) {
-    if (t.fetching) return !1;if (t.fetched && !t.error) return t.timestamp + r.ttl <= Date.now();
-  }return !0;
-},
-    ttlSuccess = Object.freeze({ type: type$3, buildStrategy: buildStrategy$3, shouldFetch: shouldFetch$3 }),
-    cacheStrategies = { get: function get(e) {
-    switch (e) {case type:
-        return simple;case type$1:
-        return simpleSuccess;case type$2:
-        return ttl;case type$3:
-        return ttlSuccess;default:
-        throw new Error("Invalid cache type - " + e);}
-  } },
-    INVALIDATE_CACHE = NAME + ".INVALIDATE_CACHE",
-    CLEAR_CACHE = NAME + ".CLEAR_CACHE",
-    FETCH_START = NAME + ".FETCH_START",
-    FETCH_SUCCESS = NAME + ".FETCH_SUCCESS",
-    FETCH_ERROR = NAME + ".FETCH_ERROR",
-    getResult = function getResult(e, t) {
-  return e && e[NAME] ? e[NAME][t] : void 0;
-},
-    selectors = Object.freeze({ getResult: getResult }),
-    _this = void 0,
-    invalidateCache = function invalidateCache(e) {
-  return { type: INVALIDATE_CACHE, payload: e };
-},
-    clearCache = function clearCache(e) {
-  return { type: CLEAR_CACHE, payload: e };
-},
-    invoke = function invoke(e) {
-  var t,
-      r = e.cache,
-      n = objectWithoutProperties(e, ["cache"]);return t = asyncToGenerator(regeneratorRuntime.mark(function e(t, c) {
-    var a, i, u, o;return regeneratorRuntime.wrap(function (e) {
-      for (;;) {
-        switch (e.prev = e.next) {case 0:
-            if (i = Object.assign({ types: [] }, config$1.DEFAULT_INVOKE_OPTIONS, n), !r || !r.key) {
-              e.next = 12;break;
-            }if (u = r.strategy || config$1.DEFAULT_CACHE_STRATEGY, o = getResult(c(), r.key), i.types = [{ type: FETCH_START, meta: { cache: r } }, { type: FETCH_SUCCESS, meta: { cache: r } }, { type: FETCH_ERROR, meta: { cache: r } }], !r.shouldFetch) {
-              e.next = 10;break;
-            }if (r.shouldFetch({ state: o })) {
-              e.next = 8;break;
-            }return e.abrupt("return", void 0);case 8:
-            e.next = 12;break;case 10:
-            if (!u || cacheStrategies.get(u.type).shouldFetch({ state: o, strategy: u })) {
-              e.next = 12;break;
-            }return e.abrupt("return", void 0);case 12:
-            return e.abrupt("return", t(((a = {})[_reduxApiMiddleware.RSAA] = i, a)));case 13:case "end":
-            return e.stop();}
-      }
-    }, e, _this);
-  })), function (e, r) {
-    return t.apply(this, arguments);
-  };
-},
-    actions = Object.freeze({ invalidateCache: invalidateCache, clearCache: clearCache, invoke: invoke }),
-    DEFAULT_KEY_STATE = { fetching: !1, fetched: !1, error: !1, timestamp: null, successPayload: null, errorPayload: null },
-    DEFAULT_STATE = {},
-    reducer = function reducer() {
-  var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : DEFAULT_STATE,
-      t = arguments[1],
-      r = t.type,
-      n = t.payload,
-      c = t.meta;switch (r) {case CLEAR_CACHE:
-      if (n && e[n]) {
-        var a = _extends({}, e);return delete a[n], a;
-      }return DEFAULT_STATE;case INVALIDATE_CACHE:
-      var i = Object.keys(e).filter(function (t) {
-        return e[t].fetching;
-      });if (i.length) {
-        var u = _extends({}, e);return i.forEach(function (e) {
-          u[e].fetching = !1;
-        }), u;
-      }return e;case FETCH_START:
-      var o,
-          s = c.cache.key;return _extends({}, e, ((o = {})[s] = _extends({}, e[s] || DEFAULT_KEY_STATE, { fetching: !0 }), o));case FETCH_SUCCESS:
-      var E,
-          T = c.cache.key;return T in e ? _extends({}, e, ((E = {})[T] = _extends({}, e[T], { fetching: !1, fetched: !0, error: !1, timestamp: new Date().getTime(), successPayload: n }), E)) : e;case FETCH_ERROR:
-      var f,
-          C = c.cache.key;return C in e ? _extends({}, e, ((f = {})[C] = _extends({}, e[C], { fetching: !1, fetched: !0, error: !0, timestamp: new Date().getTime(), errorPayload: n }), f)) : e;default:
-      return e;}
-},
-    index = { config: config$1, constants: constants, cache: cacheStrategies, actions: actions, reducer: reducer, selectors: selectors };exports.default = index;
+var _config2 = _interopRequireDefault(_config);
+
+var _constants = require('./constants');
+
+var constants = _interopRequireWildcard(_constants);
+
+var _cache = require('./cache');
+
+var _cache2 = _interopRequireDefault(_cache);
+
+var _actions = require('./actions');
+
+var actions = _interopRequireWildcard(_actions);
+
+var _reducer = require('./reducer');
+
+var _reducer2 = _interopRequireDefault(_reducer);
+
+var _selectors = require('./selectors');
+
+var selectors = _interopRequireWildcard(_selectors);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = { config: _config2.default, constants: constants, cache: _cache2.default, actions: actions, reducer: _reducer2.default, selectors: selectors };
 //# sourceMappingURL=index.js.map
-},{"redux-api-middleware":"YLYZ"}],"CFBi":[function(require,module,exports) {
+},{"./config":"XH+S","./constants":"6Zj8","./cache":"PntH","./actions":"6EgQ","./reducer":"xBFq","./selectors":"ZDIO"}],"CFBi":[function(require,module,exports) {
 /**
  * @category Common Helpers
  * @summary Is the given argument an instance of Date?
@@ -35247,7 +34778,7 @@ var persistor = (0, _reduxPersist.persistStore)(store);
 
 exports.store = store;
 exports.persistor = persistor;
-},{"redux":"aV+f","redux-thunk":"Sa/f","redux-api-middleware":"YLYZ","redux-persist":"71VQ","redux-devtools-extension":"yP4S","redux-persist/lib/storage":"PJei","../es":"uaY5"}],"vKFU":[function(require,module,exports) {
+},{"redux":"aV+f","redux-thunk":"Sa/f","redux-api-middleware":"GrLF","redux-persist":"71VQ","redux-devtools-extension":"yP4S","redux-persist/lib/storage":"PJei","../es":"uaY5"}],"vKFU":[function(require,module,exports) {
 "use strict";
 },{}],"Focm":[function(require,module,exports) {
 'use strict';
@@ -35485,4 +35016,4 @@ _reactDom2.default.render(_react2.default.createElement(
 if (undefined !== 'true') (0, _registerServiceWorker2.default)();
 if (module.hot) module.hot.accept();
 },{"react":"1n8/","react-dom":"NKHc","react-redux":"jYI/","redux-persist/integration/react":"4j42","./registerServiceWorker":"xv3Y","core-js/modules/es6.typed.array-buffer":"4NJ0","core-js/modules/es6.typed.int8-array":"wqM+","core-js/modules/es6.typed.uint8-array":"QTtY","core-js/modules/es6.typed.uint8-clamped-array":"Kqgs","core-js/modules/es6.typed.int16-array":"fEGw","core-js/modules/es6.typed.uint16-array":"xyd6","core-js/modules/es6.typed.int32-array":"hIko","core-js/modules/es6.typed.uint32-array":"tNPN","core-js/modules/es6.typed.float32-array":"/wis","core-js/modules/es6.typed.float64-array":"9mbT","core-js/modules/es6.map":"ioKM","core-js/modules/es6.set":"coyu","core-js/modules/es6.weak-map":"D6DP","core-js/modules/es6.weak-set":"bRUR","core-js/modules/es6.reflect.apply":"F0Xu","core-js/modules/es6.reflect.construct":"4JlF","core-js/modules/es6.reflect.define-property":"S841","core-js/modules/es6.reflect.delete-property":"JRlJ","core-js/modules/es6.reflect.get":"kv8Z","core-js/modules/es6.reflect.get-own-property-descriptor":"zj1X","core-js/modules/es6.reflect.get-prototype-of":"d0aC","core-js/modules/es6.reflect.has":"OWTq","core-js/modules/es6.reflect.is-extensible":"deHu","core-js/modules/es6.reflect.own-keys":"e6SV","core-js/modules/es6.reflect.prevent-extensions":"BmyK","core-js/modules/es6.reflect.set":"K46i","core-js/modules/es6.reflect.set-prototype-of":"L5z5","core-js/modules/es6.promise":"Pjta","core-js/modules/es6.symbol":"uVn9","core-js/modules/es6.object.freeze":"EO7q","core-js/modules/es6.object.seal":"+4GY","core-js/modules/es6.object.prevent-extensions":"3llM","core-js/modules/es6.object.is-frozen":"Z1rp","core-js/modules/es6.object.is-sealed":"Fckj","core-js/modules/es6.object.is-extensible":"1EYb","core-js/modules/es6.object.get-own-property-descriptor":"nIty","core-js/modules/es6.object.get-prototype-of":"ud3u","core-js/modules/es6.object.keys":"m9aB","core-js/modules/es6.object.get-own-property-names":"i23/","core-js/modules/es6.object.assign":"K3/J","core-js/modules/es6.object.is":"MlqR","core-js/modules/es6.object.set-prototype-of":"0JGj","core-js/modules/es6.function.name":"N3yi","core-js/modules/es6.string.raw":"t2/9","core-js/modules/es6.string.from-code-point":"xSM3","core-js/modules/es6.string.code-point-at":"zR9y","core-js/modules/es6.string.repeat":"C85R","core-js/modules/es6.string.starts-with":"w2SA","core-js/modules/es6.string.ends-with":"zRn7","core-js/modules/es6.string.includes":"fH7p","core-js/modules/es6.regexp.flags":"pDhD","core-js/modules/es6.regexp.match":"RTfC","core-js/modules/es6.regexp.replace":"KGao","core-js/modules/es6.regexp.split":"a/o/","core-js/modules/es6.regexp.search":"zOab","core-js/modules/es6.array.from":"RRcs","core-js/modules/es6.array.of":"RB6b","core-js/modules/es6.array.copy-within":"tWTB","core-js/modules/es6.array.find":"Qppk","core-js/modules/es6.array.find-index":"7sVm","core-js/modules/es6.array.fill":"hUQ6","core-js/modules/es6.array.iterator":"6w+v","core-js/modules/es6.number.is-finite":"FuY7","core-js/modules/es6.number.is-integer":"pwRL","core-js/modules/es6.number.is-safe-integer":"5qVI","core-js/modules/es6.number.is-nan":"SsgJ","core-js/modules/es6.number.epsilon":"DzYy","core-js/modules/es6.number.min-safe-integer":"+ifB","core-js/modules/es6.number.max-safe-integer":"4shx","core-js/modules/es6.math.acosh":"py3/","core-js/modules/es6.math.asinh":"ob11","core-js/modules/es6.math.atanh":"iUik","core-js/modules/es6.math.cbrt":"YRuK","core-js/modules/es6.math.clz32":"R2Qc","core-js/modules/es6.math.cosh":"nEse","core-js/modules/es6.math.expm1":"AmoX","core-js/modules/es6.math.fround":"vmlq","core-js/modules/es6.math.hypot":"kLut","core-js/modules/es6.math.imul":"A8J8","core-js/modules/es6.math.log1p":"qtpC","core-js/modules/es6.math.log10":"VUW8","core-js/modules/es6.math.log2":"1Jo9","core-js/modules/es6.math.sign":"mZl9","core-js/modules/es6.math.sinh":"m0zb","core-js/modules/es6.math.tanh":"Fnqw","core-js/modules/es6.math.trunc":"tiOR","core-js/modules/es7.array.includes":"TLss","core-js/modules/es7.object.values":"Ltmz","core-js/modules/es7.object.entries":"gxEP","core-js/modules/es7.object.get-own-property-descriptors":"BQD8","core-js/modules/es7.string.pad-start":"9SWN","core-js/modules/es7.string.pad-end":"n20m","core-js/modules/web.timers":"OTsy","core-js/modules/web.immediate":"5hZL","core-js/modules/web.dom.iterable":"v6Aj","regenerator-runtime/runtime":"QVnC","whatwg-fetch":"MCp7","./App":"lY9v","./state":"dm40","./index.css":"vKFU"}]},{},["Focm"], null)
-//# sourceMappingURL=/redux-cached-api-middleware/demo.a3092495.map
+//# sourceMappingURL=/redux-cached-api-middleware/demo.5b5a785d.map
